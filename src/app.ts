@@ -1,11 +1,11 @@
 import express from 'express';
+import tareasRouter from './routes/tareasRoutes'
 
 const PORT = 5005;
 const server = express();
 
-server.get("/", (req, res) => {
-    res.send("<html><body><h1>Hola Mundo</h1></body></html>");
-});
+server.use(express.json());
+server.use("/api/tareas", tareasRouter);
 
 server.listen(PORT, () => {
     console.info(`Iniciando servidor en puerto ${PORT}`)
