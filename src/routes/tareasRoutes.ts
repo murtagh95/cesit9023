@@ -1,77 +1,86 @@
+import { ITarea, Tarea } from './../models/Tarea';
 import express, {Request, Response} from 'express';
-import { Tarea } from '../models/Tarea'
 const router = express.Router();
 
-let tareas: Tarea[] = [
-    { id: 1, nombre: "Uno" },
-    { id: 2, nombre: "Dos" },
-    { id: 3, nombre: "Tres" },
-];
+router.get("/", async (req: Request, res: Response) => {
 
-router.get("/", (req: Request, res: Response) => {
+    if(req.query.search) {
+        const criterioRegEx = new RegExp(req.query.search as string, 'i');
+        const criterioDeBusqueda = [
+            {nombre: { $regex: criterioRegEx }}, 
+            {descripcion: { $regex: criterioRegEx }}
+        ];
+
+        const tareas = await Tarea.find({ '$or': criterioDeBusqueda });
+        return res.send(tareas);
+    }
+
+    const tareas = await Tarea.find();
     res.send(tareas);
 });
 
-router.get("/:id", (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
     if(!req.params?.id) {
-        res.send(400).send({message: "Se deber ingresar el id de la tarea"})
+        return res.send(400).send({message: "Se deber ingresar el id de la tarea"})
     }
-    const tarea = tareas.find(t => t.id === parseInt(req.params.id));
+    const tarea = await Tarea.findById(req.params.id);
     if(!tarea) {
-        res.send(404).send({message: `No se la tarea con id=${req.params.id}`})
+        return res.send(404).send({message: `No se la tarea con id=${req.params.id}`})
     }
     res.send(tarea);
 });
 
-router.post("/", (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
 
-    const nuevaTarea = req.body as Tarea;
+    const nuevaTarea = req.body as ITarea;
     
     if(!nuevaTarea?.nombre) {
-        res.status(400).send({
+        return res.status(400).send({
             message: "El nombre no existe"
         })
     }
 
-    nuevaTarea.id = tareas[tareas.length - 1].id + 1;
-    tareas.push(nuevaTarea);
+    const tarea = new Tarea(nuevaTarea);
+    await tarea.save();
 
-    res.status(201).send(nuevaTarea);
+    res.status(201).send(tarea);
 })
 
-router.put('/:id', (req: Request, res: Response) => {
+router.put('/:id', async (req: Request, res: Response) => {
     if(!req.params?.id) {
-        res.send(400).send({message: "Se deber ingresar el id de la tarea"})
+        return res.send(400).send({message: "Se deber ingresar el id de la tarea"})
     }
-    const tarea = tareas.find(t => t.id === parseInt(req.params.id));
+    const tarea = await Tarea.findById(req.params.id);
     if(!tarea) {
-        res.send(404).send({message: `No se la tarea con id=${req.params.id}`});
-        return;
+        return res.send(404).send({message: `No se la tarea con id=${req.params.id}`});
     }
 
-    const tareaActualizar = req.body as Tarea;
+    const tareaActualizar = req.body as ITarea;
     if(!tareaActualizar?.nombre) {
-        res.status(400).send({
+        return res.status(400).send({
             message: "El nombre o id no existe"
         })
-    } else {
-        tareaActualizar.id = tarea?.id;
     }
-
-    tareas = tareas.map(t => t.id === parseInt(req.params.id) ? tareaActualizar : t);
+    if(tareaActualizar?._id !== tarea.id) {
+        return res.status(400).send({
+            message: "El id no coincide"
+        });
+    }
+    
+    await Tarea.updateOne({_id: tarea.id }, tareaActualizar);
     res.send(tareaActualizar);
 });
 
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
     if(!req.params?.id) {
-        res.send(400).send({message: "Se deber ingresar el id de la tarea"})
+        return res.send(400).send({message: "Se deber ingresar el id de la tarea"})
     }
-    const tarea = tareas.find(t => t.id === parseInt(req.params.id));
+    const tarea = await Tarea.findById(req.params.id);
     if(!tarea) {
-        res.send(404).send({message: `No se la tarea con id=${req.params.id}`})
+        return res.send(404).send({message: `No se la tarea con id=${req.params.id}`})
     }
 
-    tareas = tareas.filter(t => t.id !== parseInt(req.params.id));
+    await Tarea.deleteOne({_id: tarea._id})
     res.send(tarea);
 });
 
