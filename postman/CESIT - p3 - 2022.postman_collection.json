@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "79cd8c8e-f966-4071-b293-a2f630daea70",
+		"name": "CESIT - p3 - 2022",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ObtenerTareas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5005/api/tareas",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerTareas Query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5005/api/tareas",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerTareaPorId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5005/api/tareas/626b26f42309ba7950ff0ec6",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas",
+						"626b26f42309ba7950ff0ec6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EliminarTareaPorId",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:5005/api/tareas/626b26ded9cce81908230f0f",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas",
+						"626b26ded9cce81908230f0f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearTarea",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Tercera tarea en mongo\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5005/api/tareas",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarTarea",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \n    \"_id\": \"626b26f42309ba7950ff0ec6\",\n    \"nombre\": \"Tercera 2 tarea en mongo\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5005/api/tareas/626b26f42309ba7950ff0ec6",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tareas",
+						"626b26f42309ba7950ff0ec6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
