@@ -11,6 +11,8 @@ const EjemploIntegrador = () => {
 
     const [tareas, setTareas] = useState<Tarea[]>([]);
 
+    console.info("--- renderizando");
+
     const buscarTareasHandler = async () => {
         try {
             const res = await axios.get<Tarea[]>('http://localhost:5005/api/tareas');
