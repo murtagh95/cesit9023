@@ -9,6 +9,7 @@ import Ejemplos from './pages/ejemplos/Ejemplos'
 import HomePage from './pages/HomePage'
 import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
+import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
 
 const mdTheme = createTheme();
 
@@ -30,6 +31,9 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path="/ejemplos" element={<Ejemplos />} />
             <Route path="/tareas" element={<TareasPage />} />
+            <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
+            <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
+            <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
           </Routes>
         </AppContainer>
       </Box>
