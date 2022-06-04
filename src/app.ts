@@ -8,8 +8,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
-const DB_NAME = 'prog3-2022';
-const DB_CONN = process.env.MONGO_DB || `mongodb://localhost:27017/${DB_NAME}`;
+const DB_NAME = process.env.DB_NAME || 'prog3-2022';
+const DB_CONN = (process.env.MONGO_DB || 'mongodb://localhost:27017/') + `${DB_NAME}`;
 const server = express();
 
 
