@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
+import { IModeloBase, modeloBase } from "./ModeloBase";
 
 
-export interface IAlumno {
-    _id?: string;
+export interface IAlumno extends IModeloBase{
     nombre: string;
     apellido: string;
     dni: number;
@@ -12,6 +12,7 @@ export interface IAlumno {
 }
 
 const alumnoSchema = new Schema<IAlumno>({
+    ...modeloBase,
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },
     dni: { type: Number, required: true },
