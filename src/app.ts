@@ -4,6 +4,7 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
+import {routerGetAlumno} from "./routes/alumnoRoutes";
 
 
 dotenv.config();
@@ -23,13 +24,15 @@ server.use(cors())
 
 // Router
 server.use("/api/tareas", tareasRouter);
+server.use("/api/alumno", routerGetAlumno);
+
 
 const run = async () => {
     await connect(DB_CONN);
     console.log("Se ha conectado a la base de datos");
 
     server.listen(PORT, () => {
-        console.info(`Iniciando servidor en puerto ${PORT}`)
+        console.info(`Iniciando servidor en puerto ${PORT}`);
     });
 
 };
