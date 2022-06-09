@@ -5,8 +5,8 @@ import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
 import {routerGetAlumno} from "./routes/alumnoRoutes";
+import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
 import routerPostMateria from './routes/materiaRoutes';
-
 
 
 dotenv.config();
@@ -26,7 +26,9 @@ server.use(cors())
 
 // Router
 server.use("/api/tareas", tareasRouter);
-server.use("/api/alumno", routerGetAlumno);
+server.use("/api/alumnos", routerGetAlumno);
+server.use("/api/alumnos", routerGetByIdAlumno)
+
 server.use("/api/materias",routerPostMateria)
 
 const run = async () => {
