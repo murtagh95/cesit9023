@@ -5,6 +5,7 @@ import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
 import {routerGetAlumno} from "./routes/alumnoRoutes";
+import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
 import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
 import routerPostMateria from './routes/materiaRoutes';
 
@@ -26,6 +27,8 @@ server.use(cors())
 
 // Router
 server.use("/api/tareas", tareasRouter);
+server.use("/api/alumno", routerGetAlumno);
+server.use("/api/alumno", routerBajaAlumno)
 server.use("/api/alumnos", routerGetAlumno);
 server.use("/api/alumnos", routerGetByIdAlumno)
 
@@ -40,5 +43,4 @@ const run = async () => {
     });
 
 };
-
 run().catch(err => console.log(err));
