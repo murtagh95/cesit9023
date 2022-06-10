@@ -1,22 +1,23 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios';
 import { Tarea } from '../models/Tarea'
-import { buscarTaresService } from '../services/tareas-services';
+import { buscarTaresService, CustomError } from '../services/tareas-services';
 import type { RootState } from '../store/store'
 
 // Define a type for the slice state
 interface TareasState {
   tareas: Tarea[];
-  tareaSeleccionada: string | null;
   cargando: boolean;
   cantidad: number;
+  mensajeError: string | null;
 }
 
 // Define the initial state using that type
 const initialState: TareasState = {
   tareas: [],
-  tareaSeleccionada: null,
   cargando: false,
-  cantidad: 0
+  cantidad: 0,
+  mensajeError: null
 }
 
 export const tareasSlice = createSlice({
@@ -29,22 +30,23 @@ export const tareasSlice = createSlice({
     },
     limpiarTareas: (state) => {
         state.tareas = initialState.tareas;
-        state.tareaSeleccionada = initialState.tareaSeleccionada;
         state.cantidad = 0;
-    }
+    },
   },
   extraReducers: (builder) => {
       builder.addCase(buscarTareas.pending, (state) => {
         state.cargando = true;
         state.cantidad = 0;
+        state.mensajeError = null;
       });
-      builder.addCase(buscarTareas.fulfilled, (state, action) => {
-        state.tareas = action.payload || [];
+      builder.addCase(buscarTareas.fulfilled, (state, { payload } :PayloadAction<Tarea[] | null>) => {
+        state.tareas = payload || [];
         state.cargando = false;
         state.cantidad = state.tareas.length;
       });
-      builder.addCase(buscarTareas.rejected, (state, action) => {
-        console.info("---", action)
+      builder.addCase(buscarTareas.rejected, (state, { payload }: PayloadAction<CustomError|undefined>) => {
+        state.mensajeError = payload?.message || 'Error desconocido';
+        state.cargando = false;
       });
   }
 })
@@ -55,10 +57,17 @@ export default tareasSlice.reducer
 
 // Extra reducers 
 
-export const buscarTareas = createAsyncThunk(
+type TareaRes = Tarea[] | null;
+
+export const buscarTareas = createAsyncThunk
+                            <TareaRes, void, { rejectValue: CustomError}>(
     'tarea/buscarTareas',
-    async () => {
-        const tareasRes = await buscarTaresService();
-        return tareasRes;
+    async (_: void, thunkApi) => {
+        try {
+            const tareasRes = await buscarTaresService();
+            return tareasRes || [];
+        } catch (error) {
+            return thunkApi.rejectWithValue(error as CustomError)
+        }
     }
 )

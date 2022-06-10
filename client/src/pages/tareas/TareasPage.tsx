@@ -1,4 +1,16 @@
-import { Button, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { 
+  Button, 
+  LinearProgress, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Typography,
+  Link as MuiLink,
+  Alert
+} from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,7 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 const TareasPage = () => {
 
   const dispatch = useAppDispatch();
-  const { cargando, tareas } = useAppSelector(state => state.tarea);
+  const { cargando, tareas, mensajeError } = useAppSelector(state => state.tarea);
 
   const navigate = useNavigate();
 
@@ -16,17 +28,27 @@ const TareasPage = () => {
     dispatch(buscarTareas());
 
     return () => {
-      dispatch(limpiarTareas());
+      if(!window.location.pathname.startsWith("/tareas")){
+        dispatch(limpiarTareas());
+      }
     }
   }, []);
-  
+
   return (
     <Box>
       <Typography variant='h3'>Listando Tareas</Typography>
       <Button variant="contained" size="small" onClick={()=> navigate("/tareas/nueva")}>Nuevo</Button>
       
-      {cargando ? (<Box marginTop={2}><LinearProgress color="secondary" /></Box>) : (
-        <TableContainer>
+      {mensajeError && <Box marginTop={2}>
+        <Alert severity="error" color="error">
+          {mensajeError}
+        </Alert>
+      </Box>}
+
+      { cargando ? 
+        (<Box marginTop={2}><LinearProgress color="secondary" /></Box>) 
+      : (
+        !mensajeError && <TableContainer>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
