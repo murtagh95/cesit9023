@@ -1,33 +1,32 @@
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, LinearProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-import { Tarea } from '../../models/Tarea';
-import { buscarTaresService } from '../../services/tareas-services';
+import { buscarTareas, limpiarTareas } from '../../slices/tareasSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 const TareasPage = () => {
 
-  const [tareas, setTareas] = useState<Tarea[]>([]);
+  const dispatch = useAppDispatch();
+  const { cargando, tareas } = useAppSelector(state => state.tarea);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch(buscarTareas());
 
-    const buscarTareas = async () => {
-      const tareasRes = await buscarTaresService();
-      setTareas(tareasRes || []);
+    return () => {
+      dispatch(limpiarTareas());
     }
-
-    buscarTareas();
   }, []);
-
   
   return (
     <Box>
       <Typography variant='h3'>Listando Tareas</Typography>
       <Button variant="contained" size="small" onClick={()=> navigate("/tareas/nueva")}>Nuevo</Button>
       
-      <TableContainer>
+      {cargando ? (<Box marginTop={2}><LinearProgress color="secondary" /></Box>) : (
+        <TableContainer>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
@@ -56,6 +55,7 @@ const TareasPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      )}      
     </Box>
   )
 }

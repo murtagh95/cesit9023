@@ -17,6 +17,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { FC } from 'react';
 import { drawerWidth } from '../constants';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../store/hooks';
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
@@ -59,13 +60,16 @@ const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
   </ListItemButton>
 )
 
-export const mainListItems = (
+export const MainListItems: FC = () => {
+  const { cantidad } = useAppSelector(state => state.tarea);
+  return (
     <>
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
       <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
-      <MenuItem title="Tareas" to="/tareas" icon={<PeopleIcon />} />
+      <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<PeopleIcon />} />
     </>
-  );
+    );
+};
 
 interface LeftMenuProps {
     open: boolean;
@@ -90,7 +94,7 @@ const LeftMenu: FC<LeftMenuProps> = ({ open, toggleDrawer }) => {
         </Toolbar>
         <Divider />
         <List component="nav">
-        {mainListItems}
+        <MainListItems />
         </List>
     </Drawer>
   )
