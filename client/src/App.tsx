@@ -9,6 +9,9 @@ import Ejemplos from './pages/ejemplos/Ejemplos'
 import HomePage from './pages/HomePage'
 import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
+import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const mdTheme = createTheme();
 
@@ -20,20 +23,25 @@ const App = () => {
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <TopBar open={open} toggleDrawer={toggleDrawer}  />
-        <LeftMenu open={open} toggleDrawer={toggleDrawer} />
-        <AppContainer>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/ejemplos" element={<Ejemplos />} />
-            <Route path="/tareas" element={<TareasPage />} />
-          </Routes>
-        </AppContainer>
-      </Box>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={mdTheme}>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <TopBar open={open} toggleDrawer={toggleDrawer}  />
+          <LeftMenu open={open} toggleDrawer={toggleDrawer} />
+          <AppContainer>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/ejemplos" element={<Ejemplos />} />
+              <Route path="/tareas" element={<TareasPage />} />
+              <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
+              <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
+              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
+            </Routes>
+          </AppContainer>
+        </Box>
+      </ThemeProvider>
+    </Provider>
   )
   
 }

@@ -14,7 +14,7 @@ const EjemploIntegradorEffect = () => {
 
     useEffect(()=> {
         console.info("--- en buscar tareas");
-        buscarTareasHandler()
+        buscarTareasHandler();
     }, []);
 
     useEffect(()=> {
