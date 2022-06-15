@@ -67,6 +67,8 @@ export const MainListItems: FC = () => {
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
       <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
       <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<PeopleIcon />} />
+      <MenuItem title={`Carreras (${cantidad})`} to="/carreras" icon={<PeopleIcon />} />
+      <MenuItem title={`Cursos (${cantidad})`} to="/cursos" icon={<PeopleIcon />} />
     </>
     );
 };

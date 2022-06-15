@@ -14,7 +14,7 @@ server.use(cors());
 server.use(express.json());
 server.use("/api/tareas", tareasRouter);
 server.use("/api/cursos", cursosRouter);
-server.use("/api/ ", carrerasRouter);
+server.use("/api/carreras", carrerasRouter);
 
 const run = async () => {
     await connect(DB_CONN);

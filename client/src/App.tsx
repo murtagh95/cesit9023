@@ -12,6 +12,7 @@ import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import CarerrasPage from './pages/carreras/CarerrasPage';
 
 const mdTheme = createTheme();
 
@@ -37,6 +38,7 @@ const App = () => {
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
+              <Route path="/carreras" element={<CarerrasPage />} />
             </Routes>
           </AppContainer>
         </Box>
