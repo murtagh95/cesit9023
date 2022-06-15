@@ -7,7 +7,7 @@ import { buscarCarrerasService,CustomError } from '../services/carreras-services
 interface CarrerasState {
   carreras: Carrera[];
   cargando: boolean;
-  cantidad: number;
+  cantidadCarrera: number;
   mensajeError: string | null;
 }
 
@@ -15,7 +15,7 @@ interface CarrerasState {
 const initialState: CarrerasState = {
   carreras: [],
   cargando: false,
-  cantidad: 0,
+  cantidadCarrera: 0,
   mensajeError: null
 }
 
@@ -29,19 +29,19 @@ export const carrerasSlice = createSlice({
     },
     limpiarCarrera: (state) => {
         state.carreras = initialState.carreras;
-        state.cantidad = 0;
+        state.cantidadCarrera = 0;
     },
   },
   extraReducers: (builder) => {
       builder.addCase(buscarCarrera.pending, (state) => {
         state.cargando = true;
-        state.cantidad = 0;
+        state.cantidadCarrera = 0;
         state.mensajeError = null;
       });
       builder.addCase(buscarCarrera.fulfilled, (state, { payload } :PayloadAction<Carrera[] | null>) => {
         state.carreras = payload || [];
         state.cargando = false;
-        state.cantidad = state.carreras.length;
+        state.cantidadCarrera = state.carreras.length;
       });
       builder.addCase(buscarCarrera.rejected, (state, { payload }: PayloadAction<CustomError|undefined>) => {
         state.mensajeError = payload?.message || 'Error desconocido';
