@@ -1,5 +1,5 @@
 export interface Tarea {
-    _id: string;
+    _id?: string;
     nombre: string;
     descripcion: string;
 }

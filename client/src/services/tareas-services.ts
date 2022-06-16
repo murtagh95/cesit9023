@@ -23,3 +23,12 @@ export const buscarTaresService = async (): Promise<Tarea[] | null> => {
         throw manageError(error);
     }
 }
+
+export const crearTareaService = async (data: Tarea): Promise<Tarea> => {
+    try {
+        const res = await axios.post<Tarea>('http://localhost:5005/api/tareas', data);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+}

@@ -1,8 +1,12 @@
-import React from 'react'
+import { Box, Typography } from '@mui/material'
+import FormTarea from './FormTarea'
 
 const TareasNuevaPage = () => {
   return (
-    <div>TareasNuevaPage</div>
+    <Box>
+      <Typography variant="h3">Nueva Tarea</Typography>
+      <FormTarea />
+    </Box>
   )
 }
 
