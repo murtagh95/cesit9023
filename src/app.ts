@@ -9,6 +9,8 @@ import { routerGetById } from './routes/getMateriaByIdRouter';
 import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
 import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
 import routerPostMateria from './routes/materiaRoutes';
+import { routerGetMateria } from './routes/materiaGetRouter';
+
 
 
 dotenv.config();
@@ -35,6 +37,7 @@ server.use("/api/alumnos", routerGetAlumno);
 server.use("/api/alumnos", routerGetByIdAlumno);
 
 server.use("/api/materias",routerPostMateria)
+server.use("/api/materias", routerGetMateria)
 
 const run = async () => {
     await connect(DB_CONN);
