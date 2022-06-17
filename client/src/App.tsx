@@ -14,6 +14,8 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import CarerrasPage from './pages/carreras/CarerrasPage';
 import CursosPage from './pages/cursos/CursosPage';
+import CarreraNuevoPage from './pages/carreras/CarreraNuevoPage';
+import CarrerasVerPage from './pages/carreras/CarrerasVerPage';
 
 const mdTheme = createTheme();
 
@@ -40,7 +42,9 @@ const App = () => {
               <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/carreras" element={<CarerrasPage />} />
-              <Route path='cursos' element={<CursosPage/>}/>
+              <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
+              <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />
+              <Route path='/cursos' element={<CursosPage/>}/>
             </Routes>
           </AppContainer>
         </Box>

@@ -24,3 +24,13 @@ export const buscarCarrerasService = async (): Promise<Carrera[] | null> => {
         throw manageError(error);
     }
 }
+
+export const crearCarreraService = async (carrera: Carrera): Promise<Carrera | null> => {
+    try {
+        const res = await axios.post<Carrera>('http://localhost:5005/api/carreras', carrera);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+}
+
