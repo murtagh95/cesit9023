@@ -1,5 +1,16 @@
 # Guia de uso de git
 
+## 0. Nos traemos los últimos cambios
+
+```bash
+# Verificamos que no tenemos nada para comitear
+git status
+
+# Si habia algo luego de commitear traemos los útimos cambios
+git pull
+
+```
+
 ## 1. Creamos una nueva rama
 
 ```bash
