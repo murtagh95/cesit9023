@@ -80,3 +80,25 @@ git branch
 
 git branch -D feature/xx-nombre-de-rama-a-borrar
 ```
+
+## Resolución de conflicto
+
+Aparece después de que hacemos un merge
+
+```bash
+# Luego de megear vemos estado del repo
+git status
+
+# Si hay conflicto lo vemos en ese listado e ingresamos a cada archivo con conflicto
+
+# Arreglamos el conflicto a mano y verficamos que todo quede funcionado
+
+# Agregamos los cambios, comiteamos y subimos
+
+git add .
+# -a nos abre el editor por defecto
+git commit -a # sino usar -m con mensaje custom
+# después de -a solo guardamos y cerramos
+git push
+
+```
