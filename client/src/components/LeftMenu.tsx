@@ -63,13 +63,14 @@ const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
 export const MainListItems: FC = () => {
   const { cantidad } = useAppSelector(state => state.tarea);
   const { cantidadCarrera } = useAppSelector(state => state.carrera);
+  const { cantidadCursos } = useAppSelector (state => state.curso);
   return (
     <>
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
       <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
       <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<PeopleIcon />} />
       <MenuItem title={`Carreras (${cantidadCarrera})`} to="/carreras" icon={<PeopleIcon />} />
-      <MenuItem title={`Cursos (${cantidad})`} to="/cursos" icon={<PeopleIcon />} />
+      <MenuItem title={`Cursos (${cantidadCursos})`} to="/cursos" icon={<PeopleIcon />} />
     </>
     );
 };

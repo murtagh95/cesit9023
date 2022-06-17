@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import carrerasSlice from '../slices/carrerasSlice';
 import counterSlice from '../slices/counterSlice';
+import cursosSlice  from '../slices/cursosSlice';
 import tareasSlice from '../slices/tareasSlice';
 
 const store = configureStore({
@@ -8,7 +9,7 @@ const store = configureStore({
       counter: counterSlice,
       tarea: tareasSlice,
       carrera: carrerasSlice,
-     
+      curso:cursosSlice
     },
 })
 
