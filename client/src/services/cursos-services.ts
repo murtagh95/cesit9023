@@ -24,3 +24,12 @@ export const buscarCursosService = async (): Promise<Curso[] | null> => {
         throw manageError(error);
     }
 }
+
+export const crearCursoService = async (curso: Curso): Promise<Curso | null> => {
+    try {
+        const res = await axios.post<Curso>('http://localhost:5005/api/cursos', curso);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+}

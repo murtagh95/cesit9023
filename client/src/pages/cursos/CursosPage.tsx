@@ -37,7 +37,7 @@ import {
     return (
       <Box>
         <Typography variant='h3'>Listando Cursos</Typography>
-        <Button variant="contained" size="small" onClick={()=> navigate("/curso/nuevo")}>Nuevo</Button>
+        <Button variant="contained" size="small" onClick={()=> navigate("/curso/nuevo")}>Nuevo Curso</Button>
         
         {mensajeError && <Box marginTop={2}>
           <Alert severity="error" color="error">
@@ -72,7 +72,7 @@ import {
                   <TableCell align="right">{curso.carrera}</TableCell>
                   <TableCell align="right">{curso.bedelia}</TableCell>
                   <TableCell align="right">
-                    <Link to={`/carreras/${curso._id}/ver`}>Ver</Link>
+                  <Button variant="contained" size="small" onClick={()=> navigate(`/cursos/${curso._id}/ver`)}>ver</Button>
                   </TableCell>
                 </TableRow>
               ))}
