@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { Tarea } from '../models/Tarea';
+import { Profesor } from '../models/Profesor';
 
 export class CustomError extends Error {
     constructor(public code: number, public message: string) {
@@ -15,18 +15,18 @@ const manageError = (error: unknown): CustomError => {
     }
 }
 
-export const buscarTareaService = async (): Promise<Tarea[] | null> => {
+export const buscarProfesorService = async (): Promise<Profesor[] | null> => {
     try {
-        const res = await axios.get<Tarea[]>('http://localhost:5005/api/tareas');
+        const res = await axios.get<Profesor[]>('http://localhost:5005/api/profesores');
         return res.data;
     } catch (error) {
         throw manageError(error);
     }
 }
 
-export const crearTareaService = async (data: Tarea): Promise<Tarea> => {
+export const crearProfesorService = async (data: Profesor): Promise<Profesor> => {
     try {
-        const res = await axios.post<Tarea>('http://localhost:5005/api/tareas', data);
+        const res = await axios.post<Profesor>('http://localhost:5005/api/profesores', data);
         return res.data;
     } catch (error) {
         throw manageError(error);

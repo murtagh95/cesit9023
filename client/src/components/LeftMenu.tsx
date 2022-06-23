@@ -1,49 +1,51 @@
-import { 
-    Divider, 
-    Drawer as MuiDrawer, 
-    IconButton, 
-    List, 
-    ListItemButton, 
-    ListItemIcon, 
-    ListItemText,
-    styled,
-    Toolbar,
+import {
+  Divider,
+  Drawer as MuiDrawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  styled,
+  Toolbar,
 } from '@mui/material';
 
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
+import HomeIcon from '@mui/icons-material/Home';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { FC } from 'react';
 import { drawerWidth } from '../constants';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../store/hooks';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-      '& .MuiDrawer-paper': {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
+  ({ theme, open }) => ({
+    '& .MuiDrawer-paper': {
+      position: 'relative',
+      whiteSpace: 'nowrap',
+      width: drawerWidth,
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      boxSizing: 'border-box',
+      ...(!open && {
+        overflowX: 'hidden',
         transition: theme.transitions.create('width', {
           easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
+          duration: theme.transitions.duration.leavingScreen,
         }),
-        boxSizing: 'border-box',
-        ...(!open && {
-          overflowX: 'hidden',
-          transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          width: theme.spacing(7),
-          [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-          },
-        }),
-      },
-    }),
-  );
+        width: theme.spacing(7),
+        [theme.breakpoints.up('sm')]: {
+          width: theme.spacing(9),
+        },
+      }),
+    },
+  }),
+);
 
 interface MenuItemProps {
   title: string;
@@ -53,10 +55,10 @@ interface MenuItemProps {
 
 const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
   <ListItemButton component={Link} to={to}>
-      <ListItemIcon>
-        {icon}
-      </ListItemIcon>
-      <ListItemText primary={title} />
+    <ListItemIcon>
+      {icon}
+    </ListItemIcon>
+    <ListItemText primary={title} />
   </ListItemButton>
 )
 
@@ -64,38 +66,40 @@ export const MainListItems: FC = () => {
   const { cantidad } = useAppSelector(state => state.tarea);
   return (
     <>
-      <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
-      <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
-      <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<PeopleIcon />} />
+      <MenuItem title="Home" to="/" icon={<HomeIcon />} />
+      <MenuItem title="Ejemplos" to="/ejemplos" icon={<FormatListBulletedIcon />} />
+      <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<AssignmentIcon />} />
+      <MenuItem title="Profesores" to="/profesores" icon={<AssignmentIndIcon />} />
+      <MenuItem title="Roles" to="/roles" icon={<FingerprintIcon />} />
     </>
-    );
+  );
 };
 
 interface LeftMenuProps {
-    open: boolean;
-    toggleDrawer: () => void;
+  open: boolean;
+  toggleDrawer: () => void;
 }
 
 const LeftMenu: FC<LeftMenuProps> = ({ open, toggleDrawer }) => {
 
   return (
     <Drawer variant="permanent" open={open}>
-        <Toolbar
+      <Toolbar
         sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          px: [1],
         }}
-        >
+      >
         <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
+          <ChevronLeftIcon />
         </IconButton>
-        </Toolbar>
-        <Divider />
-        <List component="nav">
+      </Toolbar>
+      <Divider />
+      <List component="nav">
         <MainListItems />
-        </List>
+      </List>
     </Drawer>
   )
 }

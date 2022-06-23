@@ -3,21 +3,25 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { crearTareaService } from '../../services/tareas-services';
+import { crearProfesorService } from '../../services/profesores-services';
 
 interface IFormInputs {
   nombre: string;
-  descripcion: string;
+  apellido: string;
+  legajo: number;
+  edad: number;
 }
 
 const schemaValidator = yup
   .object({
     nombre: yup.string().required('El nombre es requerido'),
-    descripcion: yup.string().required('La descripcion es requerida'),
+    apellido: yup.string().required('El apellido es requerido'),
+    legajo: yup.string().required('El número de legajo es requerido'),
+    edad: yup.string(),
   })
   .required();
 
-const FormTarea = () => {
+const FormProfesor = () => {
   const navigate = useNavigate();
   const {
     control,
@@ -30,8 +34,8 @@ const FormTarea = () => {
   const onSubmit = async (data: IFormInputs) => {
     console.info('--- valores del formulario', data);
     try {
-      await crearTareaService(data);
-      navigate('/tareas');
+      await crearProfesorService(data);
+      navigate('/profesores');
     } catch (error) {
       console.error(error);
     }
@@ -59,24 +63,65 @@ const FormTarea = () => {
 
         <br />
         <br />
-        
+
         <Controller
-          name='descripcion'
+          name='apellido'
           control={control}
           defaultValue=''
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Descripcion'
-              placeholder='Ingrese la descripcion aquí...'
+              label='Apellido'
+              placeholder='Ingrese el apellido aquí...'
               fullWidth
-              error={Boolean(errors.descripcion)}
-              helperText={errors.descripcion ? errors.descripcion.message : ''}
+              error={Boolean(errors.apellido)}
+              helperText={errors.apellido ? errors.apellido.message : ''}
             />
           )}
         />
-        {errors.descripcion && <p>{errors.descripcion.message}</p>}
+
+        <br />
+        <br />
+
+        <Controller
+          name='legajo'
+          control={control}
+          defaultValue={0}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              multiline
+              label='Número de legajo'
+              placeholder='Ingrese el número de legajo aquí...'
+              fullWidth
+              error={Boolean(errors.legajo)}
+              helperText={errors.legajo ? errors.legajo.message : ''}
+            />
+          )}
+        />
+
+        <br />
+        <br />
+
+
+        <Controller
+          name='edad'
+          control={control}
+          defaultValue={0}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              multiline
+              label='Edad'
+              placeholder='Ingrese la edad aquí...'
+              fullWidth
+              error={Boolean(errors.edad)}
+              helperText={errors.edad ? errors.edad.message : ''}
+            />
+          )}
+        />
+
         <br />
         <input type='submit' />
       </form>
@@ -84,4 +129,4 @@ const FormTarea = () => {
   );
 };
 
-export default FormTarea;
+export default FormProfesor;

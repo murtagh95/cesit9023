@@ -8,12 +8,12 @@ import {
   TableHead, 
   TableRow, 
   Typography,
-  Link as MuiLink,
+  Link,
   Alert
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { buscarTareas, limpiarTareas } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
@@ -69,7 +69,7 @@ const TareasPage = () => {
                 </TableCell>
                 <TableCell align="right">true</TableCell>
                 <TableCell align="right">
-                  <Link to={`/tareas/${tarea._id}/ver`}>Ver</Link>
+                  <Link href={`/tareas/${tarea._id}/ver`}>Ver</Link>
                 </TableCell>
               </TableRow>
             ))}

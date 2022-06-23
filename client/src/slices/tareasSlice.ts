@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios';
 import { Tarea } from '../models/Tarea'
-import { buscarTaresService, CustomError } from '../services/tareas-services';
+import { buscarTareaService, CustomError } from '../services/tareas-services';
 import type { RootState } from '../store/store'
 
 // Define a type for the slice state
@@ -64,7 +64,7 @@ export const buscarTareas = createAsyncThunk
     'tarea/buscarTareas',
     async (_: void, thunkApi) => {
         try {
-            const tareasRes = await buscarTaresService();
+            const tareasRes = await buscarTareaService();
             return tareasRes || [];
         } catch (error) {
             return thunkApi.rejectWithValue(error as CustomError)
