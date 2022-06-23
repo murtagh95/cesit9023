@@ -10,8 +10,8 @@ import { routerGetById } from './routes/getMateriaByIdRouter';
 import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
 import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
 import routerPostMateria from './routes/materiaRoutes';
+import { routerDeleteMateria } from './routes/materiaDeleteRoutes';
 import { routerGetMateria } from './routes/materiaGetRouter';
-
 
 
 dotenv.config();
@@ -33,12 +33,13 @@ server.use(cors())
 server.use("/api/tareas", tareasRouter);
 server.use("/api/alumnos",routerPutAlumno)
 server.use("/api/alumno", routerGetAlumno);
-server.use("/api/materias", routerGetById);
 server.use("/api/alumno", routerBajaAlumno);
 server.use("/api/alumnos", routerGetAlumno);
 server.use("/api/alumnos", routerGetByIdAlumno);
 server.use("/api/materias",routerPostMateria)
+server.use("/api/materias", routerDeleteMateria);
 server.use("/api/materias", routerGetMateria)
+server.use("/api/materias", routerGetById);
 
 const run = async () => {
     await connect(DB_CONN);
