@@ -32,3 +32,21 @@ export const crearTareaService = async (data: Tarea): Promise<Tarea> => {
         throw manageError(error);
     }
 }
+
+export const buscarTareaPorIdService = async (id: string): Promise<Tarea> => {
+    try {
+        const res = await axios.get<Tarea>(`http://localhost:5005/api/tareas/${id}`);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+}
+
+export const actualizarTareaService = async (id:string, data: Partial<Tarea>) => {
+    try {
+        const res = await axios.put<Tarea>(`http://localhost:5005/api/tareas/${id}`, data);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+}

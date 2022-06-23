@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage'
 import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
+import TareasEditarPage from './pages/tareas/TareasEditarPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import CarerrasPage from './pages/carreras/CarerrasPage';
@@ -18,6 +19,7 @@ import CarrerasVerPage from './pages/carreras/CarrerasVerPage';
 import CursosNuevoPage from './pages/cursos/CursosNuevoPage';
 import CursosVerPage from './pages/cursos/CursosVerPage';
 import CursosPage from './pages/cursos/CursosPage';
+
 
 const mdTheme = createTheme();
 
@@ -42,6 +44,7 @@ const App = () => {
               <Route path="/tareas" element={<TareasPage />} />
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
+              <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/carreras" element={<CarerrasPage />} />
               <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
@@ -49,8 +52,6 @@ const App = () => {
               <Route path='/cursos' element={<CursosPage/>}/>
               <Route path="/curso/nuevo" element={<CursosNuevoPage />} />
               <Route path="/cursos/:id/ver" element={<CursosVerPage />} />
-
-
             </Routes>
           </AppContainer>
         </Box>

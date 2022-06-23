@@ -70,6 +70,8 @@ const TareasPage = () => {
                 <TableCell align="right">true</TableCell>
                 <TableCell align="right">
                   <Link to={`/tareas/${tarea._id}/ver`}>Ver</Link>
+                  {` `}
+                  <Link to={`/tareas/${tarea._id}/editar`}>Editar</Link>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,11 +1,11 @@
-import { Box, Grid, Input, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { crearTareaService } from '../../services/tareas-services';
 
-interface IFormInputs {
+import { FC } from 'react';
+
+export interface IFormInputs {
   nombre: string;
   descripcion: string;
 }
@@ -17,28 +17,27 @@ const schemaValidator = yup
   })
   .required();
 
-const FormTarea = () => {
-  const navigate = useNavigate();
+interface FormTareaProps {
+  data?: IFormInputs;
+  onSubmit: (data: IFormInputs) => void
+};
+
+const FormTarea: FC<FormTareaProps> = ({data, onSubmit}) => {
+  
+
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>({
+    defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
-  const onSubmit = async (data: IFormInputs) => {
-    console.info('--- valores del formulario', data);
-    try {
-      await crearTareaService(data);
-      navigate('/tareas');
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   return (
-    <Grid xs={8}>
+    <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name='nombre'

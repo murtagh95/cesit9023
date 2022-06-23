@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios';
 import { Tarea } from '../models/Tarea'
-import { buscarTaresService, CustomError } from '../services/tareas-services';
+import { buscarTareaPorIdService, buscarTaresService, CustomError } from '../services/tareas-services';
 import type { RootState } from '../store/store'
 
 // Define a type for the slice state
 interface TareasState {
   tareas: Tarea[];
+  tareaSeleccionada: Tarea | null;
   cargando: boolean;
   cantidad: number;
   mensajeError: string | null;
@@ -15,6 +16,7 @@ interface TareasState {
 // Define the initial state using that type
 const initialState: TareasState = {
   tareas: [],
+  tareaSeleccionada: null,
   cargando: false,
   cantidad: 0,
   mensajeError: null
@@ -48,6 +50,19 @@ export const tareasSlice = createSlice({
         state.mensajeError = payload?.message || 'Error desconocido';
         state.cargando = false;
       });
+      builder.addCase(buscarTareaPorId.pending, (state) => {
+        state.cargando = true;
+        state.mensajeError = null;
+      });
+      builder.addCase(buscarTareaPorId.fulfilled, (state, { payload } :PayloadAction<Tarea | null>) => {
+        console.info("--- ther",payload)
+        state.tareaSeleccionada = payload || null;
+        state.cargando = false;
+      });
+      builder.addCase(buscarTareaPorId.rejected, (state, { payload }: PayloadAction<CustomError|undefined>) => {
+        state.mensajeError = payload?.message || 'Error desconocido';
+        state.cargando = false;
+      });
   }
 })
 
@@ -66,6 +81,19 @@ export const buscarTareas = createAsyncThunk
         try {
             const tareasRes = await buscarTaresService();
             return tareasRes || [];
+        } catch (error) {
+            return thunkApi.rejectWithValue(error as CustomError)
+        }
+    }
+)
+
+export const buscarTareaPorId = createAsyncThunk
+                            <Tarea, string, { rejectValue: CustomError}>(
+    'tarea/buscarTareaPorId',
+    async (id: string, thunkApi) => {
+        try {
+            const tareaRes = await buscarTareaPorIdService(id);
+            return tareaRes;
         } catch (error) {
             return thunkApi.rejectWithValue(error as CustomError)
         }
