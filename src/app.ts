@@ -10,6 +10,7 @@ import { routerGetById } from './routes/getMateriaByIdRouter';
 import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
 import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
 import routerPostMateria from './routes/materiaRoutes';
+import { routerPutMateria } from './routes/materiaRouter';
 import { routerDeleteMateria } from './routes/materiaDeleteRoutes';
 import { routerGetMateria } from './routes/materiaGetRouter';
 
@@ -35,6 +36,9 @@ server.use("/api/alumnos",routerPutAlumno)
 server.use("/api/alumno", routerGetAlumno);
 server.use("/api/alumno", routerBajaAlumno);
 server.use("/api/alumnos", routerGetAlumno);
+server.use("/api/alumnos", routerGetByIdAlumno)
+server.use("/api/alumno", routerGetAlumno);
+server.use("/api/materia", routerPutMateria)
 server.use("/api/alumnos", routerGetByIdAlumno);
 server.use("/api/materias",routerPostMateria)
 server.use("/api/materias", routerDeleteMateria);
