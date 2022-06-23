@@ -6,6 +6,7 @@ import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
 import {routerPutAlumno} from './routes/putAlumnosRoute';
 import {routerGetAlumno} from "./routes/alumnoRoutes";
+import routerPostAlumno from './routes/postAlumnoRouter';
 import { routerGetById } from './routes/getMateriaByIdRouter';
 import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
 import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
@@ -34,6 +35,7 @@ server.use(cors())
 server.use("/api/tareas", tareasRouter);
 server.use("/api/alumnos",routerPutAlumno)
 server.use("/api/alumno", routerGetAlumno);
+server.use("/api/alumno",routerPostAlumno)
 server.use("/api/alumno", routerBajaAlumno);
 server.use("/api/alumnos", routerGetAlumno);
 server.use("/api/alumnos", routerGetByIdAlumno)
