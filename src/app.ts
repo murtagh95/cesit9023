@@ -4,16 +4,10 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
-import {routerPutAlumno} from './routes/putAlumnosRoute';
-import {routerGetAlumno} from "./routes/alumnoRoutes";
-import routerPostAlumno from './routes/postAlumnoRouter';
-import { routerGetById } from './routes/getMateriaByIdRouter';
-import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
-import routerGetByIdAlumno from './routes/alumnoByIdRoutes';
-import routerPostMateria from './routes/materiaRoutes';
-import { routerPutMateria } from './routes/materiaRouter';
-import { routerDeleteMateria } from './routes/materiaDeleteRoutes';
-import { routerGetMateria } from './routes/materiaGetRouter';
+
+// Routes
+import { routerMateria } from './routes/materiaRouter';
+import { alumnoRouter } from './routes/alumnoRoutes';
 
 
 dotenv.config();
@@ -33,19 +27,8 @@ server.use(cors())
 
 // Router
 server.use("/api/tareas", tareasRouter);
-server.use("/api/alumnos",routerPutAlumno)
-server.use("/api/alumno", routerGetAlumno);
-server.use("/api/alumno",routerPostAlumno)
-server.use("/api/alumno", routerBajaAlumno);
-server.use("/api/alumnos", routerGetAlumno);
-server.use("/api/alumnos", routerGetByIdAlumno)
-server.use("/api/alumno", routerGetAlumno);
-server.use("/api/materia", routerPutMateria)
-server.use("/api/alumnos", routerGetByIdAlumno);
-server.use("/api/materias",routerPostMateria)
-server.use("/api/materias", routerDeleteMateria);
-server.use("/api/materias", routerGetMateria)
-server.use("/api/materias", routerGetById);
+server.use("/api/alumnos",alumnoRouter);
+server.use("/api/materias", routerMateria);
 
 const run = async () => {
     await connect(DB_CONN);
@@ -54,7 +37,6 @@ const run = async () => {
     server.listen(PORT, () => {
         console.info(`Iniciando servidor en puerto ${PORT}`);
     });
-
 };
 
 run().catch(err => console.log(err));

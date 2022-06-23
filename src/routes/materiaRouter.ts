@@ -1,12 +1,27 @@
-import { Router } from "express";
-import { PutMateriaController } from "../controller/putMateriaController";
+import {Request, Response, Router} from "express";
+import { MateriaController } from "../controller/materiaController";
 
-const routerPutMateria = Router();
-const putMateriaController = new PutMateriaController();
+const routerMateria = Router();
+const materiaController = new MateriaController();
 
-routerPutMateria.put("/:id",async (request, respose) => {
-    await putMateriaController.updateAlumno (request,respose);
+routerMateria.post("/",async (req, res) =>{
+    await materiaController.postMateria (req,res);
 })
 
+routerMateria.put("/:id",async (request, respose) => {
+    await materiaController.updateAlumno (request,respose);
+})
 
-export { routerPutMateria };
+routerMateria.get("/", async(request, response) => {
+    await materiaController.getMaterias(request,response)
+});
+
+routerMateria.delete("/:_id",async (req: Request, res: Response) => {
+    await materiaController.bajaLogica(req, res);
+});
+
+routerMateria.get("/:id", async (request, response) => {
+    await materiaController.getMateriaById(request, response);
+});
+
+export { routerMateria };

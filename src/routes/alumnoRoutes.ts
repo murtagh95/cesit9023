@@ -1,13 +1,29 @@
 import { Router } from "express";
-import GetAlumnoController  from "../controller/getAlumnoContorller";
+import AlumnoController from "../controller/alumnoController";
 
 
-const routerGetAlumno = Router()
-const alumnoController = new GetAlumnoController()
+const alumnoRouter = Router()
+const alumnoController = new AlumnoController();
 
-routerGetAlumno.get("/", async (request, response) => {
+alumnoRouter.put("/:id",async (req, res) =>{
+    await alumnoController.updateAlumno (req,res);
+})
+
+alumnoRouter.post("/", async (req, res) => {
+    await alumnoController.mandarAlumno(req,res)
+})
+
+alumnoRouter.delete("/:id", async (request, response) => {
+    await alumnoController.bajaAlumno(request, response);
+});
+
+alumnoRouter.get("/:id", async (request, response)=>{
+    await alumnoController.getById(request,response)
+} );
+
+alumnoRouter.get("/", async (request, response) => {
     await alumnoController.getTasks(request, response);
 });
 
-export { routerGetAlumno };
+export { alumnoRouter };
 
