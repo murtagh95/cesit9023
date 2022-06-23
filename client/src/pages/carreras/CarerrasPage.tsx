@@ -37,7 +37,7 @@ import { buscarCarrera, limpiarCarrera } from '../../slices/carrerasSlice';
     return (
       <Box>
         <Typography variant='h3'>Listando Carreras</Typography>
-        <Button variant="contained" size="small" onClick={()=> navigate("/carrera/nueva")}>Nuevo Curso</Button>
+        <Button variant="contained" size="small" onClick={()=> navigate("/carrera/nueva")}>Nuevo Carrera</Button>
         
         {mensajeError && <Box marginTop={2}>
           <Alert severity="error" color="error">
