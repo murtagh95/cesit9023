@@ -56,6 +56,7 @@ const ProfesoresPage = () => {
                   <TableCell align="right">Apellido</TableCell>
                   <TableCell align="right">Legajo</TableCell>
                   <TableCell align="right">Edad</TableCell>
+                  <TableCell align="right">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
