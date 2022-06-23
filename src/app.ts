@@ -4,6 +4,7 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import * as dotenv from "dotenv";
+import {routerPutAlumno} from './routes/putAlumnosRoute';
 import {routerGetAlumno} from "./routes/alumnoRoutes";
 import { routerGetById } from './routes/getMateriaByIdRouter';
 import {routerBajaAlumno} from "./routes/deleteAlumnoRouter";
@@ -30,19 +31,18 @@ server.use(cors())
 
 // Router
 server.use("/api/tareas", tareasRouter);
+server.use("/api/alumnos",routerPutAlumno)
 server.use("/api/alumno", routerGetAlumno);
 server.use("/api/materias", routerGetById);
 server.use("/api/alumno", routerBajaAlumno);
 server.use("/api/alumnos", routerGetAlumno);
 server.use("/api/alumnos", routerGetByIdAlumno);
-
 server.use("/api/materias",routerPostMateria)
 server.use("/api/materias", routerGetMateria)
 
 const run = async () => {
     await connect(DB_CONN);
     console.log("Se ha conectado a la base de datos");
-
 
     server.listen(PORT, () => {
         console.info(`Iniciando servidor en puerto ${PORT}`);
