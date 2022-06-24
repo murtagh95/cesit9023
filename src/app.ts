@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import { connect } from 'mongoose';
-import tareasRouter from './routes/tareasRoutes'
-import cursosRouter from "./routes/cursosRoutes";
-import carrerasRouter from "./routes/carrerasRoutes";
+import tareasRouter from './routes/tareasRoutes';
+import cursosRouter from './routes/cursosRoutes';
+import carrerasRouter from './routes/carrerasRoutes';
 
 const PORT = 5005;
 const DB_NAME = 'prog3-2022';
@@ -12,18 +12,17 @@ const server = express();
 
 server.use(cors());
 server.use(express.json());
-server.use("/api/tareas", tareasRouter);
-server.use("/api/cursos", cursosRouter);
-server.use("/api/carreras", carrerasRouter);
+server.use('/api/tareas', tareasRouter);
+server.use('/api/cursos', cursosRouter);
+server.use('/api/carreras', carrerasRouter);
 
 const run = async () => {
-    await connect(DB_CONN);
-    console.log("Se ha conectado a la base de datos");
+  await connect(DB_CONN);
+  console.log('Se ha conectado a la base de datos');
 
-    server.listen(PORT, () => {
-        console.info(`Iniciando servidor en puerto ${PORT}`)
-    });
-
+  server.listen(PORT, () => {
+    console.info(`Iniciando servidor en puerto ${PORT}`);
+  });
 };
 
-run().catch(err => console.log(err));
+run().catch((err) => console.log(err));

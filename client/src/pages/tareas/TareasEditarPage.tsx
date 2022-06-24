@@ -1,30 +1,30 @@
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom';
 import { actualizarTareaService } from '../../services/tareas-services';
 import { buscarTareaPorId } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import FormTarea, { IFormInputs } from './FormTarea'
+import FormTarea, { IFormInputs } from './FormTarea';
 
 const TareasEditarPage = () => {
-  const {id} = useParams();
-  const {cargando, tareaSeleccionada} = useAppSelector(state => state.tarea)
+  const { id } = useParams();
+  const { cargando, tareaSeleccionada } = useAppSelector((state) => state.tarea);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(()=> {
-    if(id) dispatch(buscarTareaPorId(id));
-  }, [id, dispatch])
+  useEffect(() => {
+    if (id) dispatch(buscarTareaPorId(id));
+  }, [id, dispatch]);
 
-  if(cargando) {
-    return <div>Loading...</div>
+  if (cargando) {
+    return <div>Loading...</div>;
   }
-  if(!tareaSeleccionada) {
-    return <div>Tarea no econtrada</div>
+  if (!tareaSeleccionada) {
+    return <div>Tarea no econtrada</div>;
   }
 
   const actualizandoTarea = async (data: IFormInputs) => {
     try {
-      if(!id) return;
+      if (!id) return;
       await actualizarTareaService(id, data);
       navigate('/tareas');
     } catch (error) {
@@ -37,7 +37,7 @@ const TareasEditarPage = () => {
       <h3>Editar Tarea</h3>
       <FormTarea data={tareaSeleccionada} onSubmit={actualizandoTarea} />
     </div>
-  )
-}
+  );
+};
 
-export default TareasEditarPage
+export default TareasEditarPage;

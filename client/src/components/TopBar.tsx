@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
@@ -35,7 +35,7 @@ interface TopBarProps {
   toggleDrawer: () => void;
 }
 
-const TopBar: FC<TopBarProps> = ({ open, toggleDrawer}) => {
+const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
   return (
     <AppBar position="absolute" open={open}>
       <Toolbar
@@ -71,7 +71,7 @@ const TopBar: FC<TopBarProps> = ({ open, toggleDrawer}) => {
         </IconButton>
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
-export default TopBar
+export default TopBar;
