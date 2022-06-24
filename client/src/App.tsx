@@ -10,6 +10,8 @@ import HomePage from './pages/HomePage'
 import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
+import { AlumnoPage } from './components/Alumnos/AlumnoPage';
+import { MateriaPage } from './components/Materias/MateriaPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import TareasEditarPage from './pages/tareas/TareasEditarPage';
@@ -38,6 +40,8 @@ const App = () => {
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
+              <Route path="/alumnos" element={<AlumnoPage />} />
+              <Route path="/materias" element={<MateriaPage/>}/>
             </Routes>
           </AppContainer>
         </Box>
