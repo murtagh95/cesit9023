@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev ./src/app.ts",
     "start": "node ./dist/app.js",
-    "build": "tsc"
+    "build": "tsc",
+    "eslint": "eslint src",
+    "eslintFix": "eslint src --fix"
   },
   "keywords": [],
   "author": "",
@@ -22,8 +24,11 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^17.0.23",
     "@types/morgan": "^1.9.3",
+    "@types/node": "^17.0.23",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.17.0",
     "morgan": "^1.10.0",
     "ts-node-dev": "^1.1.8"
   }
