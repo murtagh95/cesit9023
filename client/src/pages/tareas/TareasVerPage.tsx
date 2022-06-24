@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const TareasVerPage = () => {
-  return (
-    <div>TareasVerPage</div>
-  )
-}
+  return <div>TareasVerPage</div>;
+};
 
-export default TareasVerPage
+export default TareasVerPage;

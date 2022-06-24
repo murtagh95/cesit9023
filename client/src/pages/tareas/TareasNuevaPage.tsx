@@ -1,10 +1,9 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material';
 import { crearTareaService } from '../../services/tareas-services';
-import FormTarea, { IFormInputs } from './FormTarea'
+import FormTarea, { IFormInputs } from './FormTarea';
 import { useNavigate } from 'react-router-dom';
 
 const TareasNuevaPage = () => {
-
   const navigate = useNavigate();
 
   const onSubmit = async (data: IFormInputs) => {
@@ -21,7 +20,7 @@ const TareasNuevaPage = () => {
       <Typography variant="h3">Nueva Tarea</Typography>
       <FormTarea onSubmit={onSubmit} />
     </Box>
-  )
-}
+  );
+};
 
-export default TareasNuevaPage  
+export default TareasNuevaPage;

@@ -2,12 +2,14 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import { connect } from 'mongoose';
-import tareasRouter from './routes/tareasRoutes';
 import * as dotenv from 'dotenv';
 
 // Routes
 import { routerMateria } from './routes/materiaRouter';
 import { alumnoRouter } from './routes/alumnoRoutes';
+import tareasRouter from './routes/tareasRoutes';
+import cursosRouter from './routes/cursosRoutes';
+import carrerasRouter from './routes/carrerasRoutes';
 
 
 dotenv.config();
@@ -29,14 +31,16 @@ server.use(cors());
 server.use('/api/tareas', tareasRouter);
 server.use('/api/alumnos',alumnoRouter);
 server.use('/api/materias', routerMateria);
+server.use('/api/cursos', cursosRouter);
+server.use('/api/carreras', carrerasRouter);
 
 const run = async () => {
-	await connect(DB_CONN);
-	console.log('Se ha conectado a la base de datos');
+  await connect(DB_CONN);
+  console.log('Se ha conectado a la base de datos');
 
-	server.listen(PORT, () => {
-		console.info(`Iniciando servidor en puerto ${PORT}`);
-	});
+  server.listen(PORT, () => {
+    console.info(`Iniciando servidor en puerto ${PORT}`);
+  });
 };
 
-run().catch(err => console.log(err));
+run().catch((err) => console.log(err));

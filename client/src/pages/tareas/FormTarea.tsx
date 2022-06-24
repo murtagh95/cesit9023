@@ -19,12 +19,10 @@ const schemaValidator = yup
 
 interface FormTareaProps {
   data?: IFormInputs;
-  onSubmit: (data: IFormInputs) => void
-};
+  onSubmit: (data: IFormInputs) => void;
+}
 
-const FormTarea: FC<FormTareaProps> = ({data, onSubmit}) => {
-  
-
+const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
   const {
     control,
     handleSubmit,
@@ -34,21 +32,19 @@ const FormTarea: FC<FormTareaProps> = ({data, onSubmit}) => {
     resolver: yupResolver(schemaValidator),
   });
 
-  
-
   return (
     <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
-          name='nombre'
+          name="nombre"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Nombre'
-              placeholder='Ingrese el nombre aquí...'
+              label="Nombre"
+              placeholder="Ingrese el nombre aquí..."
               fullWidth
               error={Boolean(errors.nombre)}
               helperText={errors.nombre ? errors.nombre.message : ''}
@@ -58,17 +54,17 @@ const FormTarea: FC<FormTareaProps> = ({data, onSubmit}) => {
 
         <br />
         <br />
-        
+
         <Controller
-          name='descripcion'
+          name="descripcion"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Descripcion'
-              placeholder='Ingrese la descripcion aquí...'
+              label="Descripcion"
+              placeholder="Ingrese la descripcion aquí..."
               fullWidth
               error={Boolean(errors.descripcion)}
               helperText={errors.descripcion ? errors.descripcion.message : ''}
@@ -77,7 +73,7 @@ const FormTarea: FC<FormTareaProps> = ({data, onSubmit}) => {
         />
         {errors.descripcion && <p>{errors.descripcion.message}</p>}
         <br />
-        <input type='submit' />
+        <input type="submit" />
       </form>
     </Grid>
   );
