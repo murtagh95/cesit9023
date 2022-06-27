@@ -10,15 +10,26 @@ import {
   Typography,
   Link as MuiLink,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { buscarTareas, limpiarTareas } from '../../slices/tareasSlice';
+import {
+  buscarTareas,
+  eliminarTareaPorId,
+  limpiarTareas,
+} from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 const TareasPage = () => {
   const dispatch = useAppDispatch();
+  const [mostrarDialogo, setMostrarDialogo] = useState(false);
+  const tareaId = useRef<string>();
   const { cargando, tareas, mensajeError } = useAppSelector(
     (state) => state.tarea
   );
@@ -83,6 +94,15 @@ const TareasPage = () => {
                       <Link to={`/tareas/${tarea._id}/ver`}>Ver</Link>
                       {` `}
                       <Link to={`/tareas/${tarea._id}/editar`}>Editar</Link>
+                      {` `}
+                      <MuiLink
+                        onClick={() => {
+                          tareaId.current = tarea._id;
+                          setMostrarDialogo(true);
+                        }}
+                      >
+                        Eliminar
+                      </MuiLink>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -91,6 +111,32 @@ const TareasPage = () => {
           </TableContainer>
         )
       )}
+
+      <Dialog
+        open={mostrarDialogo}
+        onClose={() => setMostrarDialogo(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Eliminando tarea?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Está seguro que desea eliminar la tarea seleccionada.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setMostrarDialogo(false)}>No</Button>
+          <Button
+            onClick={() => {
+              dispatch(eliminarTareaPorId(tareaId.current || ''));
+              setMostrarDialogo(false);
+            }}
+            autoFocus
+          >
+            Si
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

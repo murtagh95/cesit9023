@@ -5,6 +5,7 @@ import {
   buscarTareaPorIdService,
   buscarTaresService,
   CustomError,
+  eliminarTareaPorIdService,
 } from '../services/tareas-services';
 import type { RootState } from '../store/store';
 
@@ -78,6 +79,27 @@ export const tareasSlice = createSlice({
         state.cargando = false;
       }
     );
+    builder.addCase(eliminarTareaPorId.pending, (state) => {
+      state.cargando = true;
+      state.mensajeError = null;
+    });
+    builder.addCase(
+      eliminarTareaPorId.fulfilled,
+      (state, { payload }: PayloadAction<Tarea | null>) => {
+        state.tareaSeleccionada = null;
+        state.tareas = state.tareas.filter(
+          (tarea) => tarea._id !== payload?._id
+        );
+        state.cargando = false;
+      }
+    );
+    builder.addCase(
+      eliminarTareaPorId.rejected,
+      (state, { payload }: PayloadAction<CustomError | undefined>) => {
+        state.mensajeError = payload?.message || 'Error desconocido';
+        state.cargando = false;
+      }
+    );
   },
 });
 
@@ -109,6 +131,19 @@ export const buscarTareaPorId = createAsyncThunk<
 >('tarea/buscarTareaPorId', async (id: string, thunkApi) => {
   try {
     const tareaRes = await buscarTareaPorIdService(id);
+    return tareaRes;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error as CustomError);
+  }
+});
+
+export const eliminarTareaPorId = createAsyncThunk<
+  Tarea,
+  string,
+  { rejectValue: CustomError }
+>('tarea/eliminarTareaPorId', async (id: string, thunkApi) => {
+  try {
+    const tareaRes = await eliminarTareaPorIdService(id);
     return tareaRes;
   } catch (error) {
     return thunkApi.rejectWithValue(error as CustomError);

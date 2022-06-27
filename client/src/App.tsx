@@ -11,6 +11,7 @@ import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
 import TareasEditarPage from './pages/tareas/TareasEditarPage';
+import TareasVerPage from './pages/tareas/TareasVerPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import CarerrasPage from './pages/carreras/CarerrasPage';
@@ -41,7 +42,7 @@ const App = () => {
               <Route path="/ejemplos" element={<Ejemplos />} />
               <Route path="/tareas" element={<TareasPage />} />
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
-              <Route path="/tareas/:id/ver" element={<TareasNuevaPage />} />
+              <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
               <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/carreras" element={<CarerrasPage />} />

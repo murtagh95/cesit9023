@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { actualizarTareaService } from '../../services/tareas-services';
@@ -33,10 +34,10 @@ const TareasEditarPage = () => {
   };
 
   return (
-    <div>
-      <h3>Editar Tarea</h3>
+    <Box>
+      <Typography variant="h3">Editar Tarea</Typography>
       <FormTarea data={tareaSeleccionada} onSubmit={actualizandoTarea} />
-    </div>
+    </Box>
   );
 };
 

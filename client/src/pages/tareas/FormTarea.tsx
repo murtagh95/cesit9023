@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 export interface IFormInputs {
   nombre: string;
@@ -73,7 +74,8 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
         />
         {errors.descripcion && <p>{errors.descripcion.message}</p>}
         <br />
-        <input type="submit" />
+        <input type="submit" value="Guardar" />
+        <Link to="/tareas">Cancelar</Link>
       </form>
     </Grid>
   );

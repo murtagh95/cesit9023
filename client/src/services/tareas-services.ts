@@ -59,3 +59,14 @@ export const actualizarTareaService = async (
     throw manageError(error);
   }
 };
+
+export const eliminarTareaPorIdService = async (id: string): Promise<Tarea> => {
+  try {
+    const res = await axios.delete<Tarea>(
+      `http://localhost:5005/api/tareas/${id}`
+    );
+    return res.data;
+  } catch (error) {
+    throw manageError(error);
+  }
+};
