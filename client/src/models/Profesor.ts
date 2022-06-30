@@ -2,6 +2,6 @@ export interface Profesor {
     _id?: string;
     nombre: string;
     apellido: string;
-    legajo: number;
+    dni: number;
     edad: number;
 }

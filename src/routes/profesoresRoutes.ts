@@ -9,7 +9,7 @@ router.get("/", async (req: Request, res: Response) => {
         const criterioDeBusqueda = [
             {nombre: { $regex: criterioRegEx }}, 
             {apellido: { $regex: criterioRegEx }},
-            {legajo: {$regex: criterioRegEx}},
+            {dni: {$regex: criterioRegEx}},
             {edad: {$regex: criterioRegEx}},
         ];
 
@@ -46,9 +46,9 @@ router.post("/", async (req: Request, res: Response) => {
             message: "Debe ingresar el apellido del profesor"
         })
     }
-    if (!nuevoProfesor?.legajo) {
+    if (!nuevoProfesor?.dni) {
         return res.status(400).send({
-            message: "Debe ingresar el número de legajo del profesor"
+            message: "Debe ingresar el número de DNI del profesor"
         })
     }
 
@@ -78,9 +78,9 @@ router.put('/:id', async (req: Request, res: Response) => {
             message: "Debe ingresar el apellido del profesor"
         })
     }
-    if(!profesorActualizar?.legajo) {
+    if(!profesorActualizar?.dni) {
         return res.status(400).send({
-            message: "Debe ingresar el número de legajo del profesor"
+            message: "Debe ingresar el número de DNI del profesor"
         })
     }
     if(profesorActualizar?._id !== profesor.id) {

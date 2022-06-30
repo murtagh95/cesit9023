@@ -13,7 +13,7 @@ const manageError = (error: unknown): CustomError => {
     } else {
         return new CustomError(500, "Error desconocido");
     }
-}
+};
 
 export const buscarProfesorService = async (): Promise<Profesor[] | null> => {
     try {
@@ -22,13 +22,51 @@ export const buscarProfesorService = async (): Promise<Profesor[] | null> => {
     } catch (error) {
         throw manageError(error);
     }
-}
+};
 
 export const crearProfesorService = async (data: Profesor): Promise<Profesor> => {
     try {
-        const res = await axios.post<Profesor>('http://localhost:5005/api/profesores', data);
-        return res.data;
+      const res = await axios.post<Profesor>(
+        'http://localhost:5005/api/profesores',
+        data
+      );
+      return res.data;
     } catch (error) {
-        throw manageError(error);
+      throw manageError(error);
     }
-}
+  };
+  
+  export const buscarProfesorPorIdService = async (id: string): Promise<Profesor> => {
+    try {
+      const res = await axios.get<Profesor>(`http://localhost:5005/api/profesores/${id}`);
+      return res.data;
+    } catch (error) {
+      throw manageError(error);
+    }
+  };
+  
+  export const actualizarProfesorService = async (
+    id: string,
+    data: Partial<Profesor>
+  ) => {
+    try {
+      const res = await axios.put<Profesor>(
+        `http://localhost:5005/api/profesores/${id}`,
+        data
+      );
+      return res.data;
+    } catch (error) {
+      throw manageError(error);
+    }
+  };
+  
+  export const eliminarProfesorPorIdService = async (id: string): Promise<Profesor> => {
+    try {
+      const res = await axios.delete<Profesor>(
+        `http://localhost:5005/api/profesores/${id}`
+      );
+      return res.data;
+    } catch (error) {
+      throw manageError(error);
+    }
+  };

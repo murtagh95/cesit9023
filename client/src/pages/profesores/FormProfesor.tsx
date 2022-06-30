@@ -1,14 +1,15 @@
-import { Box, Grid, Input, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { crearProfesorService } from '../../services/profesores-services';
 
-interface IFormInputs {
+import { FC } from 'react';
+import { Link } from 'react-router-dom';
+
+export interface IFormInputs {
   nombre: string;
   apellido: string;
-  legajo: number;
+  dni: number;
   edad: number;
 }
 
@@ -16,33 +17,28 @@ const schemaValidator = yup
   .object({
     nombre: yup.string().required('El nombre es requerido'),
     apellido: yup.string().required('El apellido es requerido'),
-    legajo: yup.string().required('El número de legajo es requerido'),
+    dni: yup.string().required('El número de DNI es requerido'),
     edad: yup.string(),
   })
   .required();
 
-const FormProfesor = () => {
-  const navigate = useNavigate();
+interface FormProfesorProps {
+  data?: IFormInputs;
+  onSubmit: (data: IFormInputs) => void;
+}
+
+const FormProfesor: FC<FormProfesorProps> = ({ data, onSubmit }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>({
+    defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
-  const onSubmit = async (data: IFormInputs) => {
-    console.info('--- valores del formulario', data);
-    try {
-      await crearProfesorService(data);
-      navigate('/profesores');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
-    <Grid xs={8}>
+    <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name='nombre'
@@ -85,18 +81,18 @@ const FormProfesor = () => {
         <br />
 
         <Controller
-          name='legajo'
+          name='dni'
           control={control}
           defaultValue={0}
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Número de legajo'
-              placeholder='Ingrese el número de legajo aquí...'
+              label='Número de DNI'
+              placeholder='Ingrese el número de DNI aquí...'
               fullWidth
-              error={Boolean(errors.legajo)}
-              helperText={errors.legajo ? errors.legajo.message : ''}
+              error={Boolean(errors.dni)}
+              helperText={errors.dni ? errors.dni.message : ''}
             />
           )}
         />
@@ -123,7 +119,8 @@ const FormProfesor = () => {
         />
 
         <br />
-        <input type='submit' />
+        <input type='submit' value="GUARDAR" />
+        <Link to="/profesores">Cancelar</Link>
       </form>
     </Grid>
   );

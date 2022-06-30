@@ -4,30 +4,23 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import LeftMenu from './components/LeftMenu';
 import TopBar from './components/TopBar';
-import { Route, Routes } from 'react-router-dom'
-import Ejemplos from './pages/ejemplos/Ejemplos'
-import HomePage from './pages/HomePage'
+import { Route, Routes } from 'react-router-dom';
+import Ejemplos from './pages/ejemplos/Ejemplos';
+import HomePage from './pages/HomePage';
 import AppContainer from './components/AppContainer';
-
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
-import TareasVerPage from './pages/tareas/TareasVerPage';
 import TareasEditarPage from './pages/tareas/TareasEditarPage';
-
+import TareasVerPage from './pages/tareas/TareasVerPage';
+import { Provider } from 'react-redux';
+import store from './store/store';
 import ProfesoresPage from './pages/profesores/ProfesoresPage';
 import ProfesoresNuevoPage from './pages/profesores/ProfesoresNuevoPage';
 import ProfesoresVerPage from './pages/profesores/ProfesoresVerPage';
-import ProfesoresEditarPage from './pages/profesores/ProfesoresEditarPage';
-
-//import RolesPage from './pages/roles/RolesPage';
-
-import { Provider } from 'react-redux';
-import store from './store/store';
 
 const mdTheme = createTheme();
 
 const App = () => {
-
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -45,24 +38,19 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/ejemplos" element={<Ejemplos />} />
               <Route path="/tareas" element={<TareasPage />} />
-
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
               <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
-              <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
-
+              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/profesores" element={<ProfesoresPage />} />
               <Route path="/profesores/nuevo" element={<ProfesoresNuevoPage />} />
-              <Route path="/tareas/:id/ver" element={<ProfesoresVerPage />} />
-              <Route path="/tareas/:id/editar" element={<ProfesoresEditarPage />} />
-              
+              <Route path="/profesores/:id/ver" element={<ProfesoresVerPage />} />
             </Routes>
           </AppContainer>
         </Box>
       </ThemeProvider>
     </Provider>
-  )
+  );
+};
 
-}
-
-export default App
+export default App;
