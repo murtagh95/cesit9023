@@ -68,10 +68,8 @@ export const MainListItems: FC = () => {
   const { cantidadCursos } = useAppSelector((state) => state.curso);
   return (
     <>
-      <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
-      <MenuItem title="Materias" to="/materias" icon={<MenuBookIcon />} />
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
-      <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
+      {/* <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} /> */}
       <MenuItem title={`Tareas`} to="/tareas" icon={<PeopleIcon />} />
       <MenuItem
         title={`Carreras (${cantidadCarrera})`}
@@ -83,6 +81,8 @@ export const MainListItems: FC = () => {
         to="/cursos"
         icon={<PeopleIcon />}
       />
+      <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
+      <MenuItem title="Materias" to="/materias" icon={<MenuBookIcon />} />
     </>
   );
 };
