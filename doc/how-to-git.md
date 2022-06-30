@@ -113,3 +113,20 @@ git commit -a # sino usar -m con mensaje custom
 git push
 
 ```
+
+## Rebase
+
+```bash
+
+# Parados en el branch del que nos queremos actualizar
+git rebase <nombre-branch>
+
+# Resolvemos posibles conflictos
+git add .
+
+# Finalizamos rebase
+git rebase --continue
+
+# Subimos los cambios forzando la subida
+git push -f 
+```
