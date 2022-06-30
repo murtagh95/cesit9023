@@ -1,13 +1,26 @@
-import { Box, Typography } from '@mui/material'
-import FormProfesor from './FormProfesor'
+import { Box, Typography } from '@mui/material';
+import { crearProfesorService } from '../../services/profesores-services';
+import FormProfesor, { IFormInputs } from './FormProfesor';
+import { useNavigate } from 'react-router-dom';
 
-const ProfesoresNuevaPage = () => {
+const ProfesoresNuevoPage = () => {
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: IFormInputs) => {
+    try {
+      await crearProfesorService(data);
+      navigate('/profesores');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h3">Nuevo Profesor</Typography>
-      <FormProfesor />
+      <FormProfesor onSubmit={onSubmit} />
     </Box>
-  )
-}
+  );
+};
 
-export default ProfesoresNuevaPage  
+export default ProfesoresNuevoPage;

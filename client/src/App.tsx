@@ -14,7 +14,9 @@ import TareasEditarPage from './pages/tareas/TareasEditarPage';
 import TareasVerPage from './pages/tareas/TareasVerPage';
 import { Provider } from 'react-redux';
 import store from './store/store';
+
 import ProfesoresPage from './pages/profesores/ProfesoresPage';
+import ProfesoresEditarPage from './pages/profesores/ProfesoresEditarPage';
 import ProfesoresNuevoPage from './pages/profesores/ProfesoresNuevoPage';
 import ProfesoresVerPage from './pages/profesores/ProfesoresVerPage';
 
@@ -41,10 +43,10 @@ const App = () => {
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
               <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
-              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/profesores" element={<ProfesoresPage />} />
               <Route path="/profesores/nuevo" element={<ProfesoresNuevoPage />} />
               <Route path="/profesores/:id/ver" element={<ProfesoresVerPage />} />
+              <Route path="/profesores/:id/editar" element={<ProfesoresEditarPage />} />
             </Routes>
           </AppContainer>
         </Box>
