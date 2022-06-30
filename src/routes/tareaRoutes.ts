@@ -1,4 +1,4 @@
-import { ITarea, Tarea } from './../models/Tarea';
+import { ITarea, Tarea } from '../models/Tarea';
 import express, { Request, Response } from 'express';
 const router = express.Router();
 
