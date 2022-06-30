@@ -9,6 +9,7 @@ export interface ITarea {
 const tareaSchema = new Schema<ITarea>({
   nombre: { type: String, required: true },
   descripcion: { type: String, required: false },
+
 });
 
 export const Tarea = model<ITarea>('tareas', tareaSchema);

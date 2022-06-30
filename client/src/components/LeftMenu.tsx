@@ -17,6 +17,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { FC } from 'react';
 import { drawerWidth } from '../constants';
 import { Link } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+import HomeIcon from '@mui/icons-material/Home';
+import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
 import { useAppSelector } from '../store/hooks';
 
 const Drawer = styled(MuiDrawer, {
@@ -63,6 +68,8 @@ export const MainListItems: FC = () => {
   const { cantidadCursos } = useAppSelector((state) => state.curso);
   return (
     <>
+      <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
+      <MenuItem title="Materias" to="/materias" icon={<MenuBookIcon />} />
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
       <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} />
       <MenuItem title={`Tareas`} to="/tareas" icon={<PeopleIcon />} />

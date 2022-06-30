@@ -1,3 +1,5 @@
 export class BaseException {
-  constructor(code: number, message: string) {}
+  constructor(code: number, message: string) {
+    // do nothing.
+  }
 }
