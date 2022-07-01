@@ -51,6 +51,11 @@ router.post("/", async (req: Request, res: Response) => {
             message: "Debe ingresar el número de DNI del profesor"
         })
     }
+    if (!nuevoProfesor?.edad) {
+        return res.status(400).send({
+            message: "Debe ingresar la edad del profesor"
+        })
+    }
 
     const profesor = new Profesor(nuevoProfesor);
     await profesor.save();
@@ -81,6 +86,11 @@ router.put('/:id', async (req: Request, res: Response) => {
     if(!profesorActualizar?.dni) {
         return res.status(400).send({
             message: "Debe ingresar el número de DNI del profesor"
+        })
+    }
+    if(!profesorActualizar?.edad) {
+        return res.status(400).send({
+            message: "Debe ingresar la edad del profesor"
         })
     }
     if(profesorActualizar?._id !== profesor.id) {

@@ -68,7 +68,7 @@ export const MainListItems: FC = () => {
     <>
       <MenuItem title="Home" to="/" icon={<HomeIcon />} />
       <MenuItem title="Ejemplos" to="/ejemplos" icon={<FormatListBulletedIcon />} />
-      <MenuItem title={`Tareas (${cantidad})`} to="/tareas" icon={<AssignmentIcon />} />
+      <MenuItem title="Tareas" to="/tareas" icon={<AssignmentIcon />} />
       <MenuItem title="Profesores" to="/profesores" icon={<AssignmentIndIcon />} />
       <MenuItem title="Roles" to="/roles" icon={<FingerprintIcon />} />
     </>

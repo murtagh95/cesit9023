@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import profesoresRouter from './routes/profesoresRoutes'
+import rolesRouter from './routes/rolesRoutes'
 
 const PORT = 5005;
 const DB_NAME = 'prog3-2022';
@@ -13,6 +14,7 @@ server.use(cors());
 server.use(express.json());
 server.use("/api/tareas", tareasRouter);
 server.use("/api/profesores", profesoresRouter)
+server.use("/api/roles", rolesRouter)
 
 const run = async () => {
     await connect(DB_CONN);

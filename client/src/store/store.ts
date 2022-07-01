@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import counterSlice from '../slices/counterSlice';
 import tareasSlice from '../slices/tareasSlice';
 import profesoresSlice from '../slices/profesoresSlice';
+import rolesSlice from '../slices/rolesSlice';
 
 const store = configureStore({
     reducer: {
       counter: counterSlice,
       tarea: tareasSlice,
       profesor: profesoresSlice,
+      rol: rolesSlice,
     },
 })
 

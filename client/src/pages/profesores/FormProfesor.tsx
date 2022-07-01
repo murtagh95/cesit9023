@@ -17,8 +17,8 @@ const schemaValidator = yup
   .object({
     nombre: yup.string().required('El nombre es requerido'),
     apellido: yup.string().required('El apellido es requerido'),
-    dni: yup.string().required('El número de DNI es requerido'),
-    edad: yup.string(),
+    dni: yup.number().required('El número de DNI es requerido'),
+    edad: yup.number().required('La edad es requerida'),
   })
   .required();
 

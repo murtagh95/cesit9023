@@ -12,7 +12,7 @@ const tareaSchema = new Schema<IProfesor>({
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },
     dni: { type: Number, required: true},
-    edad: { type: Number, required: false},
+    edad: { type: Number, required: true},
 
 });
 
