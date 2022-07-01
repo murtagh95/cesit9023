@@ -81,7 +81,7 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
               name="finalizada"
               control={control}
               render={({ field }) => (
-                <Checkbox {...field} checked={field.value} />
+                <Checkbox {...field} checked={field.value || false} />
               )}
             />
           }
