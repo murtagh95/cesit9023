@@ -1,16 +1,45 @@
 import { Request, Response } from 'express';
 import { ITarea, Tarea } from '../models/Tarea';
 
+function getNombre(parametro: string) {
+  return { nombre: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getDescripcion(parametro: string) {
+  return { descripcion: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getAll(parametro: string) {
+  const criterioRegEx = new RegExp(parametro, 'i');
+  return [
+    { nombre: { $regex: criterioRegEx } },
+    { descripcion: { $regex: criterioRegEx } },
+  ];
+}
+
 class TareaController {
   async getTareas(req: Request, res: Response) {
-    if (req.query.search) {
-      const criterioRegEx = new RegExp(req.query.search as string, 'i');
-      const criterioDeBusqueda = [
-        { nombre: { $regex: criterioRegEx } },
-        { descripcion: { $regex: criterioRegEx } },
-      ];
+    if (Object.keys(req.query).length != 0) {
+      const posiblesBusquedas: any = {
+        nombre: getNombre,
+        descripcion: getDescripcion,
+        _todos: getAll,
+      };
 
-      const tareas = await Tarea.find({ $or: criterioDeBusqueda });
+      const criterioDeBusqueda = [];
+      for (const [key, value] of Object.entries(req.query)) {
+        if (posiblesBusquedas[key] !== undefined) {
+          if (key === '_todos') {
+            criterioDeBusqueda.push(...posiblesBusquedas[key](value));
+          } else {
+            criterioDeBusqueda.push(posiblesBusquedas[key](value));
+          }
+        }
+      }
+
+      let parametrosFiltro: any = { $or: criterioDeBusqueda };
+
+      const tareas = await Tarea.find(parametrosFiltro);
       return res.send(tareas);
     }
 

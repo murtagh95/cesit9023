@@ -108,21 +108,26 @@ export const { setCargando, limpiarTareas } = tareasSlice.actions;
 export default tareasSlice.reducer;
 
 // Extra reducers
-
+interface BuscarTareasQuery {
+  criterio?: string;
+}
 type TareaRes = Tarea[] | null;
 
 export const buscarTareas = createAsyncThunk<
   TareaRes,
-  void,
+  BuscarTareasQuery | undefined,
   { rejectValue: CustomError }
->('tarea/buscarTareas', async (_: void, thunkApi) => {
-  try {
-    const tareasRes = await buscarTaresService();
-    return tareasRes || [];
-  } catch (error) {
-    return thunkApi.rejectWithValue(error as CustomError);
+>(
+  'tarea/buscarTareas',
+  async (props: BuscarTareasQuery | undefined, thunkApi) => {
+    try {
+      const tareasRes = await buscarTaresService(props?.criterio);
+      return tareasRes || [];
+    } catch (error) {
+      return thunkApi.rejectWithValue(error as CustomError);
+    }
   }
-});
+);
 
 export const buscarTareaPorId = createAsyncThunk<
   Tarea,

@@ -15,9 +15,15 @@ const manageError = (error: unknown): CustomError => {
   }
 };
 
-export const buscarTaresService = async (): Promise<Tarea[] | null> => {
+export const buscarTaresService = async (
+  criterio?: string
+): Promise<Tarea[] | null> => {
   try {
-    const res = await axios.get<Tarea[]>('http://localhost:5005/api/tareas');
+    let uri = 'http://localhost:5005/api/tareas';
+    if (criterio) {
+      uri += `?${criterio}`;
+    }
+    const res = await axios.get<Tarea[]>(uri);
     return res.data;
   } catch (error) {
     throw manageError(error);

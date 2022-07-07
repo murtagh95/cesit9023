@@ -25,6 +25,7 @@ import {
   limpiarTareas,
 } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import BuscarTareas from './components/BuscarTareas';
 
 const TareasPage = () => {
   const dispatch = useAppDispatch();
@@ -37,7 +38,7 @@ const TareasPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(buscarTareas());
+    dispatch(buscarTareas({}));
 
     return () => {
       if (!window.location.pathname.startsWith('/tareas')) {
@@ -56,6 +57,8 @@ const TareasPage = () => {
       >
         Nuevo
       </Button>
+
+      <BuscarTareas />
 
       {mensajeError && (
         <Box marginTop={2}>

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, LinearProgress, Typography } from '@mui/material';
 import { FC, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CustomLabelItem from '../../components/CustomLabelItem';
@@ -15,7 +15,7 @@ const TareasVerPage: FC = () => {
   }, [id, dispatch]);
 
   if (cargando) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
   if (!tareaSeleccionada) {
     return <div>Tarea no econtrada</div>;
@@ -33,6 +33,10 @@ const TareasVerPage: FC = () => {
         <CustomLabelItem
           label="Descripcion"
           value={tareaSeleccionada.descripcion}
+        />
+        <CustomLabelItem
+          label="Finalizada"
+          value={tareaSeleccionada.finalizada ? 'true' : 'false'}
         />
       </Grid>
     </Box>
