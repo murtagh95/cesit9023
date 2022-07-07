@@ -24,6 +24,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
 import { useAppSelector } from '../store/hooks';
 
+
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -66,6 +67,7 @@ const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
 export const MainListItems: FC = () => {
   const { cantidadCarrera } = useAppSelector((state) => state.carrera);
   const { cantidadCursos } = useAppSelector((state) => state.curso);
+  const { cantidadMaterias } = useAppSelector((state) => state.materia)
   return (
     <>
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
@@ -82,7 +84,9 @@ export const MainListItems: FC = () => {
         icon={<PeopleIcon />}
       />
       <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
-      <MenuItem title="Materias" to="/materias" icon={<MenuBookIcon />} />
+      <MenuItem title={`Materias`}
+        to="/materias"
+        icon={<MenuBookIcon />} />
     </>
   );
 };
