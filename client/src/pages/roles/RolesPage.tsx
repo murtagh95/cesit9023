@@ -18,11 +18,11 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import {
   buscarRoles,
   eliminarRolPorId,
-  limpiarRoles
+  limpiarRoles,
 } from '../../slices/rolesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
@@ -40,19 +40,19 @@ const RolesPage = () => {
     dispatch(buscarRoles());
 
     return () => {
-      if (!window.location.pathname.startsWith("/roles")) {
+      if (!window.location.pathname.startsWith('/roles')) {
         dispatch(limpiarRoles());
       }
-    }
+    };
   }, []);
 
   return (
     <Box>
-      <Typography variant='h3'>Listando Roles</Typography>
+      <Typography variant="h3">Listando Roles</Typography>
       <Button
         variant="contained"
         size="small"
-        onClick={() => navigate("/roles/nuevo")}
+        onClick={() => navigate('/roles/nuevo')}
       >
         Nuevo
       </Button>
@@ -81,8 +81,7 @@ const RolesPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-
-                {roles.map(rol => (
+                {roles.map((rol) => (
                   <TableRow
                     key={rol._id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -90,7 +89,9 @@ const RolesPage = () => {
                     <TableCell component="th" scope="row">
                       {rol.nombre}
                     </TableCell>
-                    <TableCell align="right">{rol.descripcion}</TableCell>
+                    <TableCell align="right">
+                      {Boolean(rol.descripcion).toString()}
+                    </TableCell>
                     <TableCell align="right">
                       <Link to={`/roles/${rol._id}/ver`}>Ver</Link>
                       {` `}
@@ -107,7 +108,6 @@ const RolesPage = () => {
                     </TableCell>
                   </TableRow>
                 ))}
-
               </TableBody>
             </Table>
           </TableContainer>
@@ -120,7 +120,7 @@ const RolesPage = () => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'Eliminando rol?'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Eliminar rol?'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Está seguro que desea eliminar el rol seleccionada.
@@ -143,5 +143,4 @@ const RolesPage = () => {
   );
 };
 
-
-export default RolesPage
+export default RolesPage;

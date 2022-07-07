@@ -63,7 +63,6 @@ const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
 )
 
 export const MainListItems: FC = () => {
-  const { cantidad } = useAppSelector(state => state.tarea);
   return (
     <>
       <MenuItem title="Home" to="/" icon={<HomeIcon />} />

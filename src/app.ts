@@ -3,7 +3,7 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import tareasRouter from './routes/tareasRoutes'
 import profesoresRouter from './routes/profesoresRoutes'
-import rolesRouter from './routes/rolesRoutes'
+import { rolesRouter } from './routes/rolesRoutes'
 
 const PORT = 5005;
 const DB_NAME = 'prog3-2022';
