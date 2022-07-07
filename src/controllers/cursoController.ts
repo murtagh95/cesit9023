@@ -3,9 +3,9 @@ import { Request, Response } from 'express';
 import { Curso, ICurso } from '../models/Curso';
 
 
-export const controller = {
+class CursoController {
 
-    get: async (req: Request, res: Response) => {
+    async getCurso(req: Request, res: Response) {
         if (req.query.search) {
             const criterioRegEx = new RegExp(req.query.search as string, 'i');
             const criterioDeBusqueda = [
@@ -21,9 +21,9 @@ export const controller = {
         const cursos = await Curso.find();
         res.json(cursos);
 
-    },
+    }
 
-    getById: async (req: Request, res: Response) => {
+    async getCursoById(req: Request, res: Response) {
 
         if (!req.params?.id) {
             return res.status(400).json({ message: "Se deber ingresar el id del curso" })
@@ -33,9 +33,9 @@ export const controller = {
             return res.status(404).json({ message: `No se la cursos con id=${req.params.id}` })
         }
         res.json(cursos);
-    },
+    }
 
-    post: async (req: Request, res: Response) => {
+    async crearCurso(req: Request, res: Response) {
 
         const nuevoCurso = req.body as ICurso;
 
@@ -49,10 +49,10 @@ export const controller = {
         await curso.save();
 
         res.status(201).json(curso);
-    },
+    }
 
 
-    put: async (req: Request, res: Response) => {
+    async actualizarCurso(req: Request, res: Response) {
 
         try {
 
@@ -72,16 +72,16 @@ export const controller = {
         } catch (error) {
             res.json({ error })
         }
-    },
+    }
 
-    delete:async (req: Request, res: Response) => {
+    async eliminarCursoPorId(req: Request, res: Response) {
         try {
             if (!req.params?.id) {
                 return res.status(400).json({ message: "Se deber ingresar el id del curso" })
             }
             const curso = await Curso.findById(req.params.id);
             if (!curso) {
-                return res.status(404).json({ message: `No se la tarea con id=${req.params.id}` })
+                return res.status(404).json({ message: `No se encuentra el curso con id=${req.params.id}` })
             }
 
             await Curso.deleteOne({ _id: curso._id })
@@ -94,3 +94,5 @@ export const controller = {
 
 
 }
+
+export default CursoController;

@@ -1,7 +1,7 @@
-export interface  Carrera {
+export interface Carrera {
     _id?: string;
-    nombre:string;
-    duracion: number;
+    nombre: string;
+    duracion: string;
     horario: string;
     plan: string;
 }

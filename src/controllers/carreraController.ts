@@ -2,95 +2,103 @@
 import { Request, Response } from 'express';
 import { Carrera, ICarrera } from '../models/Carrera';
 
-
-export const controller = {
-
-    get: async (req: Request, res: Response) => {
+class CarreraController {
+    async getCarreras(req: Request, res: Response) {
         if (req.query.search) {
             const criterioRegEx = new RegExp(req.query.search as string, 'i');
             const criterioDeBusqueda = [
                 { nombre: { $regex: criterioRegEx } },
-
+                { descripcion: { $regex: criterioRegEx } },
             ];
 
-            const carreras = await Carrera.find({ '$or': criterioDeBusqueda });
-            return res.json(carreras);
+            const carreras = await Carrera.find({ $or: criterioDeBusqueda });
+            return res.send(carreras);
         }
 
         const carreras = await Carrera.find();
-        res.json(carreras);
+        res.send(carreras);
+    }
 
-    },
-
-    getById: async (req: Request, res: Response) => {
-
+    async getCarreraPorId(req: Request, res: Response) {
         if (!req.params?.id) {
-            return res.status(400).json({ message: "Se deber ingresar el id de la carrera" })
+            return res
+                .send(400)
+                .send({ message: 'Se deber ingresar el id de la carrera' });
         }
         const carrera = await Carrera.findById(req.params.id);
         if (!carrera) {
-            return res.status(404).json({ message: `No se encuentra la carrera con id=${req.params.id}` })
+            return res
+                .send(404)
+                .send({ message: `No se encuentra la carrera con id=${req.params.id}` });
         }
-        res.json(carrera);
-    },
+        res.send(carrera);
+    }
 
-    post: async (req: Request, res: Response) => {
+    async crearCarrera(req: Request, res: Response) {
+        const nuevaCarrera = req.body as ICarrera;
 
-        const nuevoCarrera = req.body as ICarrera;
-
-        if (!nuevoCarrera?.duracion && !nuevoCarrera?.nombre && !nuevoCarrera?.horario && !nuevoCarrera?.plan) {
+        if (!nuevaCarrera?.duracion && !nuevaCarrera?.nombre && !nuevaCarrera?.horario && !nuevaCarrera?.plan) {
             return res.status(400).json({
                 message: "faltan datos"
             })
         }
 
-        const carrera = new Carrera(nuevoCarrera);
+        const carrera = new Carrera(nuevaCarrera);
         await carrera.save();
 
-        res.status(201).json(carrera);
-    },
-
-
-    put: async (req: Request, res: Response) => {
-
-
-        try {
-
-            if (!req.params?.id) {
-                return res.status(400).json({ message: "Se deber ingresar el id del carrera" })
-            }
-            const carrera = await Carrera.findById(req.params.id);
-            if (!carrera) {
-                return res.status(404).json({ message: `No se encuentra el carrera con id=${req.params.id}` });
-            }
-
-            const carreraActualizar = req.body as ICarrera;
-
-
-            await Carrera.updateOne({ _id: carrera.id }, carreraActualizar);
-            res.json(carreraActualizar);
-        } catch (error) {
-            res.json({ error })
-        }
-    },
-
-    delete:async (req: Request, res: Response) => {
-        try {
-            if (!req.params?.id) {
-                return res.status(400).json({ message: "Se deber ingresar el id del carrera" })
-            }
-            const carrera = await Carrera.findById(req.params.id);
-            if (!carrera) {
-                return res.status(404).json({ message: `No se la tarea con id=${req.params.id}` })
-            }
-
-            await Carrera.deleteOne({ _id: carrera._id })
-            res.json(carrera);
-        } catch (error) {
-            res.json({ error })
-
-        }
+        res.status(201).send(carrera);
     }
 
+    async actualizarCarrera(req: Request, res: Response) {
+        if (!req.params?.id) {
+            return res
+                .send(400)
+                .send({ message: 'Se deber ingresar el id de la carrera' });
+        }
+        const carrera = await Carrera.findById(req.params.id);
+        if (!carrera) {
+            return res
+                .send(404)
+                .send({ message: `No se encuentra la carrera con id=${req.params.id}` });
+        }
 
+        const carreraActualizar = req.body as ICarrera;
+        if (!carreraActualizar?.nombre) {
+            return res.status(400).send({
+                message: 'El nombre o id no existe',
+            });
+        }
+        if (carreraActualizar?._id !== carrera.id) {
+            return res.status(400).send({
+                message: 'El id no coincide',
+            });
+        }
+
+        await Carrera.updateOne({ _id: carrera.id }, carreraActualizar);
+        res.send(carreraActualizar);
+    }
+
+    async eliminarCarreraPorId(req: Request, res: Response) {
+        if (!req.params?.id) {
+            return res
+                .send(400)
+                .send({ message: 'Se deber ingresar el id de la carrera' });
+        }
+        const carrera = await Carrera.findById(req.params.id);
+        if (!carrera) {
+            return res
+                .send(404)
+                .send({ message: `No se la carrera con id=${req.params.id}` });
+        }
+
+        await Carrera.deleteOne({ _id: carrera._id });
+        res.send(carrera);
+    }
 }
+
+export default CarreraController;
+
+
+
+
+

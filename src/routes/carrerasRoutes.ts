@@ -1,18 +1,20 @@
 
 import express from 'express';
-import { controller } from '../controllers/carreraController';
+import CarreraController from '../controllers/carreraController';
 
 
 const router = express.Router();
 
-router.get("/", controller.get );
+const controller = new CarreraController();
 
-router.get("/:id",controller.getById);
+router.get("/", controller.getCarreras);
 
-router.post("/" ,controller.post);
+router.get("/:id", controller.getCarreraPorId);
 
-router.put('/:id', controller.put);
+router.post("/", controller.crearCarrera);
 
-router.delete('/:id', controller.delete);
+router.put('/:id', controller.actualizarCarrera);
+
+router.delete('/:id', controller.eliminarCarreraPorId);
 
 export default router;

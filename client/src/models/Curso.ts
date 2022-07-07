@@ -3,5 +3,5 @@ export interface Curso {
     anio: number;
     cantidadAlumnos: number;
     carrera: string;
-    bedelia: string; 
+    bedelia: string;
 };

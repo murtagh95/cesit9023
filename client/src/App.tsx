@@ -28,6 +28,8 @@ import MateriasEditarPage from './pages/materias/MateriasEditarPage';
 import AlumnoNuevaPage from './pages/alumnos/AlumnoNuevaPage';
 import AlumnoEditarPage from './pages/alumnos/AlumnoEditarPage';
 import AlumnoVerPage from './pages/alumnos/AlumnoVerPage';
+import CarreraEditarPage from './pages/carreras/CarreraEditarPage';
+import CursoEditarPage from './pages/cursos/CursoEditarPage';
 
 const mdTheme = createTheme({
   palette: {
@@ -80,9 +82,16 @@ const App = () => {
               <Route path="/carreras" element={<CarerrasPage />} />
               <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
               <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />
+              <Route path="/carreras/:id/editar" element={<CarreraEditarPage />} />
+
               <Route path="/cursos" element={<CursosPage />} />
               <Route path="/curso/nuevo" element={<CursosNuevoPage />} />
               <Route path="/cursos/:id/ver" element={<CursosVerPage />} />
+              <Route path="/cursos/:id/editar" element={<CursoEditarPage />} />
+
+
+
+
             </Routes>
           </AppContainer>
         </Box>

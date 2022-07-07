@@ -1,41 +1,44 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, ButtonGroup, Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { crearCursoService } from '../../services/cursos-services';
+import { FC } from 'react'
+import { Link } from 'react-router-dom';
 
-interface IFormInputs {
-    anio: number;
-    cantidadAlumnos: number;
-    carrera: string;
-    bedelia: string; 
+export interface IFormInputs {
+  anio: number;
+  cantidadAlumnos: number;
+  carrera: string;
+  bedelia: string;
 }
 
 const schemaValidator = yup
   .object({
-    anio: yup.number().required('El año es requerido'),
-    cantidadAlumnos: yup.number().required('La Cantidad de Alumnos es Requerida'),
-    carrera: yup.string().required('la carrera es requerido'),
-    bedelia: yup.string().required('el nombre de la Bedel es requerido'),
+    anio: yup.number().required('El año es requerido').typeError("El año debe ser un número"),
+    cantidadAlumnos: yup.number().required('La Cantidad de Alumnos es Requerida').typeError("La cantidad debe ser un número"),
+    carrera: yup.string().required('La carrera es requerido'),
+    bedelia: yup.string().required('El nombre de la Bedel es requerido'),
 
   })
   .required();
 
-const FormCurso = () => {
-  const navigate = useNavigate();
-  const { control, handleSubmit, formState: { errors } } = useForm<IFormInputs>({ resolver: yupResolver(schemaValidator) });
 
-  const onSubmit = async (data: IFormInputs) => {
+interface FormCursoProps {
+  data?: IFormInputs;
+  onSubmit: (data: IFormInputs) => void;
+}
 
-    try {
-      await crearCursoService(data);
-      navigate('/cursos');
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
+const FormCurso: FC<FormCursoProps> = ({ data, onSubmit }) => {
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInputs>({
+    defaultValues: data || {},
+    resolver: yupResolver(schemaValidator),
+  });
   return (
     <Grid xs={8}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -113,9 +116,12 @@ const FormCurso = () => {
         />
         <br />
         <br />
-        <Button variant="contained" size="small" type='submit'>Enviar</Button>
-        
-        
+
+        <ButtonGroup size="large" aria-label="large outlined primary button group" color="success">
+          <Button type="submit">Guardar</Button>
+          <Button color="error" component={Link} to="/cursos">Cancelar</Button>
+        </ButtonGroup>
+
       </form>
     </Grid>
   );

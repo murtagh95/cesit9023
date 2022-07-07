@@ -17,6 +17,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { FC } from 'react';
 import { drawerWidth } from '../constants';
 import { Link } from 'react-router-dom';
+import SchoolIcon from '@material-ui/icons/School';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
@@ -68,20 +70,21 @@ export const MainListItems: FC = () => {
   const { cantidadCarrera } = useAppSelector((state) => state.carrera);
   const { cantidadCursos } = useAppSelector((state) => state.curso);
   const { cantidadMaterias } = useAppSelector((state) => state.materia)
+
   return (
     <>
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
       {/* <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} /> */}
       <MenuItem title={`Tareas`} to="/tareas" icon={<PeopleIcon />} />
       <MenuItem
-        title={`Carreras (${cantidadCarrera})`}
+        title={`Carreras `}
         to="/carreras"
-        icon={<PeopleIcon />}
+        icon={<SchoolIcon />}
       />
       <MenuItem
-        title={`Cursos (${cantidadCursos})`}
+        title={`Cursos `}
         to="/cursos"
-        icon={<PeopleIcon />}
+        icon={<HomeWorkIcon />}
       />
       <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
       <MenuItem title={`Materias`}

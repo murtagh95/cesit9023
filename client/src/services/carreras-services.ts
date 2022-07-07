@@ -9,7 +9,7 @@ export class CustomError extends Error {
 }
 
 const manageError = (error: unknown): CustomError => {
-    if( error instanceof AxiosError){
+    if (error instanceof AxiosError) {
         return new CustomError(error?.response?.status || 400, error.message);
     } else {
         return new CustomError(500, "Error desconocido");
@@ -34,3 +34,37 @@ export const crearCarreraService = async (carrera: Carrera): Promise<Carrera | n
     }
 }
 
+export const buscarCarreraPorIdService = async (id: string): Promise<Carrera> => {
+    try {
+        const res = await axios.get<Carrera>(`http://localhost:5005/api/carreras/${id}`);
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+};
+
+export const actualizarCarreraService = async (
+    id: string,
+    data: Partial<Carrera>
+) => {
+    try {
+        const res = await axios.put<Carrera>(
+            `http://localhost:5005/api/carreras/${id}`,
+            data
+        );
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+};
+
+export const eliminarCarreraPorIdService = async (id: string): Promise<Carrera> => {
+    try {
+        const res = await axios.delete<Carrera>(
+            `http://localhost:5005/api/carreras/${id}`
+        );
+        return res.data;
+    } catch (error) {
+        throw manageError(error);
+    }
+};
