@@ -9,7 +9,7 @@ routerMateria.post('/', async (req, res) => {
 });
 
 routerMateria.put('/:id', async (request, respose) => {
-  await materiaController.updateAlumno(request, respose);
+  await materiaController.updateMateria(request, respose);
 });
 
 routerMateria.get('/', async (request, response) => {

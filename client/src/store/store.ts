@@ -12,8 +12,8 @@ const store = configureStore({
     tarea: tareasSlice,
     carrera: carrerasSlice,
     curso: cursosSlice,
-    materia: materiasSlice
-    alumno: alumnosSlice
+    materia: materiasSlice,
+    alumno: alumnosSlice,
   },
 });
 

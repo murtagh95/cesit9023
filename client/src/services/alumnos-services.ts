@@ -38,7 +38,9 @@ export const crearAlumnoService = async (data: Alumno): Promise<Alumno> => {
 
 export const buscarAlumnoPorIdService = async (id: string): Promise<Alumno> => {
   try {
-    const res = await axios.get<Alumno>(`http://localhost:5005/api/alumnos/${id}`);
+    const res = await axios.get<Alumno>(
+      `http://localhost:5005/api/alumnos/${id}`
+    );
     return res.data;
   } catch (error) {
     throw manageError(error);
@@ -60,7 +62,9 @@ export const actualizarAlumnoService = async (
   }
 };
 
-export const eliminarAlumnosPorIdService = async (id: string): Promise<Alumno> => {
+export const eliminarAlumnosPorIdService = async (
+  id: string
+): Promise<Alumno> => {
   try {
     const res = await axios.delete<Alumno>(
       `http://localhost:5005/api/alumnos/${id}`
