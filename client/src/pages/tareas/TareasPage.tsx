@@ -89,7 +89,9 @@ const TareasPage = () => {
                     <TableCell component="th" scope="row">
                       {tarea.nombre}
                     </TableCell>
-                    <TableCell align="right">true</TableCell>
+                    <TableCell align="right">
+                      {Boolean(tarea.finalizada).toString()}
+                    </TableCell>
                     <TableCell align="right">
                       <Link to={`/tareas/${tarea._id}/ver`}>Ver</Link>
                       {` `}

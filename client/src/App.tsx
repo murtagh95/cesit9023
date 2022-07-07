@@ -57,10 +57,12 @@ const App = () => {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/ejemplos" element={<Ejemplos />} />
+
               <Route path="/tareas" element={<TareasPage />} />
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
               <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
               <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
+              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
               <Route path="/alumnos" element={<AlumnoPage />} />
               <Route path="/materias" element={<MateriaPage />} />

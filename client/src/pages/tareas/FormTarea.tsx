@@ -1,4 +1,4 @@
-import { Grid, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 export interface IFormInputs {
   nombre: string;
   descripcion: string;
+  finalizada: boolean;
 }
 
 const schemaValidator = yup
@@ -67,11 +68,26 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
               label="Descripcion"
               placeholder="Ingrese la descripcion aquí..."
               fullWidth
+              rows={4}
               error={Boolean(errors.descripcion)}
               helperText={errors.descripcion ? errors.descripcion.message : ''}
             />
           )}
         />
+
+        <FormControlLabel
+          control={
+            <Controller
+              name="finalizada"
+              control={control}
+              render={({ field }) => (
+                <Checkbox {...field} checked={field.value || false} />
+              )}
+            />
+          }
+          label="Finalizada"
+        />
+
         {errors.descripcion && <p>{errors.descripcion.message}</p>}
         <br />
         <input type="submit" value="Guardar" />
