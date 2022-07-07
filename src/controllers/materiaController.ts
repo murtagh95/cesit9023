@@ -74,7 +74,7 @@ class MateriaController {
         }
       }
     }
-    materias = await Materia.find();
+    materias = await Materia.find({baja:false});
 
     return response.send(materias);
   }
@@ -99,7 +99,7 @@ class MateriaController {
     res.status(201).json(materia);
   }
 
-  async updateAlumno(req: Request, res: Response) {
+  async updateMateria(req: Request, res: Response) {
     const mensaje = [];
 
     const materiaActualizar = req.body as IMaterias;
@@ -132,8 +132,7 @@ class MateriaController {
         } else {
           await Materia.updateOne(
             { _id: materia.id },
-            { fechaActualizacion: new Date() },
-            materiaActualizar
+            {...materiaActualizar, fechaActualizacion: new Date() },
           );
           res.json(materiaActualizar);
         }

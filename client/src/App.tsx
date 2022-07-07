@@ -10,8 +10,8 @@ import HomePage from './pages/HomePage';
 import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
-import { AlumnoPage } from './components/Alumnos/AlumnoPage';
-import { MateriaPage } from './components/Materias/MateriaPage';
+import AlumnoPage from './pages/alumnos/AlumnoPage';
+import MateriaPage from './pages/materias/MateriaPage';
 import TareasEditarPage from './pages/tareas/TareasEditarPage';
 import TareasVerPage from './pages/tareas/TareasVerPage';
 import { Provider } from 'react-redux';
@@ -22,8 +22,23 @@ import CarrerasVerPage from './pages/carreras/CarrerasVerPage';
 import CursosNuevoPage from './pages/cursos/CursosNuevoPage';
 import CursosVerPage from './pages/cursos/CursosVerPage';
 import CursosPage from './pages/cursos/CursosPage';
+import MateriasNuevaPage from './pages/materias/MateriasNuevaPage';
+import MateriasVerPage from './pages/materias/MateriasVerPage';
+import MateriasEditarPage from './pages/materias/MateriasEditarPage';
+import AlumnoNuevaPage from './pages/alumnos/AlumnoNuevaPage';
+import AlumnoEditarPage from './pages/alumnos/AlumnoEditarPage';
+import AlumnoVerPage from './pages/alumnos/AlumnoVerPage';
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#692C3C',
+    },
+    secondary: {
+      main: '#edf2ff',
+    },
+  },
+});
 
 const App = () => {
   const [open, setOpen] = useState(true);
@@ -50,9 +65,18 @@ const App = () => {
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
               <Route path="/alumnos" element={<AlumnoPage />} />
-
               <Route path="/materias" element={<MateriaPage />} />
-
+              <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
+              <Route path="/materias/:id/ver" element={<MateriasVerPage />} />
+              <Route
+                path="/materias/:id/editar"
+                element={<MateriasEditarPage />}
+              />
+              <Route path="/alumno/nuevo" element={<AlumnoNuevaPage />} />
+              <Route path="/alumno/:id/editar" element={<AlumnoEditarPage />} />
+              <Route path="/alumno/:id/ver" element={<AlumnoVerPage />} />
+              <Route path="/materias" element={<MateriaPage />} />
+              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
               <Route path="/carreras" element={<CarerrasPage />} />
               <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
               <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />
