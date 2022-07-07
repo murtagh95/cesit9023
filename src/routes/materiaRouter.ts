@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { MateriaController } from '../controller/materiaController';
+import { MateriaController } from '../controllers/materiaController';
 
 const routerMateria = Router();
 const materiaController = new MateriaController();
@@ -9,7 +9,7 @@ routerMateria.post('/', async (req, res) => {
 });
 
 routerMateria.put('/:id', async (request, respose) => {
-  await materiaController.updateAlumno(request, respose);
+  await materiaController.updateMateria(request, respose);
 });
 
 routerMateria.get('/', async (request, response) => {

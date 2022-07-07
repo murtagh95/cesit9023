@@ -1,4 +1,4 @@
-import { IAlumno, Alumno } from './../models/Alumno';
+import { IAlumno, Alumno } from '../models/Alumno';
 import { Request, Response } from 'express';
 
 function getNombre(parametro: string) {
@@ -75,6 +75,7 @@ class AlumnoController {
               $and: [
                 { fechaNacimiento: { $gte: new Date(fechaNacimiento) } },
                 { fechaNacimiento: { $lt: new Date(fechaFinal) } },
+                { baja: false}
               ],
             };
           }
@@ -89,8 +90,8 @@ class AlumnoController {
       return response.send(alumnos);
     }
 
-    alumnos = await Alumno.find();
-
+    alumnos = await Alumno.find({baja:false});
+    // let filtroAlumno = alumnos.filter((alumno) => alumno.baja === false);
     return response.send(alumnos);
   }
 
@@ -101,6 +102,7 @@ class AlumnoController {
         .json({ message: 'Se deber ingresar el id del alumno' });
     }
     const alumno = await Alumno.findById(req.params.id);
+
     if (!alumno) {
       return res
         .status(404)
