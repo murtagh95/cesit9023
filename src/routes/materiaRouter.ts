@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { MateriaController } from '../controller/materiaController';
+import { MateriaController } from '../controllers/materiaController';
 
 const routerMateria = Router();
 const materiaController = new MateriaController();

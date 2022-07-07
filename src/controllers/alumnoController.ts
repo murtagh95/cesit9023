@@ -1,4 +1,4 @@
-import { IAlumno, Alumno } from './../models/Alumno';
+import { IAlumno, Alumno } from '../models/Alumno';
 import { Request, Response } from 'express';
 
 function getNombre(parametro: string) {
@@ -90,8 +90,8 @@ class AlumnoController {
     }
 
     alumnos = await Alumno.find();
-
-    return response.send(alumnos);
+    let filtroAlumno = alumnos.filter((alumno) => alumno.baja === false);
+    return response.send(filtroAlumno);
   }
 
   async getById(req: Request, res: Response) {
@@ -101,6 +101,7 @@ class AlumnoController {
         .json({ message: 'Se deber ingresar el id del alumno' });
     }
     const alumno = await Alumno.findById(req.params.id);
+
     if (!alumno) {
       return res
         .status(404)
