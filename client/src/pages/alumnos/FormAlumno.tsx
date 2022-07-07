@@ -2,12 +2,8 @@ import { Button, Grid, Stack, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-import { FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 
 export interface IFormInputs {
   nombre: string;
@@ -34,7 +30,7 @@ interface FormTareaProps {
 
 const FormAlumno: FC<FormTareaProps> = ({ data, onSubmit }) => {
   // const [value, setValue] = useState<Date | null>(null);
-  
+
   const navigate = useNavigate();
   const {
     control,
@@ -124,9 +120,9 @@ const FormAlumno: FC<FormTareaProps> = ({ data, onSubmit }) => {
         />
         <br />
         <br />
-        
+
         {/* calendario */}
-        <Controller 
+        <Controller
           name="fechaNacimiento"
           control={control}
           render={({ field }) => (
