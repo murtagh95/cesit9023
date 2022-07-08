@@ -10,18 +10,20 @@ import { Link } from 'react-router-dom';
 
 export interface IFormInputs {
   nombre: string;
-  duracion: number;
-  horario: string
+  duracion: string;
+  horario: string;
   plan: string;
 }
 
 const schemaValidator = yup
   .object({
     nombre: yup.string().required('El nombre es requerido'),
-    duracion: yup.number().required('La duración es requerida').typeError("La duración debe ser un número"),
+    duracion: yup
+      .string()
+      .required('La duración es requerida')
+      .typeError('La duración debe ser un número'),
     horario: yup.string().required('El horario es requerido'),
     plan: yup.string().required('El plan es requerido'),
-
   })
   .required();
 
@@ -30,9 +32,7 @@ interface FormCarreraProps {
   onSubmit: (data: IFormInputs) => void;
 }
 
-
 const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
-
   const {
     control,
     handleSubmit,
@@ -42,24 +42,21 @@ const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
     resolver: yupResolver(schemaValidator),
   });
 
-
-
-
   return (
     <Grid xs={8}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
-          name='nombre'
+          name="nombre"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Nombre'
-              placeholder='Ingrese el nombre aquí...'
+              label="Nombre"
+              placeholder="Ingrese el nombre aquí..."
               fullWidth
-              type='text'
+              type="text"
               error={Boolean(errors.nombre)}
               helperText={errors.nombre ? errors.nombre.message : ''}
             />
@@ -70,18 +67,17 @@ const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
         <br />
 
         <Controller
-          name='duracion'
+          name="duracion"
           control={control}
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Duracion'
-              placeholder='Ingrese la duracion aquí...'
+              label="Duracion"
+              placeholder="Ingrese la duracion aquí..."
               fullWidth
               error={Boolean(errors.duracion)}
               helperText={errors.duracion ? errors.duracion.message : ''}
-
             />
           )}
         />
@@ -89,15 +85,15 @@ const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
         <br />
 
         <Controller
-          name='horario'
+          name="horario"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='horario'
-              placeholder='Ingrese la descripcion aquí...'
+              label="horario"
+              placeholder="Ingrese la descripcion aquí..."
               fullWidth
               error={Boolean(errors.horario)}
               helperText={errors.horario ? errors.horario.message : ''}
@@ -108,15 +104,15 @@ const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
         <br />
 
         <Controller
-          name='plan'
+          name="plan"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Plan'
-              placeholder='Ingrese la duracion aquí...'
+              label="Plan"
+              placeholder="Ingrese la duracion aquí..."
               fullWidth
               error={Boolean(errors.plan)}
               helperText={errors.plan ? errors.plan.message : ''}
@@ -125,12 +121,16 @@ const FormCarrera: FC<FormCarreraProps> = ({ data, onSubmit }) => {
         />
         <br />
         <br />
-        <ButtonGroup size="large" aria-label="large outlined primary button group" color="success" >
+        <ButtonGroup
+          size="large"
+          aria-label="large outlined primary button group"
+          color="success"
+        >
           <Button type="submit">Guardar</Button>
-          <Button color="error" component={Link} to="/carreras">Cancelar</Button>
+          <Button color="error" component={Link} to="/carreras">
+            Cancelar
+          </Button>
         </ButtonGroup>
-
-
       </form>
     </Grid>
   );

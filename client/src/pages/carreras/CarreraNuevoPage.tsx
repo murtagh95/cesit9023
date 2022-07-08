@@ -1,5 +1,5 @@
-import { Box, Typography } from '@mui/material'
-import FormCarrera, { IFormInputs } from './FormCarrera'
+import { Box, Typography } from '@mui/material';
+import FormCarrera, { IFormInputs } from './FormCarrera';
 import { crearCarreraService } from '../../services/carreras-services';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const CarreraNuevoPage = () => {
       <Typography variant="h3">Nueva Carrera</Typography>
       <FormCarrera onSubmit={onSubmit} />
     </Box>
-  )
-}
+  );
+};
 
-export default CarreraNuevoPage  
+export default CarreraNuevoPage;
