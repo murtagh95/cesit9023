@@ -17,7 +17,7 @@ const CustomLabel = styled(Paper, {
 
 interface CustomLabelItemProps {
   label: string;
-  value: string | number;
+  value: string;
 }
 
 const CustomLabelItem: FC<CustomLabelItemProps> = ({ label, value }) => {

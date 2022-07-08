@@ -10,42 +10,45 @@ import {
   Toolbar,
 } from '@mui/material';
 
-import HomeIcon from '@mui/icons-material/Home';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { FC } from 'react';
 import { drawerWidth } from '../constants';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../store/hooks';
+import SchoolIcon from '@material-ui/icons/School';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
+import PersonIcon from '@mui/icons-material/Person';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import { useAppSelector } from '../store/hooks';
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  '& .MuiDrawer-paper': {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: 'border-box',
+    ...(!open && {
+      overflowX: 'hidden',
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.leavingScreen,
       }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
+      width: theme.spacing(7),
+      [theme.breakpoints.up('sm')]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
 
 interface MenuItemProps {
   title: string;
@@ -55,20 +58,30 @@ interface MenuItemProps {
 
 const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
   <ListItemButton component={Link} to={to}>
-    <ListItemIcon>
-      {icon}
-    </ListItemIcon>
+    <ListItemIcon>{icon}</ListItemIcon>
     <ListItemText primary={title} />
   </ListItemButton>
-)
+);
 
 export const MainListItems: FC = () => {
+  const { cantidadCarrera } = useAppSelector((state) => state.carrera);
+  const { cantidadCursos } = useAppSelector((state) => state.curso);
+  const { cantidadMaterias } = useAppSelector((state) => state.materia);
+
   return (
     <>
-      <MenuItem title="Home" to="/" icon={<HomeIcon />} />
-      <MenuItem title="Ejemplos" to="/ejemplos" icon={<FormatListBulletedIcon />} />
-      <MenuItem title="Tareas" to="/tareas" icon={<AssignmentIcon />} />
-      <MenuItem title="Profesores" to="/profesores" icon={<AssignmentIndIcon />} />
+      <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
+      {/* <MenuItem title="Ejemplos" to="/ejemplos" icon={<ShoppingCartIcon />} /> */}
+      <MenuItem title={`Tareas`} to="/tareas" icon={<PeopleIcon />} />
+      <MenuItem title={`Carreras `} to="/carreras" icon={<SchoolIcon />} />
+      <MenuItem title={`Cursos `} to="/cursos" icon={<HomeWorkIcon />} />
+      <MenuItem title="Alumnos" to="/alumnos" icon={<PersonIcon />} />
+      <MenuItem title={`Materias`} to="/materias" icon={<MenuBookIcon />} />
+      <MenuItem
+        title="Profesores"
+        to="/profesores"
+        icon={<AssignmentIndIcon />}
+      />
       <MenuItem title="Roles" to="/roles" icon={<FingerprintIcon />} />
     </>
   );
@@ -80,7 +93,6 @@ interface LeftMenuProps {
 }
 
 const LeftMenu: FC<LeftMenuProps> = ({ open, toggleDrawer }) => {
-
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
@@ -100,7 +112,7 @@ const LeftMenu: FC<LeftMenuProps> = ({ open, toggleDrawer }) => {
         <MainListItems />
       </List>
     </Drawer>
-  )
-}
+  );
+};
 
-export default LeftMenu
+export default LeftMenu;

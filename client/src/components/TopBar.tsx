@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
@@ -7,7 +7,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../constants';
-
+import logo from './img/LOGOBLANCO.png'
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
@@ -35,9 +35,9 @@ interface TopBarProps {
   toggleDrawer: () => void;
 }
 
-const TopBar: FC<TopBarProps> = ({ open, toggleDrawer}) => {
+const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
   return (
-    <AppBar position="absolute" open={open}>
+    <AppBar id='AppBar' position="absolute" open={open}>
       <Toolbar
         sx={{
           pr: '24px', // keep right padding when drawer closed
@@ -62,16 +62,16 @@ const TopBar: FC<TopBarProps> = ({ open, toggleDrawer}) => {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          CESIT
+           <img className='logo' src={logo} alt="logo" />
         </Typography>
         <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
+          <Badge badgeContent={4} color="primary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
-export default TopBar
+export default TopBar;

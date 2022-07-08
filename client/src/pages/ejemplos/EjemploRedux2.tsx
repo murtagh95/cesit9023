@@ -1,22 +1,18 @@
 import { increment } from '../../slices/counterSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 const EjemploRedux2 = () => {
-    const value = useAppSelector(state => state.counter.value);
-    const dispatch = useAppDispatch();
-  
-    console.info("---> renderinzado2...");
-    
-    return (
-        <div>
-            <h1>EjemploRedux 2</h1>
+  const value = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
 
-            <p>Counter: {value}</p>
-            <button onClick={
-                () => dispatch(increment())
-            }>Increment</button>
-        </div>
-    )
-}
+  return (
+    <div>
+      <h1>EjemploRedux 2</h1>
 
-export default EjemploRedux2
+      <p>Counter: {value}</p>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+    </div>
+  );
+};
+
+export default EjemploRedux2;

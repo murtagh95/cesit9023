@@ -1,13 +1,15 @@
-import { Box, Grid, Input, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { crearTareaService } from '../../services/tareas-services';
 
-interface IFormInputs {
+import { FC } from 'react';
+import { Link } from 'react-router-dom';
+
+export interface IFormInputs {
   nombre: string;
   descripcion: string;
+  finalizada: boolean;
 }
 
 const schemaValidator = yup
@@ -17,39 +19,34 @@ const schemaValidator = yup
   })
   .required();
 
-const FormTarea = () => {
-  const navigate = useNavigate();
+interface FormTareaProps {
+  data?: IFormInputs;
+  onSubmit: (data: IFormInputs) => void;
+}
+
+const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>({
+    defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
-  const onSubmit = async (data: IFormInputs) => {
-    console.info('--- valores del formulario', data);
-    try {
-      await crearTareaService(data);
-      navigate('/tareas');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
-    <Grid xs={8}>
+    <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Controller
-          name='nombre'
+          name="nombre"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Nombre'
-              placeholder='Ingrese el nombre aquí...'
+              label="Nombre"
+              placeholder="Ingrese el nombre aquí..."
               fullWidth
               error={Boolean(errors.nombre)}
               helperText={errors.nombre ? errors.nombre.message : ''}
@@ -59,26 +56,42 @@ const FormTarea = () => {
 
         <br />
         <br />
-        
+
         <Controller
-          name='descripcion'
+          name="descripcion"
           control={control}
-          defaultValue=''
+          defaultValue=""
           render={({ field }) => (
             <TextField
               {...field}
               multiline
-              label='Descripcion'
-              placeholder='Ingrese la descripcion aquí...'
+              label="Descripcion"
+              placeholder="Ingrese la descripcion aquí..."
               fullWidth
+              rows={4}
               error={Boolean(errors.descripcion)}
               helperText={errors.descripcion ? errors.descripcion.message : ''}
             />
           )}
         />
+
+        <FormControlLabel
+          control={
+            <Controller
+              name="finalizada"
+              control={control}
+              render={({ field }) => (
+                <Checkbox {...field} checked={field.value || false} />
+              )}
+            />
+          }
+          label="Finalizada"
+        />
+
         {errors.descripcion && <p>{errors.descripcion.message}</p>}
         <br />
-        <input type='submit' />
+        <input type="submit" value="Guardar" />
+        <Link to="/tareas">Cancelar</Link>
       </form>
     </Grid>
   );
