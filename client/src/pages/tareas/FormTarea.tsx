@@ -1,10 +1,13 @@
-import { Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Grid, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import MyInputText from '../../components/form/MyInputText';
+import MyTextArea from '../../components/form/MyTextArea';
+import MyCheckbox from '../../components/form/MyCheckbox';
 
 export interface IFormInputs {
   nombre: string;
@@ -25,75 +28,40 @@ interface FormTareaProps {
 }
 
 const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
-    formState: { errors },
   } = useForm<IFormInputs>({
     defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
   return (
-    <Grid>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="nombre"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="Nombre"
-              placeholder="Ingrese el nombre aquí..."
-              fullWidth
-              error={Boolean(errors.nombre)}
-              helperText={errors.nombre ? errors.nombre.message : ''}
-            />
-          )}
-        />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <MyInputText name="nombre" control={control} label="Nombre" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyTextArea name="descripcion" control={control} label="Descripcion" />
+          </Grid>
+          <Grid item xs={12}>
+          <MyCheckbox name="finalizada" control={control} label="Finalizada?" />
+          </Grid>
+          <Grid item xs={12}>
+            <Stack direction="row" spacing={1}>
+              <Button type="submit" value="Guardar" variant="contained" >Guardar</Button>
+              <Button
+                variant="outlined"
+                value="Cncelar"
+                onClick={() => navigate(`/tareas`)}
+              >Cancelar</Button>
+            </Stack>
+          </Grid>
 
-        <br />
-        <br />
-
-        <Controller
-          name="descripcion"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="Descripcion"
-              placeholder="Ingrese la descripcion aquí..."
-              fullWidth
-              rows={4}
-              error={Boolean(errors.descripcion)}
-              helperText={errors.descripcion ? errors.descripcion.message : ''}
-            />
-          )}
-        />
-
-        <FormControlLabel
-          control={
-            <Controller
-              name="finalizada"
-              control={control}
-              render={({ field }) => (
-                <Checkbox {...field} checked={field.value || false} />
-              )}
-            />
-          }
-          label="Finalizada"
-        />
-
-        {errors.descripcion && <p>{errors.descripcion.message}</p>}
-        <br />
-        <input type="submit" value="Guardar" />
-        <Link to="/tareas">Cancelar</Link>
+        </Grid>
       </form>
-    </Grid>
   );
 };
 

@@ -1,13 +1,12 @@
 import {
   Box,
   Button,
-  MenuItem,
-  Select,
-  TextField,
   Typography,
 } from '@mui/material';
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import MyDropdown, { DropdownOption } from '../../../components/form/MyDropdown';
+import MyInputText from '../../../components/form/MyInputText';
 import { buscarTareas } from '../../../slices/tareasSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
@@ -16,13 +15,14 @@ export interface IFromBuscar {
   busqueda: string;
 }
 
-const BuscarTareas = () => {
+const BuscarTareas: FC = () => {
   const dispatch = useAppDispatch();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState,
+    reset,
   } = useForm<IFromBuscar>({
     defaultValues: {
       tipo: '_todos',
@@ -33,39 +33,34 @@ const BuscarTareas = () => {
     dispatch(buscarTareas({ criterio: `${data.tipo}=${data.busqueda}` }));
   };
 
+  const limpiarBusqueda = () => {
+    reset({ busqueda: ''});
+    dispatch(buscarTareas());  
+  }
+
+  const options: DropdownOption[] = [
+    { label: 'Nombre', value: 'nombre'},
+    { label: 'Descripción', value: 'descripcion'},
+    { label: 'Todo', value: '_todos'}
+  ]
+
   return (
     <Box padding={2}>
       <Typography>Buscar por</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          control={control}
-          name="tipo"
-          render={({ field: { onChange, value } }) => (
-            <Select onChange={onChange} value={value || ' '}>
-              <MenuItem value="nombre">Nombre</MenuItem>
-              <MenuItem value="descripcion">Descripción</MenuItem>
-              <MenuItem value="_todos">Todos</MenuItem>
-            </Select>
-          )}
-        />
+        <Box display="flex" gap={1}>
+        <MyDropdown name='tipo' control={control} label="Buscar por" options={options} />
 
-        <Controller
-          name="busqueda"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Nombre"
-              placeholder="Ingrese el nombre aquí..."
-              error={Boolean(errors.busqueda)}
-              helperText={errors.busqueda ? errors.busqueda.message : ''}
-            />
-          )}
-        />
-        <Button type="submit" variant="outlined">
-          Buscar
-        </Button>
+          <MyInputText name='busqueda' control={control} label="Criterio de busqueda" />
+
+          <Button type="submit" variant="outlined">
+            Buscar
+          </Button>
+          <Button onClick={limpiarBusqueda} variant="outlined" color='success'>
+            X
+          </Button>
+        </Box>
+        
       </form>
     </Box>
   );
