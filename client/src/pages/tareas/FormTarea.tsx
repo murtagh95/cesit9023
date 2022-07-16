@@ -8,11 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import MyInputText from '../../components/form/MyInputText';
 import MyTextArea from '../../components/form/MyTextArea';
 import MyCheckbox from '../../components/form/MyCheckbox';
+import MyInputDate from '../../components/form/MyInputDate';
 
 export interface IFormInputs {
   nombre: string;
   descripcion: string;
   finalizada: boolean;
+  fechaLimite?: Date | undefined;
 }
 
 const schemaValidator = yup
@@ -33,7 +35,7 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
     control,
     handleSubmit,
   } = useForm<IFormInputs>({
-    defaultValues: data || {},
+    defaultValues: data || { fechaLimite: new Date() },
     resolver: yupResolver(schemaValidator),
   });
 
@@ -47,11 +49,14 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
             <MyTextArea name="descripcion" control={control} label="Descripcion" />
           </Grid>
           <Grid item xs={12}>
-          <MyCheckbox name="finalizada" control={control} label="Finalizada?" />
+            <MyCheckbox name="finalizada" control={control} label="Finalizada?" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputDate name="fechaLimite" control={control} label="Fecha Límite" />
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>
-              <Button type="submit" value="Guardar" variant="contained" >Guardar</Button>
+              <Button type="submit" variant="contained" >Guardar</Button>
               <Button
                 variant="outlined"
                 value="Cncelar"

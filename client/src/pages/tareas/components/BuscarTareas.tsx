@@ -4,7 +4,7 @@ import {
   Typography,
 } from '@mui/material';
 import { FC } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import MyDropdown, { DropdownOption } from '../../../components/form/MyDropdown';
 import MyInputText from '../../../components/form/MyInputText';
 import { buscarTareas } from '../../../slices/tareasSlice';
@@ -45,7 +45,7 @@ const BuscarTareas: FC = () => {
   ]
 
   return (
-    <Box padding={2}>
+    <Box>
       <Typography>Buscar por</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" gap={1}>

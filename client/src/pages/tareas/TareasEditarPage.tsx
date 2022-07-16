@@ -34,7 +34,7 @@ const TareasEditarPage = () => {
   };
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Editar Tarea</Typography>
       <FormTarea data={tareaSeleccionada} onSubmit={actualizandoTarea} />
     </Box>

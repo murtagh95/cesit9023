@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   LinearProgress,
   Table,
@@ -8,17 +9,10 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Link as MuiLink,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   buscarTareas,
   eliminarTareaPorId,
@@ -26,6 +20,10 @@ import {
 } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import BuscarTareas from './components/BuscarTareas';
+import { TableDeleteBtn, TableEditBtn, TableShowBtn } from '../../components/table/TableButtons';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import { format } from 'date-fns'
+import { DATE_FORMAT } from '../../utils/constants';
 
 const TareasPage = () => {
   const dispatch = useAppDispatch();
@@ -48,16 +46,20 @@ const TareasPage = () => {
   }, []);
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
+      
       <Typography variant="h3">Listando Tareas</Typography>
+      
       <Button
         variant="contained"
         size="small"
         onClick={() => navigate('/tareas/nueva')}
+        fullWidth
       >
-        Nuevo
+        Nueva Tarea
       </Button>
-
+      
+      
       <BuscarTareas />
 
       {mensajeError && (
@@ -79,7 +81,8 @@ const TareasPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Nombre</TableCell>
-                  <TableCell align="right">Finalizada?</TableCell>
+                  <TableCell align="right">Finalizada</TableCell>
+                  <TableCell align="right">Fecha Límite</TableCell>
                   <TableCell align="right">Acciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -93,21 +96,18 @@ const TareasPage = () => {
                       {tarea.nombre}
                     </TableCell>
                     <TableCell align="right">
-                      {Boolean(tarea.finalizada).toString()}
+                      {tarea.finalizada ? 'Si' : 'No'}
                     </TableCell>
                     <TableCell align="right">
-                      <Link to={`/tareas/${tarea._id}/ver`}>Ver</Link>
-                      {` `}
-                      <Link to={`/tareas/${tarea._id}/editar`}>Editar</Link>
-                      {` `}
-                      <MuiLink
-                        onClick={() => {
+                      {tarea.fechaLimite  ? format(new Date(tarea.fechaLimite), DATE_FORMAT) : ''}
+                    </TableCell>
+                    <TableCell align="right">
+                        <TableShowBtn onClick={() => navigate(`/tareas/${tarea._id}/ver`)} />
+                        <TableEditBtn onClick={() => navigate(`/tareas/${tarea._id}/editar`)} />
+                        <TableDeleteBtn onClick={() => {
                           tareaId.current = tarea._id;
                           setMostrarDialogo(true);
-                        }}
-                      >
-                        Eliminar
-                      </MuiLink>
+                        }} />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -117,31 +117,16 @@ const TareasPage = () => {
         )
       )}
 
-      <Dialog
+      <ConfirmationModal
         open={mostrarDialogo}
+        message="Está seguro que desea eliminar la tarea seleccionada."
         onClose={() => setMostrarDialogo(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'Eliminando tarea?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Está seguro que desea eliminar la tarea seleccionada.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setMostrarDialogo(false)}>No</Button>
-          <Button
-            onClick={() => {
-              dispatch(eliminarTareaPorId(tareaId.current || ''));
-              setMostrarDialogo(false);
-            }}
-            autoFocus
-          >
-            Si
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onNo={() => setMostrarDialogo(false)}
+        onYes={() => {
+          dispatch(eliminarTareaPorId(tareaId.current || ''));
+          setMostrarDialogo(false);
+        }}
+      />
     </Box>
   );
 };

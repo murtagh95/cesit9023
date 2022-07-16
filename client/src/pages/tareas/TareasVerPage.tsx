@@ -22,12 +22,11 @@ const TareasVerPage: FC = () => {
   }
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Visualizando Tarea</Typography>
-      <Box padding={2}>
-        <Link to="/tareas">Volver</Link>
-      </Box>
-
+      
+      <Link to="/tareas">Volver</Link>
+      
       <Grid container spacing={2}>
         <CustomLabelItem label="Nombre" value={tareaSeleccionada.nombre} />
         <CustomLabelItem
