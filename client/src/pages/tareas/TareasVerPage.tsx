@@ -1,9 +1,11 @@
 import { Box, Grid, LinearProgress, Typography } from '@mui/material';
+import format from 'date-fns/format';
 import { FC, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CustomLabelItem from '../../components/CustomLabelItem';
 import { buscarTareaPorId } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { DATE_FORMAT } from '../../utils/constants';
 
 const TareasVerPage: FC = () => {
   const { id } = useParams();
@@ -36,6 +38,14 @@ const TareasVerPage: FC = () => {
         <CustomLabelItem
           label="Finalizada"
           value={tareaSeleccionada.finalizada ? 'true' : 'false'}
+        />
+        <CustomLabelItem
+          label="Fecha Límite"
+          value={tareaSeleccionada.fechaLimite ? format(new Date(tareaSeleccionada.fechaLimite), DATE_FORMAT): ''}
+        />
+        <CustomLabelItem
+          label="Progreso"
+          value={tareaSeleccionada.progreso}
         />
       </Grid>
     </Box>
