@@ -6,13 +6,15 @@ export interface ITarea {
   descripcion?: string;
   finalizada?: boolean;
   fechaLimite?: boolean;
+  progreso?: number;
 }
 
 const tareaSchema = new Schema<ITarea>({
   nombre: { type: String, required: true },
   descripcion: { type: String, required: false },
   finalizada: { type: Boolean, default: false },
-  fechaLimite: { type: Date, required: true },
+  fechaLimite: { type: Date, required: false },
+  progreso: { type: Number, required: false },
 });
 
 export const Tarea = model<ITarea>('tareas', tareaSchema);

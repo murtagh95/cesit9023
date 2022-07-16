@@ -4,4 +4,5 @@ export interface Tarea {
   descripcion: string;
   finalizada: boolean;
   fechaLimite?: Date | undefined;
+  progreso: number;
 }

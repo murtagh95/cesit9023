@@ -9,12 +9,14 @@ import MyInputText from '../../components/form/MyInputText';
 import MyTextArea from '../../components/form/MyTextArea';
 import MyCheckbox from '../../components/form/MyCheckbox';
 import MyInputDate from '../../components/form/MyInputDate';
+import MyInputSlider from '../../components/form/MyInputSlider';
 
 export interface IFormInputs {
   nombre: string;
   descripcion: string;
   finalizada: boolean;
   fechaLimite?: Date | undefined;
+  progreso: number;
 }
 
 const schemaValidator = yup
@@ -33,6 +35,7 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
   const navigate = useNavigate();
   const {
     control,
+    setValue,
     handleSubmit,
   } = useForm<IFormInputs>({
     defaultValues: data || { fechaLimite: new Date() },
@@ -53,6 +56,9 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
           </Grid>
           <Grid item xs={12}>
             <MyInputDate name="fechaLimite" control={control} label="Fecha Límite" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputSlider name="progreso" control={control} label="Progreso" setValue={setValue}/>
           </Grid>
           <Grid item xs={12}>
             <Stack direction="row" spacing={1}>

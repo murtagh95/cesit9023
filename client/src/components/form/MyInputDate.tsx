@@ -26,6 +26,8 @@ const MyInputDate: FC<InputProps> = ({ name, control, label }) => {
                   inputVariant="outlined"
                   autoOk
                   format={DATE_FORMAT}
+                  label={label}
+                  size="small"
                 />
               );
             }}

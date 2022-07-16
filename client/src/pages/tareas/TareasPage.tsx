@@ -81,8 +81,9 @@ const TareasPage = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Nombre</TableCell>
-                  <TableCell align="right">Finalizada</TableCell>
-                  <TableCell align="right">Fecha Límite</TableCell>
+                  <TableCell align="center">Finalizada</TableCell>
+                  <TableCell align="center">Fecha Límite</TableCell>
+                  <TableCell align="center">Progreso</TableCell>
                   <TableCell align="right">Acciones</TableCell>
                 </TableRow>
               </TableHead>
@@ -95,11 +96,14 @@ const TareasPage = () => {
                     <TableCell component="th" scope="row">
                       {tarea.nombre}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       {tarea.finalizada ? 'Si' : 'No'}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                       {tarea.fechaLimite  ? format(new Date(tarea.fechaLimite), DATE_FORMAT) : ''}
+                    </TableCell>
+                    <TableCell align="center">
+                      {tarea.progreso}
                     </TableCell>
                     <TableCell align="right">
                         <TableShowBtn onClick={() => navigate(`/tareas/${tarea._id}/ver`)} />
