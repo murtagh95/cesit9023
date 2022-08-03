@@ -3,11 +3,11 @@ import {
   Button,
   Typography,
 } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import MyDropdown, { DropdownOption } from '../../../components/form/MyDropdown';
 import MyInputText from '../../../components/form/MyInputText';
-import { buscarTareas } from '../../../slices/tareasSlice';
+import { buscarTareas, setCriterio } from '../../../slices/tareasSlice';
 import { useAppDispatch } from '../../../store/hooks';
 
 export interface IFromBuscar {
@@ -17,6 +17,10 @@ export interface IFromBuscar {
 
 const BuscarTareas: FC = () => {
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setCriterio(null));
+  }, []);
 
   const {
     control,
@@ -30,11 +34,16 @@ const BuscarTareas: FC = () => {
   });
 
   const onSubmit = (data: IFromBuscar) => {
-    dispatch(buscarTareas({ criterio: `${data.tipo}=${data.busqueda}` }));
+    const criterio: Record<string, string> = {
+      [data.tipo as string]: data.busqueda as string
+    };
+    dispatch(setCriterio(criterio));
+    dispatch(buscarTareas());
   };
 
   const limpiarBusqueda = () => {
     reset({ busqueda: ''});
+    dispatch(setCriterio(null));
     dispatch(buscarTareas());  
   }
 

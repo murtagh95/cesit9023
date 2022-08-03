@@ -5,7 +5,7 @@ export interface ITarea {
   nombre: string;
   descripcion?: string;
   finalizada?: boolean;
-  fechaLimite?: boolean;
+  fechaLimite?: Date;
   progreso?: number;
 }
 

@@ -1,6 +1,15 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Tarea } from '../models/Tarea';
 
+export class PaginatedResponse<T> {
+  constructor(
+    public data: T[] | null,
+    public skip: number,
+    public limit: number,
+    public total: number
+  ) {}
+}
+
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
     super(message);
@@ -16,14 +25,24 @@ const manageError = (error: unknown): CustomError => {
 };
 
 export const buscarTaresService = async (
-  criterio?: string
-): Promise<Tarea[] | null> => {
+  criterio?: string,
+  page?: number,
+  limit?: number
+): Promise<PaginatedResponse<Tarea>> => {
   try {
     let uri = 'http://localhost:5005/api/tareas';
+
+    let params = '';
     if (criterio) {
-      uri += `?${criterio}`;
+      params += `${criterio}`;
     }
-    const res = await axios.get<Tarea[]>(uri);
+    // if (page) {
+    //   params += `page=${page}`;
+    // }
+    // if (limit) {
+    //   params += `limit=${limit}`;
+    // }
+    const res = await axios.get<PaginatedResponse<Tarea>>(`${uri}?${params}`);
     return res.data;
   } catch (error) {
     throw manageError(error);

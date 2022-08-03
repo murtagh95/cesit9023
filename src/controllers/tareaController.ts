@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
 import { ITarea, Tarea } from '../models/Tarea';
+import { faker } from '@faker-js/faker';
+import { randomIntFromInterval } from '../utils/numbers';
+import PaginatedResponse from '../models/responses/PaginatedResponse';
+import { getLimit, getSkip } from '../utils/controlleres/utils';
 
 function getNombre(parametro: string) {
   return { nombre: { $regex: new RegExp(parametro, 'i') } };
@@ -19,32 +23,36 @@ function getAll(parametro: string) {
 
 class TareaController {
   async getTareas(req: Request, res: Response) {
-    if (Object.keys(req.query).length != 0) {
-      const posiblesBusquedas: any = {
-        nombre: getNombre,
-        descripcion: getDescripcion,
-        _todos: getAll,
-      };
+    const posiblesBusquedas: any = {
+      nombre: getNombre,
+      descripcion: getDescripcion,
+      _todos: getAll,
+    };
 
-      const criterioDeBusqueda = [];
-      for (const [key, value] of Object.entries(req.query)) {
-        if (posiblesBusquedas[key] !== undefined) {
-          if (key === '_todos') {
-            criterioDeBusqueda.push(...posiblesBusquedas[key](value));
-          } else {
-            criterioDeBusqueda.push(posiblesBusquedas[key](value));
-          }
+    const criterioDeBusqueda = [];
+
+    for (const [key, value] of Object.entries(req.query)) {
+      if (
+        !['limit', 'skip'].includes(key) &&
+        posiblesBusquedas[key] !== undefined
+      ) {
+        if (key === '_todos') {
+          criterioDeBusqueda.push(...posiblesBusquedas[key](value));
+        } else {
+          criterioDeBusqueda.push(posiblesBusquedas[key](value));
         }
       }
-
-      let parametrosFiltro: any = { $or: criterioDeBusqueda };
-
-      const tareas = await Tarea.find(parametrosFiltro);
-      return res.send(tareas);
     }
 
-    const tareas = await Tarea.find();
-    res.send(tareas);
+    let parametrosFiltro: any = criterioDeBusqueda.length
+      ? { $or: criterioDeBusqueda }
+      : {};
+
+    const limit = getLimit(req);
+    const skip = getSkip(req);
+    const tareas = await Tarea.find(parametrosFiltro).skip(skip).limit(limit);
+    const count = await Tarea.count(parametrosFiltro);
+    return res.send(new PaginatedResponse<ITarea>(tareas, skip, limit, count));
   }
 
   async getTareaPorId(req: Request, res: Response) {
@@ -121,6 +129,23 @@ class TareaController {
 
     await Tarea.deleteOne({ _id: tarea._id });
     res.send(tarea);
+  }
+
+  // https://fakerjs.dev/
+  async crearSetProuebas(req: Request, res: Response) {
+    await Tarea.remove({});
+    for (let i = 0; i < 100; i++) {
+      const nuevaTarea = {
+        nombre: `${i} ${i % 2 ? 'abc' : 'xyz'} - ${faker.lorem.sentence(6)}`,
+        descripcion: faker.lorem.paragraph(3),
+        finalizada: Boolean(Math.random() < 0.5),
+        fechaLimite: new Date(faker.date.soon()),
+        progreso: randomIntFromInterval(0, 100),
+      } as ITarea;
+      const tarea = new Tarea(nuevaTarea);
+      await tarea.save();
+    }
+    res.send({});
   }
 }
 

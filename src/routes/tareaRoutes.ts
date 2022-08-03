@@ -14,4 +14,6 @@ router.put('/:id', controller.actualizarTarea);
 
 router.delete('/:id', controller.eliminarTareaPorId);
 
+router.get('/dev/crear-set-pruebas', controller.crearSetProuebas);
+
 export default router;

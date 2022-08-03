@@ -6,25 +6,32 @@ import {
   buscarTaresService,
   CustomError,
   eliminarTareaPorIdService,
+  PaginatedResponse,
 } from '../services/tareas-services';
 import type { RootState } from '../store/store';
 
 // Define a type for the slice state
 interface TareasState {
   tareas: Tarea[];
+  skip: number;
+  limit: number;
+  cantidadPaginas: number;
   tareaSeleccionada: Tarea | null;
   cargando: boolean;
-  cantidad: number;
   mensajeError: string | null;
+  criterio: Record<string, string> | null;
 }
 
 // Define the initial state using that type
 const initialState: TareasState = {
   tareas: [],
+  skip: 0,
+  limit: 10,
+  cantidadPaginas: 0,
   tareaSeleccionada: null,
   cargando: false,
-  cantidad: 0,
   mensajeError: null,
+  criterio: null,
 };
 
 export const tareasSlice = createSlice({
@@ -37,21 +44,27 @@ export const tareasSlice = createSlice({
     },
     limpiarTareas: (state) => {
       state.tareas = initialState.tareas;
-      state.cantidad = 0;
+    },
+    setCriterio: (
+      state,
+      { payload }: PayloadAction<Record<string, string> | null>
+    ) => {
+      state.criterio = payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(buscarTareas.pending, (state) => {
       state.cargando = true;
-      state.cantidad = 0;
       state.mensajeError = null;
     });
     builder.addCase(
       buscarTareas.fulfilled,
-      (state, { payload }: PayloadAction<Tarea[] | null>) => {
-        state.tareas = payload || [];
+      (state, { payload }: PayloadAction<PaginatedResponse<Tarea>>) => {
+        state.tareas = payload.data || [];
+        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.cantidadPaginas = Math.round(payload.total / payload.limit);
+        state.limit = payload.limit;
         state.cargando = false;
-        state.cantidad = state.tareas.length;
       }
     );
     builder.addCase(
@@ -103,31 +116,40 @@ export const tareasSlice = createSlice({
   },
 });
 
-export const { setCargando, limpiarTareas } = tareasSlice.actions;
+export const { setCargando, limpiarTareas, setCriterio } = tareasSlice.actions;
 
 export default tareasSlice.reducer;
 
 // Extra reducers
 interface BuscarTareasQuery {
-  criterio?: string;
+  limit: number;
+  skip: number;
 }
-type TareaRes = Tarea[] | null;
-
 export const buscarTareas = createAsyncThunk<
-  TareaRes,
-  BuscarTareasQuery | undefined,
+  PaginatedResponse<Tarea>,
+  BuscarTareasQuery | void,
   { rejectValue: CustomError }
->(
-  'tarea/buscarTareas',
-  async (props: BuscarTareasQuery | undefined, thunkApi) => {
-    try {
-      const tareasRes = await buscarTaresService(props?.criterio);
-      return tareasRes || [];
-    } catch (error) {
-      return thunkApi.rejectWithValue(error as CustomError);
+>('tarea/buscarTareas', async (params: BuscarTareasQuery | void, thunkApi) => {
+  try {
+    const state = thunkApi.getState() as RootState;
+    let criterio = state.tarea.criterio || ({} as Record<string, string>);
+    if (params?.limit && params?.skip) {
+      criterio = { ...criterio, limit: params.limit.toString() };
+      const skipLimit = (params.skip - 1) * params.limit;
+      criterio = { ...criterio, skip: skipLimit.toString() };
     }
+
+    let tareasRes: PaginatedResponse<Tarea>;
+
+    tareasRes = await buscarTaresService(
+      new URLSearchParams(criterio).toString()
+    );
+
+    return tareasRes;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error as CustomError);
   }
-);
+});
 
 export const buscarTareaPorId = createAsyncThunk<
   Tarea,

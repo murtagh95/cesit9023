@@ -17,3 +17,6 @@
 3. npm run dev
 
 
+# Información interesante
+
+https://www.bezkoder.com/docker-compose-nodejs-mongodb/
