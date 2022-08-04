@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { connect } from 'mongoose';
 import * as dotenv from 'dotenv';
+import cookieSession from 'cookie-session';
 
 // Routes
 import { routerMateria } from './routes/materiaRouter';
@@ -12,6 +13,7 @@ import cursosRouter from './routes/cursosRoutes';
 import carrerasRouter from './routes/carrerasRoutes';
 import profesoresRouter from './routes/profesoresRoutes';
 import { rolesRouter } from './routes/rolesRoutes';
+import userRoutes from './routes/userRoutes';
 
 dotenv.config();
 const PORT = process.env.PORT || 5005;
@@ -27,6 +29,12 @@ if (process.env.ENVIRONMENT != 'production') {
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cors());
+server.use(
+  cookieSession({
+    signed: false,
+    secure: process.env.NODE_ENV !== 'test',
+  })
+);
 
 // Router
 server.use('/api/tareas', tareasRouter);
@@ -36,6 +44,7 @@ server.use('/api/cursos', cursosRouter);
 server.use('/api/carreras', carrerasRouter);
 server.use('/api/profesores', profesoresRouter);
 server.use('/api/roles', rolesRouter);
+server.use('/api/users', userRoutes);
 
 const run = async () => {
   await connect(DB_CONN);
