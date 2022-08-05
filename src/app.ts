@@ -13,7 +13,7 @@ import cursosRouter from './routes/cursosRoutes';
 import carrerasRouter from './routes/carrerasRoutes';
 import profesoresRouter from './routes/profesoresRoutes';
 import { rolesRouter } from './routes/rolesRoutes';
-import userRoutes from './routes/userRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
 
 dotenv.config();
 const PORT = process.env.PORT || 5005;
@@ -44,7 +44,7 @@ server.use('/api/cursos', cursosRouter);
 server.use('/api/carreras', carrerasRouter);
 server.use('/api/profesores', profesoresRouter);
 server.use('/api/roles', rolesRouter);
-server.use('/api/users', userRoutes);
+server.use('/api/usuarios', usuarioRoutes);
 
 const run = async () => {
   await connect(DB_CONN);

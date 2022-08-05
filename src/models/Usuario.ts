@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-export interface IUser {
+export interface IUsuario {
   _id?: string;
   nombre: string;
   email: string;
@@ -8,7 +8,7 @@ export interface IUser {
   token?: string;
 }
 
-const userSchema = new Schema<IUser>(
+const usuarioSchema = new Schema<IUsuario>(
   {
     nombre: {
       type: String,
@@ -39,4 +39,4 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-export const User = model<IUser>('users', userSchema);
+export const Usuario = model<IUsuario>('usuarios', usuarioSchema);

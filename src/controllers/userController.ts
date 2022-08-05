@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser, User } from '../models/User';
+import { IUsuario, Usuario } from '../models/Usuario';
 import { faker } from '@faker-js/faker';
 
 import bcrypt from 'bcryptjs';
@@ -8,13 +8,13 @@ import jwt from 'jsonwebtoken';
 class UserController {
   async postRegistrar(req: Request, res: Response) {
     try {
-      const { nombre, email, password } = req.body as IUser;
+      const { nombre, email, password } = req.body as IUsuario;
       if (!nombre || !email || !password) {
         return res.json({ message: 'Nombre, email y password son requeridos' });
       }
 
       // Se revisa que el usuario no exista
-      const userExist = await User.findOne({ email: req.body.email });
+      const userExist = await Usuario.findOne({ email: req.body.email });
       if (userExist) {
         return res.json({
           message: 'El usuario ya existe para el email ingresado',
@@ -24,7 +24,7 @@ class UserController {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(req.body.password, salt);
       req.body.password = hashPassword;
-      const user = new User(req.body);
+      const user = new Usuario(req.body);
       await user.save();
 
       const jwtToken = await jwt.sign(
@@ -56,7 +56,7 @@ class UserController {
         return res.json({ message: 'Por favor, ingrese credenciales' });
       }
 
-      const userExist = await User.findOne({ email: req.body.email });
+      const userExist = await Usuario.findOne({ email: req.body.email });
       if (!userExist) {
         return res.json({ message: 'Credenciales inválidas' });
       }
@@ -92,8 +92,8 @@ class UserController {
 
   async getUsers(req: Request, res: Response) {
     try {
-      const user = await User.find();
-      console.info('--- req.session', req.session);
+      const user = await Usuario.find();
+
       if (!user) {
         return res.json({ message: 'Usuario no encontrado' });
       }
