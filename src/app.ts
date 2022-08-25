@@ -14,6 +14,7 @@ import carrerasRouter from './routes/carrerasRoutes';
 import profesoresRouter from './routes/profesoresRoutes';
 import { rolesRouter } from './routes/rolesRoutes';
 import usuarioRoutes from './routes/usuarioRoutes';
+import { currentUser } from './middlewares/current-user';
 
 dotenv.config();
 const PORT = process.env.PORT || 5005;
@@ -35,6 +36,7 @@ server.use(
     secure: process.env.NODE_ENV !== 'test',
   })
 );
+server.use(currentUser);
 
 // Router
 server.use('/api/tareas', tareasRouter);

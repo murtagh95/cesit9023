@@ -56,20 +56,18 @@ class UserController {
         return res.json({ message: 'Por favor, ingrese credenciales' });
       }
 
-      const userExist = await Usuario.findOne({ email: req.body.email });
-      if (!userExist) {
+      const usuario = await Usuario.findOne({ email: req.body.email });
+      if (!usuario) {
         return res.json({ message: 'Credenciales inválidas' });
       }
 
-      const isPasswordMatched = await bcrypt.compare(
-        password,
-        userExist.password
-      );
-      if (!isPasswordMatched) {
+      const passwordCoincide = await bcrypt.compare(password, usuario.password);
+      if (!passwordCoincide) {
         return res.json({ message: 'Credenciales inválidas' });
       }
+
       const jwtToken = await jwt.sign(
-        { id: userExist._id },
+        { id: usuario._id },
         process.env.SECRET_KEY!,
         {
           expiresIn: process.env.JWT_EXPIRE!,
@@ -92,12 +90,8 @@ class UserController {
 
   async getUsers(req: Request, res: Response) {
     try {
-      const user = await Usuario.find();
-
-      if (!user) {
-        return res.json({ message: 'Usuario no encontrado' });
-      }
-      return res.json({ user: user });
+      const users = await Usuario.find();
+      return res.json(users);
     } catch (error) {
       return res.json({ error: error });
     }
