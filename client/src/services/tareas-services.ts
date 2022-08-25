@@ -1,14 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Tarea } from '../models/Tarea';
-
-export class PaginatedResponse<T> {
-  constructor(
-    public data: T[] | null,
-    public skip: number,
-    public limit: number,
-    public total: number
-  ) {}
-}
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {

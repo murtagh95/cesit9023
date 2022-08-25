@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Tarea } from '../models/Tarea';
 import {
   buscarTareaPorIdService,
   buscarTaresService,
   CustomError,
   eliminarTareaPorIdService,
-  PaginatedResponse,
 } from '../services/tareas-services';
 import type { RootState } from '../store/store';
 
