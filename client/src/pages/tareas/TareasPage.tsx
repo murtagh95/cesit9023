@@ -22,18 +22,22 @@ import {
 } from '../../slices/tareasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import BuscarTareas from './components/BuscarTareas';
-import { TableDeleteBtn, TableEditBtn, TableShowBtn } from '../../components/table/TableButtons';
+import {
+  TableDeleteBtn,
+  TableEditBtn,
+  TableShowBtn,
+} from '../../components/table/TableButtons';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 import { DATE_FORMAT } from '../../utils/constants';
+import TitulosApp from '../../components/TitulosApp';
 
 const TareasPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const tareaId = useRef<string>();
-  const { cargando, tareas, mensajeError, cantidadPaginas, skip, limit } = useAppSelector(
-    (state) => state.tarea
-  );
+  const { cargando, tareas, mensajeError, cantidadPaginas, skip, limit } =
+    useAppSelector((state) => state.tarea);
 
   const navigate = useNavigate();
 
@@ -49,23 +53,21 @@ const TareasPage = () => {
 
   const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
     dispatch(buscarTareas({ skip, limit }));
-  }
+  };
 
   return (
     <Box display="flex" flexDirection="column" gap={3} padding={2}>
-      
-      <Typography variant="h3">Listando Tareas</Typography>
-      
-      <Button
-        variant="contained"
-        size="small"
-        onClick={() => navigate('/tareas/nueva')}
-        fullWidth
-      >
-        Nueva Tarea
-      </Button>
-      
-      
+      <TitulosApp title="Listando Tareas">
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => navigate('/tareas/nueva')}
+          fullWidth
+        >
+          Nueva Tarea
+        </Button>
+      </TitulosApp>
+
       <BuscarTareas />
 
       {mensajeError && (
@@ -107,18 +109,24 @@ const TareasPage = () => {
                         {tarea.finalizada ? 'Si' : 'No'}
                       </TableCell>
                       <TableCell align="center">
-                        {tarea.fechaLimite  ? format(new Date(tarea.fechaLimite), DATE_FORMAT) : ''}
+                        {tarea.fechaLimite
+                          ? format(new Date(tarea.fechaLimite), DATE_FORMAT)
+                          : ''}
                       </TableCell>
-                      <TableCell align="center">
-                        {tarea.progreso}
-                      </TableCell>
+                      <TableCell align="center">{tarea.progreso}</TableCell>
                       <TableCell align="right">
-                          <TableShowBtn onClick={() => navigate(`/tareas/${tarea._id}/ver`)} />
-                          <TableEditBtn onClick={() => navigate(`/tareas/${tarea._id}/editar`)} />
-                          <TableDeleteBtn onClick={() => {
+                        <TableShowBtn
+                          onClick={() => navigate(`/tareas/${tarea._id}/ver`)}
+                        />
+                        <TableEditBtn
+                          onClick={() => navigate(`/tareas/${tarea._id}/editar`)}
+                        />
+                        <TableDeleteBtn
+                          onClick={() => {
                             tareaId.current = tarea._id;
                             setMostrarDialogo(true);
-                          }} />
+                          }}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -127,10 +135,16 @@ const TareasPage = () => {
             </TableContainer>
 
             <Stack spacing={2} width="100%" alignItems="center">
-              <Pagination count={cantidadPaginas} page={skip} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
+              <Pagination
+                count={cantidadPaginas}
+                page={skip}
+                siblingCount={2}
+                onChange={handlePaginationOnChange}
+                variant="outlined"
+                color="primary"
+              />
             </Stack>
           </>
-          
         )
       )}
 
