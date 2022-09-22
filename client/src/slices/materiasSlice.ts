@@ -1,5 +1,5 @@
-
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Materia } from '../models/Materia';
 import {
     buscarMateriaPorIdService,
@@ -7,6 +7,7 @@ import {
     CustomError,
     eliminarMateriaPorIdService,
 } from '../services/materias-services';
+import type { RootState } from '../store/store';
 
 
 // Define a type for the slice state
@@ -16,6 +17,10 @@ interface MateriasState {
     cargando: boolean;
     cantidadMaterias: number;
     mensajeError: string | null;
+    skip: number;
+    limit: number;
+    cantidadPaginas: number;
+    criterio: Record<string, string> | null;
 }
 
 // Define the initial state using that type
@@ -25,6 +30,10 @@ const initialState: MateriasState = {
     cargando: false,
     cantidadMaterias: 0,
     mensajeError: null,
+    skip: 0,
+    limit: 10,
+    cantidadPaginas: 0,
+    criterio: null
 };
 
 export const materiasSlice = createSlice({
@@ -39,8 +48,15 @@ export const materiasSlice = createSlice({
             state.materias = initialState.materias;
             state.cantidadMaterias = 0;
         },
+        setCriterio: (
+          state,
+          { payload }: PayloadAction<Record<string, string> | null>
+        ) => {
+          state.criterio = payload;
+        },
     },
     extraReducers: (builder) => {
+        // Buscar materia
         builder.addCase(buscarMaterias.pending, (state) => {
             state.cargando = true;
             state.cantidadMaterias = 0;
@@ -48,10 +64,12 @@ export const materiasSlice = createSlice({
         });
         builder.addCase(
             buscarMaterias.fulfilled,
-            (state, { payload }: PayloadAction<Materia[] | null>) => {
-                state.materias = payload || [];
+            (state, { payload }: PayloadAction<PaginatedResponse<Materia>>) => {
+                state.materias = payload.data || [];
+                state.skip = Math.round(payload.skip / payload.limit) + 1;
+                state.cantidadPaginas = Math.round(payload.total / payload.limit);
+                state.limit = payload.limit;
                 state.cargando = false;
-                state.cantidadMaterias = state.materias.length;
             }
         );
         builder.addCase(
@@ -61,6 +79,9 @@ export const materiasSlice = createSlice({
                 state.cargando = false;
             }
         );
+
+
+        // Buscar Materia por ID
         builder.addCase(buscarMateriaPorId.pending, (state) => {
             state.cargando = true;
             state.mensajeError = null;
@@ -79,6 +100,9 @@ export const materiasSlice = createSlice({
                 state.cargando = false;
             }
         );
+
+
+        // Eliminar materia por ID
         builder.addCase(eliminarMateriaPorId.pending, (state) => {
             state.cargando = true;
             state.mensajeError = null;
@@ -103,22 +127,38 @@ export const materiasSlice = createSlice({
     },
 });
 
-export const { setCargando, limpiarMaterias } = materiasSlice.actions;
+export const { setCargando, limpiarMaterias, setCriterio } = materiasSlice.actions;
 
 export default materiasSlice.reducer;
 
 // Extra reducers
-
-type MateriaRes = Materia[] | null;
+interface BuscarMateriasQuery {
+    limit: number;
+    skip: number;
+}
 
 export const buscarMaterias = createAsyncThunk<
-    MateriaRes,
-    void,
+    PaginatedResponse<Materia>,
+    BuscarMateriasQuery | void,
     { rejectValue: CustomError }
->('materia/buscarMaterias', async (_: void, thunkApi) => {
+>('materia/buscarMaterias', async (params: BuscarMateriasQuery | void, thunkApi) => {
     try {
-        const materiaRes = await buscarMateriaService();
-        return materiaRes || [];
+        const state = thunkApi.getState() as RootState;
+        let criterio = state.materia.criterio || ({} as Record<string, string>);
+        
+        if (params?.limit && params?.skip) {
+        criterio = { ...criterio, limit: params.limit.toString() };
+        const skipLimit = (params.skip - 1) * params.limit;
+        criterio = { ...criterio, skip: skipLimit.toString() };
+        }
+
+        let materiaRes: PaginatedResponse<Materia>;
+
+        materiaRes = await buscarMateriaService(
+            new URLSearchParams(criterio).toString()
+        );
+
+        return materiaRes;
     } catch (error) {
         return thunkApi.rejectWithValue(error as CustomError);
     }

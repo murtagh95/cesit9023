@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Alumno } from '../models/Alumno';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -15,9 +16,15 @@ const manageError = (error: unknown): CustomError => {
   }
 };
 
-export const buscarAlumnosService = async (): Promise<Alumno[] | null> => {
+export const buscarAlumnosService = async (criterio?: string): Promise<PaginatedResponse<Alumno>> => {
   try {
-    const res = await axios.get<Alumno[]>('http://localhost:5005/api/alumnos');
+    let uri= 'http://localhost:5005/api/alumnos';
+
+    let params = '';
+    if (criterio) {
+      params += `${criterio}`;
+    }
+    const res = await axios.get<PaginatedResponse<Alumno>>(`${uri}?${params}`);
     return res.data;
   } catch (error) {
     throw manageError(error);

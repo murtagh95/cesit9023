@@ -1,6 +1,9 @@
 import {
+  Alert,
   Button,
   LinearProgress,
+  Pagination,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -8,32 +11,27 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Link as MuiLink,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@mui/material';
-import CreateIcon from '@mui/icons-material/Create';
-import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Box } from '@mui/system';
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import {  useNavigate } from 'react-router-dom';
 import {
   buscarAlumnos,
   eliminarAlumnoPorId,
   limpiarAlumnos,
 } from '../../slices/alumnosSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import BuscarAlumnos from './components/BuscarAlumnos';
+import { TableDeleteBtn, TableEditBtn, TableShowBtn } from '../../components/table/TableButtons';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import { format } from 'date-fns'
+import { DATE_FORMAT } from '../../utils/constants';
 
 const AlumnoPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const alumnoId = useRef<string>();
-  const { cargando, alumnos, mensajeError } = useAppSelector(
+  const { cargando, alumnos, mensajeError, cantidadPaginas, skip, limit } = useAppSelector(
     (state) => state.alumno
   );
 
@@ -48,19 +46,22 @@ const AlumnoPage = () => {
       }
     };
   }, []);
+  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
+    dispatch(buscarAlumnos({ skip, limit }));
+  }
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Listando Alumnos</Typography>
-      <br />
       <Button
         variant="contained"
         size="small"
-        onClick={() => navigate('/alumno/nuevo')}
+        onClick={() => navigate('/alumnos/nuevo')}
       >
-        Nuevo
+        Nuevo Alumno
       </Button>
-      <br />
+
+      <BuscarAlumnos />
 
       {mensajeError && (
         <Box marginTop={2}>
@@ -69,13 +70,14 @@ const AlumnoPage = () => {
           </Alert>
         </Box>
       )}
-      <br />
+      
       {cargando ? (
         <Box marginTop={2}>
           <LinearProgress color="secondary" />
         </Box>
       ) : (
         !mensajeError && (
+          <>
           <TableContainer>
             <Table size="small" aria-label="a dense table">
               <TableHead>
@@ -101,67 +103,39 @@ const AlumnoPage = () => {
                     <TableCell align="center">{alumno.dni}</TableCell>
                     <TableCell align="center">{alumno.domicilio}</TableCell>
                     <TableCell align="center">
-                      {alumno.fechaNacimiento}
+                      {alumno.fechaNacimiento ? format(new Date(alumno.fechaNacimiento), DATE_FORMAT) : ''}
                     </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        color="inherit"
-                        onClick={() => navigate(`/alumno/${alumno._id}/ver`)}
-                      >
-                        <VisibilityIcon />
-                      </Button>
-
-                      <Button
-                        color="success"
-                        onClick={() => navigate(`/alumno/${alumno._id}/editar`)}
-                      >
-                        <CreateIcon />
-                      </Button>
-
-                      <MuiLink
-                        onClick={() => {
-                          alumnoId.current = alumno._id;
-                          setMostrarDialogo(true);
-                        }}
-                      >
-                        <Button color="error">
-                          <DeleteIcon />
-                        </Button>
-                      </MuiLink>
-                    </TableCell>
+                    <TableCell align="right">
+                          <TableShowBtn onClick={() => navigate(`/alumnos/${alumno._id}/ver`)} />
+                          <TableEditBtn onClick={() => navigate(`/alumnos/${alumno._id}/editar`)} />
+                          <TableDeleteBtn onClick={() => {
+                            alumnoId.current = alumno._id;
+                            setMostrarDialogo(true);
+                          }} />
+                      </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+          <Stack spacing={2} width="100%" alignItems="center">
+              <Pagination count={cantidadPaginas} page={skip} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
+            </Stack>
+          </>
         )
       )}
 
-      <Dialog
+<ConfirmationModal
         open={mostrarDialogo}
+        message="Está seguro que desea eliminar la tarea seleccionada."
         onClose={() => setMostrarDialogo(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'Eliminar alumno?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Está seguro que desea eliminar el alumno seleccionado.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setMostrarDialogo(false)}>No</Button>
-          <Button
-            onClick={() => {
-              dispatch(eliminarAlumnoPorId(alumnoId.current || ''));
-              setMostrarDialogo(false);
-            }}
-            autoFocus
-          >
-            Si
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onNo={() => setMostrarDialogo(false)}
+        onYes={() => {
+          dispatch(eliminarAlumnoPorId(alumnoId.current || ''));
+          setMostrarDialogo(false);
+        }}
+      />
     </Box>
   );
 };

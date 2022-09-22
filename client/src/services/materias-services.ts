@@ -1,5 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Materia } from '../models/Materia';
+import { back_end_url } from '../utils/constants';
+
+const URL = `${back_end_url}/materias`
+
 
 export class CustomError extends Error {
     constructor(public code: number, public message: string) {
@@ -15,9 +20,14 @@ const manageError = (error: unknown): CustomError => {
     }
 };
 
-export const buscarMateriaService = async (): Promise<Materia[] | null> => {
+export const buscarMateriaService = async (criterio?: string): Promise<PaginatedResponse<Materia>> => {
     try {
-        const res = await axios.get<Materia[]>('http://localhost:5005/api/materias');
+        let params = '';
+        if (criterio) {
+        params += `${criterio}`;
+        }
+
+        const res = await axios.get<PaginatedResponse<Materia>>(`${URL}?${params}`);
         return res.data;
     } catch (error) {
         throw manageError(error);
@@ -27,7 +37,7 @@ export const buscarMateriaService = async (): Promise<Materia[] | null> => {
 export const crearMateriaService = async (data: Materia): Promise<Materia> => {
     try {
         const res = await axios.post<Materia>(
-            'http://localhost:5005/api/materias',
+            URL,
             data
         );
         return res.data;
@@ -38,7 +48,7 @@ export const crearMateriaService = async (data: Materia): Promise<Materia> => {
 
 export const buscarMateriaPorIdService = async (id: string): Promise<Materia> => {
     try {
-        const res = await axios.get<Materia>(`http://localhost:5005/api/materias/${id}`);
+        const res = await axios.get<Materia>(`${URL}/${id}`);
         return res.data;
     } catch (error) {
         throw manageError(error);
@@ -51,7 +61,7 @@ export const actualizarMateriaService = async (
 ) => {
     try {
         const res = await axios.put<Materia>(
-            `http://localhost:5005/api/materias/${id}`,
+            `${URL}/${id}`,
             data
         );
         return res.data;
@@ -63,7 +73,7 @@ export const actualizarMateriaService = async (
 export const eliminarMateriaPorIdService = async (id: string): Promise<Materia> => {
     try {
         const res = await axios.delete<Materia>(
-            `http://localhost:5005/api/materias/${id}`
+            `${URL}/${id}`
         );
         return res.data;
     } catch (error) {

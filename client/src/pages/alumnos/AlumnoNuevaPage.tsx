@@ -17,7 +17,7 @@ const AlumnoNuevaPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3">Nueva Alumno</Typography>
+      <Typography variant="h3">Nuevo Alumno</Typography>
       <FormAlumno onSubmit={onSubmit} />
     </Box>
   );

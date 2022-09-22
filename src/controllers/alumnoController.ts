@@ -1,5 +1,8 @@
 import { IAlumno, Alumno } from '../models/Alumno';
 import { Request, Response } from 'express';
+import { faker } from '@faker-js/faker';
+import PaginatedResponse from '../models/responses/PaginatedResponse';
+import { getLimit, getSkip } from '../utils/controlleres/utils';
 
 function getNombre(parametro: string) {
   return { nombre: { $regex: new RegExp(parametro, 'i') } };
@@ -30,69 +33,43 @@ function getBusquedaTotal(parametro: string) {
 class AlumnoController {
   async getTasks(request: Request, response: Response) {
     let alumnos: IAlumno[] = [];
+    const criterioDeBusqueda = [];
 
     if (Object.keys(request.query).length != 0) {
-      const posiblesBusquedas: any = {
-        domicilio: getDomicilio,
-        dni: getDni,
-        apellido: getApellido,
+      const busquedas: any = {
         nombre: getNombre,
+        apellido: getApellido,
+        dni: getDni,
+        domicilio: getDomicilio,
         busqueda: getBusquedaTotal,
       };
 
-      const criterioDeBusqueda = [];
       for (const [key, value] of Object.entries(request.query)) {
-        if (posiblesBusquedas[key] !== undefined) {
+        if (!['limit', 'skip'].includes(key) && busquedas[key] !== undefined) {
           if (key === 'busqueda') {
-            criterioDeBusqueda.push(...posiblesBusquedas[key](value));
+            criterioDeBusqueda.push(...busquedas[key](value));
           } else {
-            criterioDeBusqueda.push(posiblesBusquedas[key](value));
+            criterioDeBusqueda.push(busquedas[key](value));
           }
         }
       }
-
-      let parametrosFiltro: any = { $or: criterioDeBusqueda };
-      if (request.query.fechaNacimiento) {
-        const fechaNacimiento: string = request.query.fechaNacimiento.toString();
-        const fechaFinal = fechaNacimiento
-          .substring(0, 8)
-          .concat(String(Number(fechaNacimiento.substring(8)) + 1));
-
-        const regExp = /(\d){4}-([0-1]{1}\d{1})-([0-3]{1}\d{1})/.test(
-          fechaNacimiento
-        );
-        if (regExp) {
-          if (criterioDeBusqueda.length) {
-            parametrosFiltro = {
-              $or: criterioDeBusqueda,
-              $and: [
-                { fechaNacimiento: { $gte: new Date(fechaNacimiento) } },
-                { fechaNacimiento: { $lt: new Date(fechaFinal) } },
-              ],
-            };
-          } else {
-            parametrosFiltro = {
-              $and: [
-                { fechaNacimiento: { $gte: new Date(fechaNacimiento) } },
-                { fechaNacimiento: { $lt: new Date(fechaFinal) } },
-                { baja: false}
-              ],
-            };
-          }
-        } else {
-          return response
-            .status(400)
-            .send({ message: 'fechaNacimiento incorrecta' });
-        }
-      }
-
-      alumnos = await Alumno.find(parametrosFiltro);
-      return response.send(alumnos);
     }
+    let parametrosFiltro: any = criterioDeBusqueda.length
+      ? {
+          $or: criterioDeBusqueda,
+          $and: [{ baja: false }],
+        }
+      : {};
 
-    alumnos = await Alumno.find({baja:false});
-    // let filtroAlumno = alumnos.filter((alumno) => alumno.baja === false);
-    return response.send(alumnos);
+    const limit = getLimit(request);
+    const skip = getSkip(request);
+
+    alumnos = await Alumno.find(parametrosFiltro).skip(skip).limit(limit);
+    const count = await Alumno.count(parametrosFiltro);
+
+    return response.send(
+      new PaginatedResponse<IAlumno>(alumnos, skip, limit, count)
+    );
   }
 
   async getById(req: Request, res: Response) {
@@ -190,6 +167,38 @@ class AlumnoController {
     } catch (error) {
       res.send(error);
     }
+  }
+
+  // https://fakerjs.dev/
+  async crearSetProuebas(req: Request, res: Response) {
+    await Alumno.remove({});
+    for (let i = 0; i < 100; i++) {
+      const nuevoAlumno = {
+        nombre: faker.name.firstName(),
+        apellido: faker.name.lastName(),
+        dni: faker.random.numeric(10),
+        domicilio: faker.address.streetName(),
+        // baja: Boolean(),
+        fechaNacimiento: faker.date.birthdate({
+          min: 1950,
+          max: 2022,
+          mode: 'year',
+        }),
+        fechaCreacion: faker.date.birthdate({
+          min: 1950,
+          max: 2022,
+          mode: 'year',
+        }),
+        fechaActualizacion: faker.date.birthdate({
+          min: 1950,
+          max: 2022,
+          mode: 'year',
+        }),
+      } as IAlumno;
+      const alumno = new Alumno(nuevoAlumno);
+      await alumno.save();
+    }
+    res.send({});
   }
 }
 

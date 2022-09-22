@@ -16,12 +16,16 @@ routerMateria.get('/', async (request, response) => {
   await materiaController.getMaterias(request, response);
 });
 
-routerMateria.delete('/:_id', async (req: Request, res: Response) => {
+routerMateria.delete('/:id', async (req: Request, res: Response) => {
   await materiaController.bajaLogica(req, res);
 });
 
 routerMateria.get('/:id', async (request, response) => {
   await materiaController.getMateriaById(request, response);
+});
+
+routerMateria.get('/dev/crear-set-pruebas', async (request, response) => {
+  await materiaController.crearSetProuebas(request, response);
 });
 
 export { routerMateria };

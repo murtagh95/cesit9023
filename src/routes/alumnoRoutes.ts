@@ -14,4 +14,6 @@ alumnoRouter.get('/:id', alumnoController.getById);
 
 alumnoRouter.get('/', alumnoController.getTasks);
 
+alumnoRouter.get('/dev/crear-set-pruebas', alumnoController.crearSetProuebas);
+
 export { alumnoRouter };

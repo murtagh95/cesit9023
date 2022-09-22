@@ -74,6 +74,10 @@ const App = () => {
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
               <Route path="/alumnos" element={<AlumnoPage />} />
+              <Route path="/alumno/nuevo" element={<AlumnoNuevaPage />} />
+              <Route path="/alumno/:id/editar" element={<AlumnoEditarPage />} />
+              <Route path="/alumno/:id/ver" element={<AlumnoVerPage />} />
+              
               <Route path="/materias" element={<MateriaPage />} />
               <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
               <Route path="/materias/:id/ver" element={<MateriasVerPage />} />
@@ -81,11 +85,10 @@ const App = () => {
                 path="/materias/:id/editar"
                 element={<MateriasEditarPage />}
               />
-              <Route path="/alumno/nuevo" element={<AlumnoNuevaPage />} />
-              <Route path="/alumno/:id/editar" element={<AlumnoEditarPage />} />
-              <Route path="/alumno/:id/ver" element={<AlumnoVerPage />} />
+              
               <Route path="/materias" element={<MateriaPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
+
               <Route path="/carreras" element={<CarerrasPage />} />
               <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
               <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />

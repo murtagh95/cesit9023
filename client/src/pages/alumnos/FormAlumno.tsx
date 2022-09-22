@@ -1,16 +1,21 @@
-import { Button, Grid, Stack, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Grid, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { FC } from 'react';
 
+import MyInputText from '../../components/form/MyInputText';
+import MyTextArea from '../../components/form/MyTextArea';
+import MyCheckbox from '../../components/form/MyCheckbox';
+import MyInputDate from '../../components/form/MyInputDate';
+import MyInputSlider from '../../components/form/MyInputSlider';
 export interface IFormInputs {
   nombre: string;
   apellido: string;
-  dni: string;
+  dni: number;
   domicilio: string;
-  fechaNacimiento: string;
+  fechaNacimiento: Date | undefined;
 }
 
 const schemaValidator = yup
@@ -23,153 +28,55 @@ const schemaValidator = yup
   })
   .required();
 
-interface FormTareaProps {
+interface FormAlumnoProps {
   data?: IFormInputs;
   onSubmit: (data: IFormInputs) => void;
 }
 
-const FormAlumno: FC<FormTareaProps> = ({ data, onSubmit }) => {
-  // const [value, setValue] = useState<Date | null>(null);
-
+const FormAlumno: FC<FormAlumnoProps> = ({ data, onSubmit }) => {
+  
   const navigate = useNavigate();
   const {
     control,
+    setValue,
     handleSubmit,
-    formState: { errors },
   } = useForm<IFormInputs>({
     defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
   return (
-    <Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <br />
-        <Controller
-          name="nombre"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="Nombre"
-              placeholder="Ingrese el nombre aquí..."
-              fullWidth
-              error={Boolean(errors.nombre)}
-              helperText={errors.nombre ? errors.nombre.message : ''}
-            />
-          )}
-        />
+    <form onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <MyInputText name="nombre" control={control} label="Nombre" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputText name="apellido" control={control} label="Apellido" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputText name="dni" control={control} label="DNI" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputText name="domicilio" control={control} label="Domicilio" />
+          </Grid>
+          <Grid item xs={12}>
+            <MyInputDate name="fechaNacimiento" control={control} label="Fecha de nacimiento" />
+          </Grid>
+          <Grid item xs={12}>
+            <Stack direction="row" spacing={1}>
+              <Button type="submit" variant="contained" >Guardar</Button>
+              <Button
+                variant="outlined"
+                value="Cncelar"
+                onClick={() => navigate(`/alumnos`)}
+              >Cancelar</Button>
+            </Stack>
+          </Grid>
 
-        <br />
-        <br />
-
-        <Controller
-          name="apellido"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="Apellido"
-              placeholder="Ingrese el apellido aquí..."
-              fullWidth
-              error={Boolean(errors.apellido)}
-              helperText={errors.apellido ? errors.apellido.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
-
-        <Controller
-          name="dni"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="DNI"
-              placeholder="Ingrese el apellido aquí..."
-              fullWidth
-              error={Boolean(errors.dni)}
-              helperText={errors.dni ? errors.dni.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
-
-        <Controller
-          name="domicilio"
-          control={control}
-          defaultValue=""
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label="Domicilio"
-              placeholder="Ingrese el domicilio aquí..."
-              fullWidth
-              error={Boolean(errors.domicilio)}
-              helperText={errors.domicilio ? errors.domicilio.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
-
-        {/* calendario */}
-        <Controller
-          name="fechaNacimiento"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              type="date"
-              sx={{ width: 220 }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              {...field}
-              label="Fecha de nacimiento"
-              placeholder="Ingrese fecha de nacimiento"
-              error={Boolean(errors.fechaNacimiento)}
-              helperText={
-                errors.fechaNacimiento ? errors.fechaNacimiento.message : ''
-              }
-            />
-          )}
-        />
-        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DatePicker
-        label="Basic example"
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-        }}
-        renderInput={(params) => <TextField {...params} />}
-      />
-    </LocalizationProvider> */}
-
-        <br />
-        <br />
-        <Stack direction="row" spacing={1}>
-          <Button type="submit" value="Guardar" variant="contained">
-            Guardar
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => navigate(`/alumnos`)}
-          >
-            Cancelar
-          </Button>
-        </Stack>
+        </Grid>
       </form>
-    </Grid>
-  );
+  )
 };
 
 export default FormAlumno;

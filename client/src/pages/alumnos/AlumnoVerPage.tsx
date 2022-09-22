@@ -1,9 +1,11 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, LinearProgress, Typography } from '@mui/material';
+import { format } from 'date-fns';
 import { FC, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import CustomLabelItem from '../../components/CustomLabelItem';
 import { buscarAlumnoPorId } from '../../slices/alumnosSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { DATE_FORMAT } from '../../utils/constants';
 
 const AlumnoVerPage: FC = () => {
   const { id } = useParams();
@@ -11,28 +13,23 @@ const AlumnoVerPage: FC = () => {
     (state) => state.alumno
   );
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) dispatch(buscarAlumnoPorId(id));
   }, [id, dispatch]);
 
   if (cargando) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
   if (!alumnoSeleccionado) {
     return <div>Alumno no econtrado</div>;
   }
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Visualizando Alumno</Typography>
-      <Box padding={2}>
-        <Button variant="outlined" onClick={() => navigate(`/alumnos`)}>
-          Volver
-        </Button>
-      </Box>
-
+      <Link to="/alumnos">Volver</Link>
+      
       <Grid container spacing={2}>
         <CustomLabelItem label="Nombre" value={alumnoSeleccionado.nombre} />
         <CustomLabelItem
@@ -46,7 +43,7 @@ const AlumnoVerPage: FC = () => {
         />
         <CustomLabelItem
           label="Fecha de nacimiento"
-          value={alumnoSeleccionado.fechaNacimiento}
+          value={alumnoSeleccionado.fechaNacimiento ? format(new Date(alumnoSeleccionado.fechaNacimiento), DATE_FORMAT): ''}
         />
       </Grid>
     </Box>

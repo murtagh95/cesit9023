@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Alumno } from '../models/Alumno';
 import {
   buscarAlumnoPorIdService,
@@ -11,19 +12,25 @@ import type { RootState } from '../store/store';
 // Define a type for the slice state
 interface AlumnosState {
   alumnos: Alumno[];
+  skip: number;
+  limit: number;
+  cantidadPaginas: number;
   alumnoSeleccionado: Alumno | null;
   cargando: boolean;
-  cantidad: number;
   mensajeError: string | null;
+  criterio: Record<string, string> | null;
 }
 
 // Define the initial state using that type
 const initialState: AlumnosState = {
   alumnos: [],
+  skip: 0,
+  limit: 10,
+  cantidadPaginas: 0,
   alumnoSeleccionado: null,
   cargando: false,
-  cantidad: 0,
   mensajeError: null,
+  criterio: null,
 };
 
 export const alumnosSlice = createSlice({
@@ -36,21 +43,27 @@ export const alumnosSlice = createSlice({
     },
     limpiarAlumnos: (state) => {
       state.alumnos = initialState.alumnos;
-      state.cantidad = 0;
+    },
+    setCriterio: (
+      state,
+      { payload }: PayloadAction<Record<string, string> | null>
+    ) => {
+      state.criterio = payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(buscarAlumnos.pending, (state) => {
       state.cargando = true;
-      state.cantidad = 0;
       state.mensajeError = null;
     });
     builder.addCase(
       buscarAlumnos.fulfilled,
-      (state, { payload }: PayloadAction<Alumno[] | null>) => {
-        state.alumnos = payload || [];
+      (state, { payload }: PayloadAction<PaginatedResponse<Alumno>>) => {
+        state.alumnos = payload.data || [];
+        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.cantidadPaginas = Math.round(payload.total / payload.limit);
+        state.limit = payload.limit;
         state.cargando = false;
-        state.cantidad = state.alumnos.length;
       }
     );
     builder.addCase(
@@ -102,22 +115,39 @@ export const alumnosSlice = createSlice({
   },
 });
 
-export const { setCargando, limpiarAlumnos } = alumnosSlice.actions;
+export const { setCargando, limpiarAlumnos, setCriterio} = alumnosSlice.actions;
 
 export default alumnosSlice.reducer;
 
 // Extra reducers
+interface BuscarAlumnosQuery {
+  limit: number;
+  skip: number;
+}
 
-type AlumnoRes = Alumno[] | null;
 
 export const buscarAlumnos = createAsyncThunk<
-  AlumnoRes,
-  void,
+PaginatedResponse<Alumno>,
+BuscarAlumnosQuery | void,
   { rejectValue: CustomError }
->('alumno/buscarAlumnos', async (_: void, thunkApi) => {
+>('alumno/buscarAlumnos', async (params: BuscarAlumnosQuery | void, thunkApi) => {
   try {
-    const alumnosRes = await buscarAlumnosService();
-    return alumnosRes || [];
+    const state = thunkApi.getState() as RootState;
+    let criterio = state.alumno.criterio || ({} as Record<string, string>);
+    if (params?.limit && params?.skip) {
+      criterio = { ...criterio, limit: params.limit.toString() };
+      const skipLimit = (params.skip - 1) * params.limit;
+      criterio = { ...criterio, skip: skipLimit.toString() };
+    }
+
+    let alumnosRes: PaginatedResponse<Alumno>;
+
+
+    alumnosRes = await buscarAlumnosService(
+      new URLSearchParams(criterio).toString()
+    );
+
+    return alumnosRes;
   } catch (error) {
     return thunkApi.rejectWithValue(error as CustomError);
   }

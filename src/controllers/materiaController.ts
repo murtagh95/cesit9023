@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { Materia, IMaterias } from '../models/Materia';
+import { Materia, IMaterias, CondicionMateria } from '../models/Materia';
+import { getLimit, getSkip } from '../utils/controlleres/utils';
+import PaginatedResponse from '../models/responses/PaginatedResponse';
+import { faker } from '@faker-js/faker';
+import { randomIntFromInterval } from '../utils/numbers';
 
 function getNombre(parametro: string) {
   return { nombre: { $regex: new RegExp(parametro, 'i') } };
@@ -16,11 +20,11 @@ function getBusquedaTotal(parametro: string) {
 
 class MateriaController {
   async bajaLogica(req: Request, res: Response) {
-    const { _id } = req.params;
+    const { id } = req.params;
 
     try {
       const materia = await Materia.findOneAndUpdate(
-        { _id: _id },
+        { _id: id },
         { baja: true, fechaActualizacion: new Date() },
         { new: true }
       );
@@ -55,6 +59,7 @@ class MateriaController {
 
   async getMaterias(request: Request, response: Response) {
     let materias: IMaterias[] = [];
+    const criterioDeBusqueda = [];
 
     if (Object.keys(request.query).length != 0) {
       const busquedas: any = {
@@ -63,9 +68,10 @@ class MateriaController {
         busqueda: getBusquedaTotal,
       };
 
-      const criterioDeBusqueda = [];
       for (const [key, value] of Object.entries(request.query)) {
-        if (busquedas[key] !== undefined) {
+        if (
+          !['limit', 'skip'].includes(key) &&
+          busquedas[key] !== undefined) {
           if (key === 'busqueda') {
             criterioDeBusqueda.push(...busquedas[key](value));
           } else {
@@ -74,9 +80,19 @@ class MateriaController {
         }
       }
     }
-    materias = await Materia.find({baja:false});
+    let parametrosFiltro: any = criterioDeBusqueda.length
+    ? { 
+        $or: criterioDeBusqueda ,
+        $and: [{ baja: false}]}
+    : {};
 
-    return response.send(materias);
+    const limit = getLimit(request)
+    const skip = getSkip(request)
+
+    materias = await Materia.find(parametrosFiltro).skip(skip).limit(limit);
+    const count = await Materia.count(parametrosFiltro);
+
+    return response.send(new PaginatedResponse<IMaterias>(materias, skip, limit, count));
   }
 
   async postMateria(req: Request, res: Response) {
@@ -141,6 +157,23 @@ class MateriaController {
       res.json(error);
     }
   }
+
+  // https://fakerjs.dev/
+  async crearSetProuebas(req: Request, res: Response) {
+    await Materia.remove({});
+    for (let i = 0; i < 100; i++) {
+      const nuevaMateria = {
+        nombre: faker.name.firstName(),
+        profesor: faker.name.firstName(),
+        duracion: randomIntFromInterval(1, 12),
+        condicionMateria: CondicionMateria.Libre,
+      } as IMaterias;
+      const tarea = new Materia(nuevaMateria);
+      await tarea.save();
+    }
+    res.send({});
+  }
+
 }
 
 export { MateriaController };
