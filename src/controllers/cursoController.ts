@@ -1,26 +1,60 @@
 
+import { faker } from '@faker-js/faker';
 import { Request, Response } from 'express';
 import { Curso, ICurso } from '../models/Curso';
+import PaginatedResponse from '../models/responses/PaginatedResponse';
+import { getLimit, getSkip } from '../utils/controlleres/utils';
+import { randomIntFromInterval } from '../utils/numbers';
 
 
+function getBedelia(parametro: string) {
+    return { bedelia: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getCarrera(parametro: string) {
+    return { carrera: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getAll(parametro: string) {
+    const criterioRegEx = new RegExp(parametro, 'i');
+    return [
+        { bedelia: { $regex: criterioRegEx } },
+        { carrera: { $regex: criterioRegEx } },
+    ];
+}
 class CursoController {
 
     async getCurso(req: Request, res: Response) {
-        if (req.query.search) {
-            const criterioRegEx = new RegExp(req.query.search as string, 'i');
-            const criterioDeBusqueda = [
-                { anio: { $regex: criterioRegEx } },
-                { carrera: { $regex: criterioRegEx } }
+        const posiblesBusquedas: any = {
+            bedelia: getBedelia,
+            carrera: getCarrera,
+            _todos: getAll,
+        };
 
-            ];
+        const criterioDeBusqueda = [];
 
-            const cursos = await Curso.find({ '$or': criterioDeBusqueda });
-            return res.json(cursos);
+        for (const [key, value] of Object.entries(req.query)) {
+            if (
+                !['limit', 'skip'].includes(key) &&
+                posiblesBusquedas[key] !== undefined
+            ) {
+                if (key === '_todos') {
+                    criterioDeBusqueda.push(...posiblesBusquedas[key](value));
+                } else {
+                    criterioDeBusqueda.push(posiblesBusquedas[key](value));
+                }
+            }
         }
 
-        const cursos = await Curso.find();
-        res.json(cursos);
+        let parametrosFiltro: any = criterioDeBusqueda.length
+            ? { $or: criterioDeBusqueda }
+            : {};
 
+        const limit = getLimit(req);
+        const skip = getSkip(req);
+        const cursos = await Curso.find(parametrosFiltro).skip(skip).limit(limit);
+        const count = await Curso.count(parametrosFiltro);
+        return res.send(new PaginatedResponse<ICurso>(cursos, skip, limit, count));
     }
 
     async getCursoById(req: Request, res: Response) {
@@ -90,6 +124,21 @@ class CursoController {
             res.json({ error })
 
         }
+    }
+
+    async crearSetProuebas(req: Request, res: Response) {
+        await Curso.remove({});
+        for (let i = 0; i < 100; i++) {
+            const nuevaCurso = {
+                anio: randomIntFromInterval(0, 5),
+                cantidadAlumnos: randomIntFromInterval(0, 80),
+                carrera: faker.lorem.paragraph(3),
+                bedelia: faker.lorem.paragraph(3),
+            } as ICurso;
+            const curso = new Curso(nuevaCurso);
+            await curso.save();
+        }
+        res.send({});
     }
 
 

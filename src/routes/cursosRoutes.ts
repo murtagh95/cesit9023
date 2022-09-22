@@ -18,4 +18,7 @@ router.put('/:id', controller.actualizarCurso);
 
 router.delete('/:id', controller.eliminarCursoPorId);
 
+router.get('/dev/crear-set-pruebas', controller.crearSetProuebas);
+
+
 export default router;

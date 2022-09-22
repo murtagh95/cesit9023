@@ -1,9 +1,16 @@
-import { Button, ButtonGroup, Grid, TextField } from '@mui/material';
+import { Button, ButtonGroup, Grid, Stack, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FC } from 'react'
 import { Link } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom';
+import MyInputText from '../../components/form/MyInputText';
+import MyTextArea from '../../components/form/MyTextArea';
+import MyCheckbox from '../../components/form/MyCheckbox';
+import MyInputDate from '../../components/form/MyInputDate';
+import MyInputSlider from '../../components/form/MyInputSlider';
 
 export interface IFormInputs {
   anio: number;
@@ -29,101 +36,47 @@ interface FormCursoProps {
 }
 
 
-const FormCurso: FC<FormCursoProps> = ({ data, onSubmit }) => {
 
+const FormCurso: FC<FormCursoProps> = ({ data, onSubmit }) => {
+  const navigate = useNavigate();
   const {
     control,
+    setValue,
     handleSubmit,
-    formState: { errors },
   } = useForm<IFormInputs>({
     defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
   return (
-    <Grid xs={8}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name='anio'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Año'
-              placeholder='Ingrese el Año aquí...'
-              fullWidth
-              error={Boolean(errors.anio)}
-              helperText={errors.anio ? errors.anio.message : ''}
-            />
-          )}
-        />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <MyInputText name="anio" control={control} label="Año" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="cantidadAlumnos" control={control} label="Cantidad de Alumnos" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="carrera" control={control} label="Carrera" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="bedelia" control={control} label="Bedelia" />
+        </Grid>
 
-        <br />
-        <br />
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1}>
+            <Button type="submit" variant="contained" >Guardar</Button>
+            <Button
+              variant="outlined"
+              value="Cncelar"
+              onClick={() => navigate(`/tareas`)}
+            >Cancelar</Button>
+          </Stack>
+        </Grid>
 
-        <Controller
-          name='cantidadAlumnos'
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Cantidad de Alumnos'
-              placeholder='Ingrese la cantidad de alumnos aquí...'
-              fullWidth
-              error={Boolean(errors.cantidadAlumnos)}
-              helperText={errors.cantidadAlumnos ? errors.cantidadAlumnos.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
+      </Grid>
+    </form>
 
-        <Controller
-          name='carrera'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Carrera'
-              placeholder='Ingrese la carrera aquí...'
-              fullWidth
-              error={Boolean(errors.carrera)}
-              helperText={errors.carrera ? errors.carrera.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
-
-        <Controller
-          name='bedelia'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='bedelia'
-              placeholder='Ingrese la bedelia aquí...'
-              fullWidth
-              error={Boolean(errors.bedelia)}
-              helperText={errors.bedelia ? errors.bedelia.message : ''}
-            />
-          )}
-        />
-        <br />
-        <br />
-
-        <ButtonGroup size="large" aria-label="large outlined primary button group" color="success">
-          <Button type="submit">Guardar</Button>
-          <Button color="error" component={Link} to="/cursos">Cancelar</Button>
-        </ButtonGroup>
-
-      </form>
-    </Grid>
   );
 };
 

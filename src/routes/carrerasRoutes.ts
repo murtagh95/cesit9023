@@ -17,4 +17,7 @@ router.put('/:id', controller.actualizarCarrera);
 
 router.delete('/:id', controller.eliminarCarreraPorId);
 
+router.get('/dev/crear-set-pruebas', controller.crearSetProuebas);
+
+
 export default router;

@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Curso } from "../models/Curso";
 
 
@@ -16,14 +17,33 @@ const manageError = (error: unknown): CustomError => {
     }
 }
 
-export const buscarCursosService = async (): Promise<Curso[] | null> => {
+
+export const buscarCursosService = async (
+    criterio?: string,
+    page?: number,
+    limit?: number
+): Promise<PaginatedResponse<Curso>> => {
     try {
-        const res = await axios.get<Curso[]>('http://localhost:5005/api/cursos');
+        let uri = 'http://localhost:5005/api/cursos';
+
+        let params = '';
+        if (criterio) {
+            params += `${criterio}`;
+        }
+        // if (page) {
+        //   params += `page=${page}`;
+        // }
+        // if (limit) {
+        //   params += `limit=${limit}`;
+        // }
+        const res = await axios.get<PaginatedResponse<Curso>>(`${uri}?${params}`);
         return res.data;
     } catch (error) {
         throw manageError(error);
     }
-}
+};
+
+
 
 export const crearCursoService = async (curso: Curso): Promise<Curso | null> => {
     try {

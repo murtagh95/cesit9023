@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { Carrera } from '../models/Carrera';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -15,9 +16,19 @@ const manageError = (error: unknown): CustomError => {
   }
 };
 
-export const buscarCarrerasService = async (): Promise<Carrera[] | null> => {
+export const buscarCarrerasService = async (
+  criterio?: string,
+  page?: number,
+  limit?: number
+): Promise<PaginatedResponse<Carrera>> => {
   try {
-    const res = await axios.get<Carrera[]>('http://localhost:5005/api/carreras');
+    let uri = 'http://localhost:5005/api/carreras';
+
+    let params = '';
+    if (criterio) {
+      params += `${criterio}`;
+    }
+    const res = await axios.get<PaginatedResponse<Carrera>>(`${uri}?${params}`);
     return res.data;
   } catch (error) {
     throw manageError(error);

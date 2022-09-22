@@ -1,6 +1,6 @@
 
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, LinearProgress, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { FC, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -18,26 +18,34 @@ const CursosVerPage: FC = () => {
   }, [id, dispatch]);
 
   if (cargando) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
   if (!cursoSeleccionado) {
     return <div>Curso no econtrado</div>;
   }
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Visualizando Curso</Typography>
-      <Box padding={2}>
-        <Link to="/cursos">Volver</Link>
-      </Box>
 
-      <Grid container spacing={2} color={blue}>
+      <Link to="/cursos">Volver</Link>
+
+      <Grid container spacing={2}>
         <CustomLabelItem label="Año" value={cursoSeleccionado.anio} />
-        <CustomLabelItem label="Cantidad Alumnos" value={cursoSeleccionado.cantidadAlumnos} />
-        <CustomLabelItem label="Carrera" value={cursoSeleccionado.carrera} />
-        <CustomLabelItem label="Bedelia" value={cursoSeleccionado.bedelia} />
-      </Grid>
 
+        <CustomLabelItem
+          label="Cantidad Alumnos"
+          value={cursoSeleccionado.cantidadAlumnos}
+        />
+        <CustomLabelItem
+          label="Carrera"
+          value={cursoSeleccionado.carrera}
+        />
+        <CustomLabelItem
+          label="Bedelia"
+          value={cursoSeleccionado.bedelia}
+        />
+      </Grid>
     </Box>
   );
 };

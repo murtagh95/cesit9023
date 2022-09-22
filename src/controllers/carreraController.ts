@@ -1,24 +1,60 @@
 
+import { faker } from '@faker-js/faker';
 import { Request, Response } from 'express';
 import { Carrera, ICarrera } from '../models/Carrera';
+import PaginatedResponse from '../models/responses/PaginatedResponse';
+import { getLimit, getSkip } from '../utils/controlleres/utils';
+import { randomIntFromInterval } from '../utils/numbers';
 
+
+function getNombre(parametro: string) {
+    return { nombre: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getDuracion(parametro: string) {
+    return { duracion: { $regex: new RegExp(parametro, 'i') } };
+}
+
+function getAll(parametro: string) {
+    const criterioRegEx = new RegExp(parametro, 'i');
+    return [
+        { nombre: { $regex: criterioRegEx } },
+        { duracion: { $regex: criterioRegEx } },
+    ];
+}
 class CarreraController {
     async getCarreras(req: Request, res: Response) {
-        if (req.query.search) {
-            const criterioRegEx = new RegExp(req.query.search as string, 'i');
-            const criterioDeBusqueda = [
-                { nombre: { $regex: criterioRegEx } },
-                { descripcion: { $regex: criterioRegEx } },
-            ];
+        const posiblesBusquedas: any = {
+            nombre: getNombre,
+            duracion: getDuracion,
+            _todos: getAll,
+        };
 
-            const carreras = await Carrera.find({ $or: criterioDeBusqueda });
-            return res.send(carreras);
+        const criterioDeBusqueda = [];
+
+        for (const [key, value] of Object.entries(req.query)) {
+            if (
+                !['limit', 'skip'].includes(key) &&
+                posiblesBusquedas[key] !== undefined
+            ) {
+                if (key === '_todos') {
+                    criterioDeBusqueda.push(...posiblesBusquedas[key](value));
+                } else {
+                    criterioDeBusqueda.push(posiblesBusquedas[key](value));
+                }
+            }
         }
 
-        const carreras = await Carrera.find();
-        res.send(carreras);
-    }
+        let parametrosFiltro: any = criterioDeBusqueda.length
+            ? { $or: criterioDeBusqueda }
+            : {};
 
+        const limit = getLimit(req);
+        const skip = getSkip(req);
+        const carreras = await Carrera.find(parametrosFiltro).skip(skip).limit(limit);
+        const count = await Carrera.count(parametrosFiltro);
+        return res.send(new PaginatedResponse<ICarrera>(carreras, skip, limit, count));
+    }
     async getCarreraPorId(req: Request, res: Response) {
         if (!req.params?.id) {
             return res
@@ -93,6 +129,20 @@ class CarreraController {
 
         await Carrera.deleteOne({ _id: carrera._id });
         res.send(carrera);
+    }
+    async crearSetProuebas(req: Request, res: Response) {
+        await Carrera.remove({});
+        for (let i = 0; i < 100; i++) {
+            const nuevaCarrera = {
+                nombre: `${i} ${i % 2 ? 'abc' : 'xyz'} - ${faker.lorem.sentence(6)}`,
+                duracion: randomIntFromInterval(0, 5).toString(),
+                horario: faker.lorem.paragraph(3),
+                plan: faker.lorem.paragraph(3),
+            } as ICarrera;
+            const carrera = new Carrera(nuevaCarrera);
+            await carrera.save();
+        }
+        res.send({});
     }
 }
 

@@ -21,7 +21,7 @@ const CarrerasEditarPage = () => {
     return <div>Loading...</div>;
   }
   if (!carreraSeleccionada) {
-    return <div>Tarea no econtrada</div>;
+    return <div>Carrera no econtrada</div>;
   }
 
   const actualizandoCarrera = async (data: IFormInputs) => {
@@ -36,7 +36,7 @@ const CarrerasEditarPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3">Editar Tarea</Typography>
+      <Typography variant="h3">Editar Carrera</Typography>
       <FormCarrera data={carreraSeleccionada} onSubmit={actualizandoCarrera} />
     </Box>
   );

@@ -1,29 +1,40 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { Carrera } from '../models/Carrera';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import {
   buscarCarreraPorIdService,
   buscarCarrerasService,
   CustomError,
   eliminarCarreraPorIdService,
 } from '../services/carreras-services';
+import { RootState } from '../store/store';
 
 // Define a type for the slice state
 interface CarrerasState {
   carreras: Carrera[];
+  skip: number;
+  limit: number;
+  cantidadPaginas: number;
   carreraSeleccionada: Carrera | null;
   cargando: boolean;
   cantidadCarrera: number;
   mensajeError: string | null;
+  criterio: Record<string, string> | null;
 }
 
 // Define the initial state using that type
 const initialState: CarrerasState = {
   carreras: [],
+  skip: 0,
+  limit: 10,
+  cantidadPaginas: 0,
   carreraSeleccionada: null,
   cargando: false,
   cantidadCarrera: 0,
-  mensajeError: null
+  mensajeError: null,
+  criterio: null,
+
 }
 
 export const carrerasSlice = createSlice({
@@ -36,24 +47,33 @@ export const carrerasSlice = createSlice({
     },
     limpiarCarrera: (state) => {
       state.carreras = initialState.carreras;
-      state.cantidadCarrera = 0;
+    },
+    setCriterio: (
+      state,
+      { payload }: PayloadAction<Record<string, string> | null>
+    ) => {
+      state.criterio = payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(buscarCarrera.pending, (state) => {
+    builder.addCase(buscarCarreras.pending, (state) => {
       state.cargando = true;
-      state.cantidadCarrera = 0;
       state.mensajeError = null;
     });
-    builder.addCase(buscarCarrera.fulfilled, (state, { payload }: PayloadAction<Carrera[] | null>) => {
-      state.carreras = payload || [];
-      state.cargando = false;
-      state.cantidadCarrera = state.carreras.length;
-    });
-    builder.addCase(buscarCarrera.rejected, (state, { payload }: PayloadAction<CustomError | undefined>) => {
-      state.mensajeError = payload?.message || 'Error desconocido';
-      state.cargando = false;
-    });
+    builder.addCase(buscarCarreras.fulfilled,
+      (state, { payload }: PayloadAction<PaginatedResponse<Carrera>>) => {
+        state.carreras = payload.data || [];
+        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.cantidadPaginas = Math.round(payload.total / payload.limit);
+        state.limit = payload.limit;
+        state.cargando = false;
+      });
+    builder.addCase(
+      buscarCarreras.rejected,
+      (state, { payload }: PayloadAction<CustomError | undefined>) => {
+        state.mensajeError = payload?.message || 'Error desconocido';
+        state.cargando = false;
+      });
 
     builder.addCase(buscarCarreraPorId.pending, (state) => {
       state.cargando = true;
@@ -97,26 +117,40 @@ export const carrerasSlice = createSlice({
   }
 })
 
-export const { setCargando, limpiarCarrera } = carrerasSlice.actions
+export const { setCargando, limpiarCarrera, setCriterio } = carrerasSlice.actions
 
 export default carrerasSlice.reducer
 
 // Extra reducers 
-
-type CarreraRes = Carrera[] | null;
-
-export const buscarCarrera = createAsyncThunk
-  <CarreraRes, void, { rejectValue: CustomError }>(
-    'tarea/buscarCarrera',
-    async (_: void, thunkApi) => {
-      try {
-        const tareasRes = await buscarCarrerasService();
-        return tareasRes || [];
-      } catch (error) {
-        return thunkApi.rejectWithValue(error as CustomError)
-      }
+interface BuscarCarreraQuery {
+  limit: number;
+  skip: number;
+}
+export const buscarCarreras = createAsyncThunk<
+  PaginatedResponse<Carrera>,
+  BuscarCarreraQuery | void,
+  { rejectValue: CustomError }
+>('carrera/buscarCarreras', async (params: BuscarCarreraQuery | void, thunkApi) => {
+  try {
+    const state = thunkApi.getState() as RootState;
+    let criterio = state.carrera.criterio || ({} as Record<string, string>);
+    if (params?.limit && params?.skip) {
+      criterio = { ...criterio, limit: params.limit.toString() };
+      const skipLimit = (params.skip - 1) * params.limit;
+      criterio = { ...criterio, skip: skipLimit.toString() };
     }
-  )
+
+    let carerasRes: PaginatedResponse<Carrera>;
+
+    carerasRes = await buscarCarrerasService(
+      new URLSearchParams(criterio).toString()
+    );
+
+    return carerasRes;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error as CustomError);
+  }
+});
 
 export const buscarCarreraPorId = createAsyncThunk<
   Carrera,
