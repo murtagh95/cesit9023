@@ -38,6 +38,7 @@ import RolesPage from './pages/roles/RolesPage';
 import RolesEditarPage from './pages/roles/RolesEditarPage';
 import RolesNuevoPage from './pages/roles/RolesNuevoPage';
 import RolesVerPage from './pages/roles/RolesVerPage';
+import LoginPage from './pages/auth/LoginPage';
 
 const mdTheme = createTheme({
   palette: {
@@ -66,6 +67,7 @@ const App = () => {
           <AppContainer>
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/ejemplos" element={<Ejemplos />} />
               <Route path="/tareas" element={<TareasPage />} />
               <Route path="/tareas/nueva" element={<TareasNuevaPage />} />

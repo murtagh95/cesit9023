@@ -1,20 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Tarea } from '../models/Tarea';
-
-export class CustomError extends Error {
-  constructor(public code: number, public message: string) {
-    super(message);
-  }
-}
-
-const manageError = (error: unknown): CustomError => {
-  if (error instanceof AxiosError) {
-    return new CustomError(error?.response?.status || 400, error.message);
-  } else {
-    return new CustomError(500, 'Error desconocido');
-  }
-};
+import { manageError } from '../utils/services';
 
 export const buscarTaresService = async (
   criterio?: string,

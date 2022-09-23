@@ -10,7 +10,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -36,7 +35,7 @@ const TareasPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const tareaId = useRef<string>();
-  const { cargando, tareas, mensajeError, cantidadPaginas, skip, limit } =
+  const { cargando, tareas, mensajeError, cantidadPaginas, offset, limit } =
     useAppSelector((state) => state.tarea);
 
   const navigate = useNavigate();
@@ -51,8 +50,11 @@ const TareasPage = () => {
     };
   }, []);
 
-  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
-    dispatch(buscarTareas({ skip, limit }));
+  const handlePaginationOnChange = (
+    ev: ChangeEvent<unknown>,
+    offset: number
+  ) => {
+    dispatch(buscarTareas({ offset, limit }));
   };
 
   return (
@@ -137,7 +139,7 @@ const TareasPage = () => {
             <Stack spacing={2} width="100%" alignItems="center">
               <Pagination
                 count={cantidadPaginas}
-                page={skip}
+                page={offset}
                 siblingCount={2}
                 onChange={handlePaginationOnChange}
                 variant="outlined"

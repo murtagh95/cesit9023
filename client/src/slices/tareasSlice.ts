@@ -1,19 +1,18 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Tarea } from '../models/Tarea';
 import {
   buscarTareaPorIdService,
   buscarTaresService,
-  CustomError,
   eliminarTareaPorIdService,
 } from '../services/tareas-services';
 import type { RootState } from '../store/store';
+import { CustomError } from '../utils/services';
 
 // Define a type for the slice state
 interface TareasState {
   tareas: Tarea[];
-  skip: number;
+  offset: number;
   limit: number;
   cantidadPaginas: number;
   tareaSeleccionada: Tarea | null;
@@ -25,7 +24,7 @@ interface TareasState {
 // Define the initial state using that type
 const initialState: TareasState = {
   tareas: [],
-  skip: 0,
+  offset: 0,
   limit: 10,
   cantidadPaginas: 0,
   tareaSeleccionada: null,
@@ -61,7 +60,7 @@ export const tareasSlice = createSlice({
       buscarTareas.fulfilled,
       (state, { payload }: PayloadAction<PaginatedResponse<Tarea>>) => {
         state.tareas = payload.data || [];
-        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.offset = Math.round(payload.offset / payload.limit) + 1;
         state.cantidadPaginas = Math.round(payload.total / payload.limit);
         state.limit = payload.limit;
         state.cargando = false;
@@ -123,7 +122,7 @@ export default tareasSlice.reducer;
 // Extra reducers
 interface BuscarTareasQuery {
   limit: number;
-  skip: number;
+  offset: number;
 }
 export const buscarTareas = createAsyncThunk<
   PaginatedResponse<Tarea>,
@@ -133,10 +132,10 @@ export const buscarTareas = createAsyncThunk<
   try {
     const state = thunkApi.getState() as RootState;
     let criterio = state.tarea.criterio || ({} as Record<string, string>);
-    if (params?.limit && params?.skip) {
+    if (params?.limit && params?.offset) {
       criterio = { ...criterio, limit: params.limit.toString() };
-      const skipLimit = (params.skip - 1) * params.limit;
-      criterio = { ...criterio, skip: skipLimit.toString() };
+      const skipLimit = (params.offset - 1) * params.limit;
+      criterio = { ...criterio, offset: skipLimit.toString() };
     }
 
     let tareasRes: PaginatedResponse<Tarea>;

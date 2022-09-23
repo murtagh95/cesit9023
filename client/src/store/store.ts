@@ -7,9 +7,11 @@ import tareasSlice from '../slices/tareasSlice';
 import alumnosSlice from '../slices/alumnosSlice';
 import profesoresSlice from '../slices/profesoresSlice';
 import rolesSlice from '../slices/rolesSlice';
+import userSlice from '../slices/userSlice';
 
 const store = configureStore({
   reducer: {
+    user: userSlice,
     counter: counterSlice,
     tarea: tareasSlice,
     carrera: carrerasSlice,

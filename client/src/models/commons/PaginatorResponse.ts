@@ -1,7 +1,7 @@
 export class PaginatedResponse<T> {
   constructor(
     public data: T[] | null,
-    public skip: number,
+    public offset: number,
     public limit: number,
     public total: number
   ) {}
