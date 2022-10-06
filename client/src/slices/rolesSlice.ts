@@ -16,6 +16,7 @@ interface RolesState {
   cargando: boolean;
   cantidad: number;
   mensajeError: string | null;
+  criterio: Record<string, string> | null;
 }
 
 // Define the initial state using that type
@@ -24,7 +25,8 @@ const initialState: RolesState = {
   rolSeleccionado: null,
   cargando: false,
   cantidad: 0,
-  mensajeError: null
+  mensajeError: null,
+  criterio: null,
 }
 
 export const rolesSlice = createSlice({
@@ -38,6 +40,12 @@ export const rolesSlice = createSlice({
     limpiarRoles: (state) => {
       state.roles = initialState.roles;
       state.cantidad = 0;
+    },
+    setCriterio: (
+      state,
+      { payload }: PayloadAction<Record<string, string> | null>
+    ) => {
+      state.criterio = payload;
     },
   },
   extraReducers: (builder) => {
@@ -103,9 +111,9 @@ export const rolesSlice = createSlice({
   },
 });
 
-export const { setCargando, limpiarRoles } = rolesSlice.actions
+export const { setCargando, limpiarRoles, setCriterio } = rolesSlice.actions
 
-export default rolesSlice.reducer
+export default rolesSlice.reducer;
 
 // Extra reducers
 

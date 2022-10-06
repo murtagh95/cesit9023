@@ -5,15 +5,15 @@ export interface IProfesor {
     nombre: string;
     apellido: string;
     dni: number;
-    edad?: number;
+    fechaNacimiento: Date;
 }
 
-const tareaSchema = new Schema<IProfesor>({
+const profesorSchema = new Schema<IProfesor>({
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },
     dni: { type: Number, required: true},
-    edad: { type: Number, required: true},
+    fechaNacimiento: { type: Date, required: true},
 
 });
 
-export const Profesor = model<IProfesor>('profesores', tareaSchema);
+export const Profesor = model<IProfesor>('profesores', profesorSchema);

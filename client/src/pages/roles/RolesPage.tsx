@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   LinearProgress,
   Table,
@@ -7,24 +8,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-  Link as MuiLink,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from '@mui/material';
+  Typography,} from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   buscarRoles,
   eliminarRolPorId,
   limpiarRoles,
 } from '../../slices/rolesSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import BuscarRoles from './components/BuscarRoles';
+import { TableDeleteBtn, TableEditBtn, TableShowBtn } from '../../components/table/TableButtons';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
 
 const RolesPage = () => {
   const dispatch = useAppDispatch();
@@ -47,15 +43,18 @@ const RolesPage = () => {
   }, []);
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Listando Roles</Typography>
       <Button
         variant="contained"
         size="small"
         onClick={() => navigate('/roles/nuevo')}
+        fullWidth
       >
-        Nuevo
+        Nuevo Rol
       </Button>
+
+      <BuscarRoles />
 
       {mensajeError && (
         <Box marginTop={2}>
@@ -93,18 +92,12 @@ const RolesPage = () => {
                       {Boolean(rol.descripcion).toString()}
                     </TableCell>
                     <TableCell align="right">
-                      <Link to={`/roles/${rol._id}/ver`}>Ver</Link>
-                      {` `}
-                      <Link to={`/roles/${rol._id}/editar`}>Editar</Link>
-                      {` `}
-                      <MuiLink
-                        onClick={() => {
-                          rolId.current = rol._id;
-                          setMostrarDialogo(true);
-                        }}
-                      >
-                        Eliminar
-                      </MuiLink>
+                    <TableShowBtn onClick={() => navigate(`/roles/${rol._id}/ver`)} />
+                          <TableEditBtn onClick={() => navigate(`/roles/${rol._id}/editar`)} />
+                          <TableDeleteBtn onClick={() => {
+                            rolId.current = rol._id;
+                            setMostrarDialogo(true);
+                          }} />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -114,31 +107,16 @@ const RolesPage = () => {
         )
       )}
 
-      <Dialog
+      <ConfirmationModal
         open={mostrarDialogo}
+        message="Está seguro que desea eliminar la tarea seleccionada."
         onClose={() => setMostrarDialogo(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'Eliminar rol?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Está seguro que desea eliminar el rol seleccionada.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setMostrarDialogo(false)}>No</Button>
-          <Button
-            onClick={() => {
-              dispatch(eliminarRolPorId(rolId.current || ''));
-              setMostrarDialogo(false);
-            }}
-            autoFocus
-          >
-            Si
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onNo={() => setMostrarDialogo(false)}
+        onYes={() => {
+          dispatch(eliminarRolPorId(rolId.current || ''));
+          setMostrarDialogo(false);
+        }}
+      />
     </Box>
   );
 };

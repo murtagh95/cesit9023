@@ -8,7 +8,9 @@ import FormProfesor, { IFormInputs } from './FormProfesor';
 
 const ProfesoresEditarPage = () => {
   const { id } = useParams();
-  const { cargando, profesorSeleccionado } = useAppSelector((state) => state.profesor);
+  const { cargando, profesorSeleccionado } = useAppSelector(
+    (state) => state.profesor
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -36,7 +38,10 @@ const ProfesoresEditarPage = () => {
   return (
     <Box>
       <Typography variant="h3">Editar Profesor</Typography>
-      <FormProfesor data={profesorSeleccionado} onSubmit={actualizandoProfesor} />
+      <FormProfesor
+        data={profesorSeleccionado}
+        onSubmit={actualizandoProfesor}
+      />
     </Box>
   );
 };

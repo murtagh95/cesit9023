@@ -1,10 +1,15 @@
-import { Grid, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Grid, Button, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import MyInputText from '../../components/form/MyInputText';
+import MyTextArea from '../../components/form/MyTextArea';
+import MyRadioButton, {
+  RadioButtonOption,
+} from '../../components/form/MyRadioButton';
 
 export interface IFormInputs {
   nombre: string;
@@ -24,61 +29,51 @@ interface FormRolProps {
 }
 
 const FormRol: FC<FormRolProps> = ({ data, onSubmit }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInputs>({
+  const navigate = useNavigate();
+  const { control, setValue, handleSubmit } = useForm<IFormInputs>({
     defaultValues: data || {},
     resolver: yupResolver(schemaValidator),
   });
 
+  const options: RadioButtonOption[] = [
+    { label: 'Hombre', value: 'hombre' },
+    { label: 'Mujer', value: 'mujer' },
+    { label: 'Otro', value: 'otro' },
+  ];
+
   return (
-    <Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name='nombre'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Nombre'
-              placeholder='Ingrese el nombre aquí...'
-              fullWidth
-              error={Boolean(errors.nombre)}
-              helperText={errors.nombre ? errors.nombre.message : ''}
-            />
-          )}
-        />
-
-        <br />
-        <br />
-
-        <Controller
-          name='descripcion'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Descripción'
-              placeholder='Ingrese la descrición aquí...'
-              fullWidth
-              error={Boolean(errors.descripcion)}
-              helperText={errors.descripcion ? errors.descripcion.message : ''}
-            />
-          )}
-        />
-
-        <br />
-        <input type='submit' value="GUARDAR" />
-        <Link to="/roles">Cancelar</Link>
-      </form>
-    </Grid>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <MyRadioButton
+            name="genero"
+            control={control}
+            label="Género"
+            options={options}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="nombre" control={control} label="Nombre" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyTextArea name="descripcion" control={control} label="Descripcion" />
+        </Grid>
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1}>
+            <Button type="submit" variant="contained">
+              Guardar
+            </Button>
+            <Button
+              variant="outlined"
+              value="Cancelar"
+              onClick={() => navigate(`/roles`)}
+            >
+              Cancelar
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
-
 export default FormRol;

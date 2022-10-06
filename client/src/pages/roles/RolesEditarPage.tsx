@@ -34,7 +34,7 @@ const RolesEditarPage = () => {
   };
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Editar Rol</Typography>
       <FormRol data={rolSeleccionado} onSubmit={actualizandoRol} />
     </Box>

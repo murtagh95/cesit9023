@@ -1,35 +1,38 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { AxiosError } from 'axios';
-import { Profesor } from '../models/Profesor'
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { PaginatedResponse } from '../models/commons/PaginatorResponse';
+import { Profesor } from '../models/Profesor';
 import {
   buscarProfesorPorIdService,
-  buscarProfesorService,
+  buscarProfesoresService,
   CustomError,
-  eliminarProfesorPorIdService
+  eliminarProfesorPorIdService,
 } from '../services/profesores-services';
-import type { RootState } from '../store/store'
+import type { RootState } from '../store/store';
 
-// Define a type for the slice state
 interface ProfesoresState {
   profesores: Profesor[];
+  skip: number;
+  limit: number;
+  cantidadPaginas: number;
   profesorSeleccionado: Profesor | null;
   cargando: boolean;
-  cantidad: number;
   mensajeError: string | null;
+  criterio: Record<string, string> | null;
 }
 
-// Define the initial state using that type
 const initialState: ProfesoresState = {
   profesores: [],
+  skip: 0,
+  limit: 10,
+  cantidadPaginas: 0,
   profesorSeleccionado: null,
   cargando: false,
-  cantidad: 0,
-  mensajeError: null
-}
+  mensajeError: null,
+  criterio: null,
+};
 
 export const profesoresSlice = createSlice({
   name: 'profesor',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     setCargando: (state, { payload }: PayloadAction<boolean>) => {
@@ -37,21 +40,27 @@ export const profesoresSlice = createSlice({
     },
     limpiarProfesores: (state) => {
       state.profesores = initialState.profesores;
-      state.cantidad = 0;
+    },
+    setCriterio: (
+      state,
+      { payload }: PayloadAction<Record<string, string> | null>
+    ) => {
+      state.criterio = payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(buscarProfesores.pending, (state) => {
       state.cargando = true;
-      state.cantidad = 0;
       state.mensajeError = null;
     });
     builder.addCase(
       buscarProfesores.fulfilled,
-      (state, { payload }: PayloadAction<Profesor[] | null>) => {
-        state.profesores = payload || [];
+      (state, { payload }: PayloadAction<PaginatedResponse<Profesor>>) => {
+        state.profesores = payload.data || [];
+        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.cantidadPaginas = Math.round(payload.total / payload.limit);
+        state.limit = payload.limit;
         state.cargando = false;
-        state.cantidad = state.profesores.length;
       }
     );
     builder.addCase(
@@ -103,26 +112,42 @@ export const profesoresSlice = createSlice({
   },
 });
 
-export const { setCargando, limpiarProfesores } = profesoresSlice.actions
+export const { setCargando, limpiarProfesores, setCriterio } =
+  profesoresSlice.actions;
 
-export default profesoresSlice.reducer
-
-// Extra reducers
-
-type ProfesorRes = Profesor[] | null;
-
+export default profesoresSlice.reducer;
+interface BuscarProfesoresQuery {
+  limit: number;
+  skip: number;
+}
 export const buscarProfesores = createAsyncThunk<
-  ProfesorRes,
-  void,
+  PaginatedResponse<Profesor>,
+  BuscarProfesoresQuery | void,
   { rejectValue: CustomError }
->('profesor/buscarProfesores', async (_: void, thunkApi) => {
-  try {
-    const profesoresRes = await buscarProfesorService();
-    return profesoresRes || [];
-  } catch (error) {
-    return thunkApi.rejectWithValue(error as CustomError);
+>(
+  'profesor/buscarProfesores',
+  async (params: BuscarProfesoresQuery | void, thunkApi) => {
+    try {
+      const state = thunkApi.getState() as RootState;
+      let criterio = state.profesor.criterio || ({} as Record<string, string>);
+      if (params?.limit && params?.skip) {
+        criterio = { ...criterio, limit: params.limit.toString() };
+        const skipLimit = (params.skip - 1) * params.limit;
+        criterio = { ...criterio, skip: skipLimit.toString() };
+      }
+
+      let profesoresRes: PaginatedResponse<Profesor>;
+
+      profesoresRes = await buscarProfesoresService(
+        new URLSearchParams(criterio).toString()
+      );
+
+      return profesoresRes;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error as CustomError);
+    }
   }
-});
+);
 
 export const buscarProfesorPorId = createAsyncThunk<
   Profesor,

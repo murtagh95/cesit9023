@@ -33,46 +33,54 @@ interface FormTareaProps {
 
 const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
   const navigate = useNavigate();
-  const {
-    control,
-    setValue,
-    handleSubmit,
-  } = useForm<IFormInputs>({
+  const { control, setValue, handleSubmit } = useForm<IFormInputs>({
     defaultValues: data || { fechaLimite: new Date() },
     resolver: yupResolver(schemaValidator),
   });
 
   return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <MyInputText name="nombre" control={control} label="Nombre" />
-          </Grid>
-          <Grid item xs={12}>
-            <MyTextArea name="descripcion" control={control} label="Descripcion" />
-          </Grid>
-          <Grid item xs={12}>
-            <MyCheckbox name="finalizada" control={control} label="Finalizada?" />
-          </Grid>
-          <Grid item xs={12}>
-            <MyInputDate name="fechaLimite" control={control} label="Fecha Límite" />
-          </Grid>
-          <Grid item xs={12}>
-            <MyInputSlider name="progreso" control={control} label="Progreso" setValue={setValue}/>
-          </Grid>
-          <Grid item xs={12}>
-            <Stack direction="row" spacing={1}>
-              <Button type="submit" variant="contained" >Guardar</Button>
-              <Button
-                variant="outlined"
-                value="Cncelar"
-                onClick={() => navigate(`/tareas`)}
-              >Cancelar</Button>
-            </Stack>
-          </Grid>
-
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <MyInputText name="nombre" control={control} label="Nombre" />
         </Grid>
-      </form>
+        <Grid item xs={12}>
+          <MyTextArea name="descripcion" control={control} label="Descripcion" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyCheckbox name="finalizada" control={control} label="Finalizada?" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputDate
+            name="fechaLimite"
+            control={control}
+            label="Fecha Límite"
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputSlider
+            name="progreso"
+            control={control}
+            label="Progreso"
+            setValue={setValue}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1}>
+            <Button type="submit" variant="contained">
+              Guardar
+            </Button>
+            <Button
+              variant="outlined"
+              value="Cancelar"
+              onClick={() => navigate(`/tareas`)}
+            >
+              Cancelar
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+    </form>
   );
 };
 

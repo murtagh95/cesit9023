@@ -1,16 +1,19 @@
-import { Grid, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Grid, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import MyInputText from '../../components/form/MyInputText';
+import MyInputDate from '../../components/form/MyInputDate';
+import SeleccionarMateria from './components/seleccionarMateria';
 
 export interface IFormInputs {
   nombre: string;
   apellido: string;
   dni: number;
-  edad: number;
+  fechaNacimiento: Date;
 }
 
 const schemaValidator = yup
@@ -18,7 +21,7 @@ const schemaValidator = yup
     nombre: yup.string().required('El nombre es requerido'),
     apellido: yup.string().required('El apellido es requerido'),
     dni: yup.number().required('El número de DNI es requerido'),
-    edad: yup.number().required('La edad es requerida'),
+    fechaNacimiento: yup.date().required('La fecha de nacimiento es requerida'),
   })
   .required();
 
@@ -28,102 +31,48 @@ interface FormProfesorProps {
 }
 
 const FormProfesor: FC<FormProfesorProps> = ({ data, onSubmit }) => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
-    formState: { errors },
   } = useForm<IFormInputs>({
-    defaultValues: data || {},
+    defaultValues: data || { fechaNacimiento: new Date() },
     resolver: yupResolver(schemaValidator),
   });
 
+
   return (
-    <Grid>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name='nombre'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Nombre'
-              placeholder='Ingrese el nombre aquí...'
-              fullWidth
-              error={Boolean(errors.nombre)}
-              helperText={errors.nombre ? errors.nombre.message : ''}
-            />
-          )}
-        />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <MyInputText name="nombre" control={control} label="Nombre" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="apellido" control={control} label="Apellido" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputText name="dni" control={control} label="DNI" />
+        </Grid>
+        <Grid item xs={12}>
+          <MyInputDate name="fechaNacimiento" control={control} label="Fecha de Nacimiento" />
+        </Grid>
+        <Grid item xs={4}>
+          <SeleccionarMateria/>
+        </Grid>
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1}>
+            <Button type="submit" variant="contained" >Guardar</Button>
+            <Button
+              variant="outlined"
+              value="Cancelar"
+              onClick={() => navigate(`/profesores`)}
+            >Cancelar</Button>
+          </Stack>
+        </Grid>
 
-        <br />
-        <br />
-
-        <Controller
-          name='apellido'
-          control={control}
-          defaultValue=''
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Apellido'
-              placeholder='Ingrese el apellido aquí...'
-              fullWidth
-              error={Boolean(errors.apellido)}
-              helperText={errors.apellido ? errors.apellido.message : ''}
-            />
-          )}
-        />
-
-        <br />
-        <br />
-
-        <Controller
-          name='dni'
-          control={control}
-          defaultValue={0}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Número de DNI'
-              placeholder='Ingrese el número de DNI aquí...'
-              fullWidth
-              error={Boolean(errors.dni)}
-              helperText={errors.dni ? errors.dni.message : ''}
-            />
-          )}
-        />
-
-        <br />
-        <br />
-
-
-        <Controller
-          name='edad'
-          control={control}
-          defaultValue={0}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              multiline
-              label='Edad'
-              placeholder='Ingrese la edad aquí...'
-              fullWidth
-              error={Boolean(errors.edad)}
-              helperText={errors.edad ? errors.edad.message : ''}
-            />
-          )}
-        />
-
-        <br />
-        <input type='submit' value="GUARDAR" />
-        <Link to="/profesores">Cancelar</Link>
-      </form>
-    </Grid>
-  );
+      </Grid>
+    </form>
+);
 };
 
 export default FormProfesor;

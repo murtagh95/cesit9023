@@ -16,7 +16,7 @@ const ProfesoresNuevoPage = () => {
   };
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={3} padding={2}>
       <Typography variant="h3">Nuevo Profesor</Typography>
       <FormProfesor onSubmit={onSubmit} />
     </Box>

@@ -4,6 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 import CustomLabelItem from '../../components/CustomLabelItem';
 import { buscarProfesorPorId } from '../../slices/profesoresSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import format from 'date-fns/format';
+import { DATE_FORMAT } from '../../utils/constants';
 
 const ProfesoresVerPage: FC = () => {
   const { id } = useParams();
@@ -32,7 +34,7 @@ const ProfesoresVerPage: FC = () => {
         <CustomLabelItem label="Nombre" value={profesorSeleccionado.nombre} />
         <CustomLabelItem label="Apellido" value={profesorSeleccionado.apellido} />
         <CustomLabelItem label="DNI" value={profesorSeleccionado.dni} />
-        <CustomLabelItem label="Edad" value={profesorSeleccionado.edad} />
+        <CustomLabelItem label="Fecha de Nacimiento" value={profesorSeleccionado.fechaNacimiento ? format(new Date(profesorSeleccionado.fechaNacimiento), DATE_FORMAT): ''} />
       </Grid>
     </Box>
   );

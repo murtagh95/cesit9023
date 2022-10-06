@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography , LinearProgress} from '@mui/material';
 import { FC, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CustomLabelItem from '../../components/CustomLabelItem';
@@ -15,7 +15,7 @@ const RolesVerPage: FC = () => {
   }, [id, dispatch]);
 
   if (cargando) {
-    return <div>Loading...</div>;
+    return <LinearProgress />;
   }
   if (!rolSeleccionado) {
     return <div>Rol no encontrado</div>;
