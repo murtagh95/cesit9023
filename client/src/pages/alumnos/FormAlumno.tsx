@@ -13,7 +13,7 @@ import MyInputSlider from '../../components/form/MyInputSlider';
 export interface IFormInputs {
   nombre: string;
   apellido: string;
-  dni: number;
+  dni: string;
   domicilio: string;
   fechaNacimiento: Date | undefined;
 }
@@ -22,7 +22,7 @@ const schemaValidator = yup
   .object({
     nombre: yup.string().required('El nombre es requerido'),
     apellido: yup.string().required('El apellido es requerido'),
-    dni: yup.number().required('El dni es requerido'),
+    dni: yup.string().required('El dni es requerido'),
     domicilio: yup.string().required('El domicilio es requerido'),
     fechaNacimiento: yup.date().required('La fecha de nacimiento es requerida'),
   })
@@ -68,7 +68,7 @@ const FormAlumno: FC<FormAlumnoProps> = ({ data, onSubmit }) => {
               <Button type="submit" variant="contained" >Guardar</Button>
               <Button
                 variant="outlined"
-                value="Cncelar"
+                value="Cancelar"
                 onClick={() => navigate(`/alumnos`)}
               >Cancelar</Button>
             </Stack>

@@ -31,7 +31,7 @@ const AlumnoPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const alumnoId = useRef<string>();
-  const { cargando, alumnos, mensajeError, cantidadPaginas, skip, limit } = useAppSelector(
+  const { cargando, alumnos, mensajeError, cantidadPaginas, offset, limit } = useAppSelector(
     (state) => state.alumno
   );
 
@@ -46,8 +46,8 @@ const AlumnoPage = () => {
       }
     };
   }, []);
-  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
-    dispatch(buscarAlumnos({ skip, limit }));
+  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, offset: number) => {
+    dispatch(buscarAlumnos({ offset, limit }));
   }
 
   return (
@@ -120,7 +120,7 @@ const AlumnoPage = () => {
           </TableContainer>
 
           <Stack spacing={2} width="100%" alignItems="center">
-              <Pagination count={cantidadPaginas} page={skip} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
+              <Pagination count={cantidadPaginas} page={offset} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
             </Stack>
           </>
         )

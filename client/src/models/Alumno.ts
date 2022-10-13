@@ -2,7 +2,7 @@ export interface  Alumno {
     _id?: string;
     nombre: string;
     apellido: string;
-    dni: number;
+    dni: string;
     domicilio: string;
     fechaNacimiento: Date | undefined;
 }

@@ -16,9 +16,11 @@ const manageError = (error: unknown): CustomError => {
   }
 };
 
-export const buscarAlumnosService = async (criterio?: string): Promise<PaginatedResponse<Alumno>> => {
+export const buscarAlumnosService = async (
+  criterio?: string
+): Promise<PaginatedResponse<Alumno>> => {
   try {
-    let uri= 'http://localhost:5005/api/alumnos';
+    let uri = 'http://localhost:5005/api/alumnos';
 
     let params = '';
     if (criterio) {
@@ -58,10 +60,11 @@ export const actualizarAlumnoService = async (
   id: string,
   data: Partial<Alumno>
 ) => {
+  let body = { nombre: data.nombre, apellido : data.apellido, dni: data.dni, domicilio: data.domicilio, fechaNacimiento: data.fechaNacimiento};
   try {
-    const res = await axios.put<Alumno>(
+    const res = await axios.patch<Alumno>(
       `http://localhost:5005/api/alumnos/${id}`,
-      data
+      body
     );
     return res.data;
   } catch (error) {

@@ -76,9 +76,9 @@ const App = () => {
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
               <Route path="/alumnos" element={<AlumnoPage />} />
-              <Route path="/alumno/nuevo" element={<AlumnoNuevaPage />} />
-              <Route path="/alumno/:id/editar" element={<AlumnoEditarPage />} />
-              <Route path="/alumno/:id/ver" element={<AlumnoVerPage />} />
+              <Route path="/alumnos/nuevo" element={<AlumnoNuevaPage />} />
+              <Route path="/alumnos/:id/editar" element={<AlumnoEditarPage />} />
+              <Route path="/alumnos/:id/ver" element={<AlumnoVerPage />} />
               
               <Route path="/materias" element={<MateriaPage />} />
               <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
