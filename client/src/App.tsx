@@ -118,10 +118,7 @@ const App = () => {
                 element={<ProfesoresEditarPage />}
               />
 
-              <Route path="/roles" element={<RolesPage />} />
-              <Route path="/roles/nuevo" element={<RolesNuevoPage />} />
-              <Route path="/roles/:id/ver" element={<RolesVerPage />} />
-              <Route path="/roles/:id/editar" element={<RolesEditarPage />} />
+              
             </Routes>
           </AppContainer>
         </Box>

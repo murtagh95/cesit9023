@@ -82,7 +82,7 @@ export const MainListItems: FC = () => {
         to="/profesores"
         icon={<AssignmentIndIcon />}
       />
-      <MenuItem title="Roles" to="/roles" icon={<FingerprintIcon />} />
+     
     </>
   );
 };

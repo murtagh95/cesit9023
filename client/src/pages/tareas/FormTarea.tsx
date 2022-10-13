@@ -10,6 +10,9 @@ import MyTextArea from '../../components/form/MyTextArea';
 import MyCheckbox from '../../components/form/MyCheckbox';
 import MyInputDate from '../../components/form/MyInputDate';
 import MyInputSlider from '../../components/form/MyInputSlider';
+import MyRadioButton, {
+  RadioButtonOption,
+} from '../../components/form/MyRadioButton';
 
 export interface IFormInputs {
   nombre: string;
@@ -38,12 +41,27 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
     resolver: yupResolver(schemaValidator),
   });
 
+  const options: RadioButtonOption[] = [
+    { label: 'Profesores', value: 'Profesores' },
+    { label: 'Bedel', value: 'Bedel' },
+    { label: 'Alumnos', value: 'Alumnos' },
+  ];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
+      <Grid item xs={12}>
+          <MyRadioButton
+            name="Roles"
+            control={control}
+            label="Roles"
+            options={options}
+          />
+        </Grid>
         <Grid item xs={12}>
           <MyInputText name="nombre" control={control} label="Nombre" />
         </Grid>
+       
         <Grid item xs={12}>
           <MyTextArea name="descripcion" control={control} label="Descripcion" />
         </Grid>
