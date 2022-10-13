@@ -17,7 +17,7 @@ interface MateriasState {
     cargando: boolean;
     cantidadMaterias: number;
     mensajeError: string | null;
-    skip: number;
+    offset: number;
     limit: number;
     cantidadPaginas: number;
     criterio: Record<string, string> | null;
@@ -30,7 +30,7 @@ const initialState: MateriasState = {
     cargando: false,
     cantidadMaterias: 0,
     mensajeError: null,
-    skip: 0,
+    offset: 0,
     limit: 10,
     cantidadPaginas: 0,
     criterio: null
@@ -66,7 +66,7 @@ export const materiasSlice = createSlice({
             buscarMaterias.fulfilled,
             (state, { payload }: PayloadAction<PaginatedResponse<Materia>>) => {
                 state.materias = payload.data || [];
-                state.skip = Math.round(payload.skip / payload.limit) + 1;
+                state.offset = Math.round(payload.offset / payload.limit) + 1;
                 state.cantidadPaginas = Math.round(payload.total / payload.limit);
                 state.limit = payload.limit;
                 state.cargando = false;
@@ -134,7 +134,7 @@ export default materiasSlice.reducer;
 // Extra reducers
 interface BuscarMateriasQuery {
     limit: number;
-    skip: number;
+    offset: number;
 }
 
 export const buscarMaterias = createAsyncThunk<
@@ -146,10 +146,10 @@ export const buscarMaterias = createAsyncThunk<
         const state = thunkApi.getState() as RootState;
         let criterio = state.materia.criterio || ({} as Record<string, string>);
         
-        if (params?.limit && params?.skip) {
+        if (params?.limit && params?.offset) {
         criterio = { ...criterio, limit: params.limit.toString() };
-        const skipLimit = (params.skip - 1) * params.limit;
-        criterio = { ...criterio, skip: skipLimit.toString() };
+        const offsetLimit = (params.offset - 1) * params.limit;
+        criterio = { ...criterio, offset: offsetLimit.toString() };
         }
 
         let materiaRes: PaginatedResponse<Materia>;

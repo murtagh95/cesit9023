@@ -31,22 +31,17 @@ import {
   setCriterio
 } from '../../slices/materiasSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import BusquedaGadget from '../../components/form/BusquedaGadget';
 import { DropdownOption } from '../../components/form/MyDropdown';
+import BuscarMaterias from './components/BuscarMaterias'
 
 
 const MateriaPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const materiaId = useRef<string>();
-  const { cargando, materias, mensajeError, skip, limit, cantidadPaginas } = useAppSelector(
+  const { cargando, materias, mensajeError, offset, limit, cantidadPaginas } = useAppSelector(
     (state) => state.materia
   );
-  const optionesBusqueda: DropdownOption[] = [
-    { label: 'Nombre', value: 'nombre' },
-    { label: 'Profesor', value: 'profesor' },
-    { label: 'Todo', value: 'busqueda' }
-  ]
 
   const navigate = useNavigate();
 
@@ -61,8 +56,8 @@ const MateriaPage = () => {
   }, []);
 
 
-  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
-    dispatch(buscarMaterias({ skip, limit }));
+  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, offset: number) => {
+    dispatch(buscarMaterias({ offset, limit }));
   }
 
   return (
@@ -78,15 +73,7 @@ const MateriaPage = () => {
         Nueva Materia
       </Button>
 
-      <BusquedaGadget
-        setCriterio={
-          (criterio: Record<string, string> | null) => dispatch(setCriterio(criterio))
-        }
-        realizarBusqueda={
-          () => dispatch(buscarMaterias())
-        }
-        options={optionesBusqueda}
-      />
+      <BuscarMaterias />
 
 
       {mensajeError && (
@@ -150,7 +137,7 @@ const MateriaPage = () => {
             <Stack spacing={2} width="100%" alignItems="center">
               <Pagination
                 count={cantidadPaginas}
-                page={skip} siblingCount={2}
+                page={offset} siblingCount={2}
                 onChange={handlePaginationOnChange}
                 variant="outlined"
                 color="primary"

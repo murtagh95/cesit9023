@@ -59,10 +59,16 @@ export const actualizarMateriaService = async (
     id: string,
     data: Partial<Materia>
 ) => {
+    const body = {
+        nombre: data.nombre,
+        profesor: data.profesor,
+        duracion: data.duracion,
+        condicionMateria: data.condicionMateria
+    };
     try {
-        const res = await axios.put<Materia>(
+        const res = await axios.patch<Materia>(
             `${URL}/${id}`,
-            data
+            body
         );
         return res.data;
     } catch (error) {

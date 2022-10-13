@@ -64,10 +64,7 @@ const MenuItem: FC<MenuItemProps> = ({ title, to, icon }) => (
 );
 
 export const MainListItems: FC = () => {
-  const { cantidadCarrera } = useAppSelector((state) => state.carrera);
-  const { cantidadCursos } = useAppSelector((state) => state.curso);
-  const { cantidadMaterias } = useAppSelector((state) => state.materia);
-
+  
   return (
     <>
       <MenuItem title="Home" to="/" icon={<DashboardIcon />} />
@@ -82,7 +79,6 @@ export const MainListItems: FC = () => {
         to="/profesores"
         icon={<AssignmentIndIcon />}
       />
-     
     </>
   );
 };
