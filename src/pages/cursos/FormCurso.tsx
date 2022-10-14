@@ -1,16 +1,11 @@
-import { Button, ButtonGroup, Grid, Stack, TextField } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
+import { Button, Grid, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FC } from 'react'
-import { Link } from 'react-router-dom';
 
 import { useNavigate } from 'react-router-dom';
 import MyInputText from '../../components/form/MyInputText';
-import MyTextArea from '../../components/form/MyTextArea';
-import MyCheckbox from '../../components/form/MyCheckbox';
-import MyInputDate from '../../components/form/MyInputDate';
-import MyInputSlider from '../../components/form/MyInputSlider';
 
 export interface IFormInputs {
   anio: number;
@@ -68,8 +63,8 @@ const FormCurso: FC<FormCursoProps> = ({ data, onSubmit }) => {
             <Button type="submit" variant="contained" >Guardar</Button>
             <Button
               variant="outlined"
-              value="Cncelar"
-              onClick={() => navigate(`/tareas`)}
+              value="Cancelar"
+              onClick={() => navigate(`/cursos`)}
             >Cancelar</Button>
           </Stack>
         </Grid>

@@ -30,7 +30,7 @@ const BuscarCursos: FC = () => {
         reset,
     } = useForm<IFromBuscar>({
         defaultValues: {
-            tipo: '_todos',
+            tipo: 'carrera',
         },
     });
 
@@ -51,7 +51,6 @@ const BuscarCursos: FC = () => {
     const options: DropdownOption[] = [
         { label: 'Carrera', value: 'carrera' },
         { label: 'Bedelia', value: 'bedelia' },
-        { label: 'Todo', value: '_todos' }
     ]
 
     return (

@@ -10,27 +10,15 @@ import {
   Typography,
   Link as MuiLink,
   Alert,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Stack,
   Pagination
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { ChangeEvent, useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { buscarCurso, eliminarCursoPorId, limpiarCurso } from '../../slices/cursosSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { Icon } from '@material-ui/core';
-import { Visibility } from '@mui/icons-material';
-import { Edit } from '@material-ui/icons';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { TableDeleteBtn, TableEditBtn, TableShowBtn } from '../../components/table/TableButtons';
-import ConfirmationModalCuso from '../../components/modals/ConfirmationModalCurso';
-import { format } from 'date-fns'
 import BuscarCursos from './components/BuscarCursos';
 import ConfirmationModalCurso from '../../components/modals/ConfirmationModalCurso';
 const CursosPage = () => {
@@ -38,7 +26,7 @@ const CursosPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const cursoId = useRef<string>();
-  const { cargando, cursos, mensajeError, cantidadPaginas, skip, limit } = useAppSelector(state => state.curso);
+  const { cargando, cursos, mensajeError, cantidadPaginas, offset, limit } = useAppSelector(state => state.curso);
 
 
   const navigate = useNavigate();
@@ -53,8 +41,8 @@ const CursosPage = () => {
     }
   }, []);
 
-  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
-    dispatch(buscarCurso({ skip, limit }));
+  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, offset: number) => {
+    dispatch(buscarCurso({ offset, limit }));
   }
   return (
     <Box display="flex" flexDirection="column" gap={3} padding={2}>
@@ -115,7 +103,7 @@ const CursosPage = () => {
               </TableContainer>
 
               <Stack spacing={2} width="100%" alignItems="center">
-                <Pagination count={cantidadPaginas} page={skip} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
+                <Pagination count={cantidadPaginas} page={offset} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
               </Stack>
             </>
           )
