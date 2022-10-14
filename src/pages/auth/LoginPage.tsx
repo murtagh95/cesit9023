@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginUser } from '../../slices/userSlice';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useEffect } from 'react';
 
 const schemaValidator = yup
   .object({
@@ -22,9 +23,16 @@ interface IFormLoginProps {
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { authenticated, mensajeError } = useAppSelector((state) => state.user);
   const { control, setValue, handleSubmit } = useForm<IFormLoginProps>({
     resolver: yupResolver(schemaValidator),
   });
+
+  useEffect(() => {
+    if (authenticated) {
+      navigate('/');
+    }
+  }, [mensajeError, authenticated]);
 
   const onSubmit = (data: IFormLoginProps) => {
     dispatch(loginUser(data));

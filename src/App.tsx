@@ -34,10 +34,6 @@ import ProfesoresPage from './pages/profesores/ProfesoresPage';
 import ProfesoresEditarPage from './pages/profesores/ProfesoresEditarPage';
 import ProfesoresNuevoPage from './pages/profesores/ProfesoresNuevoPage';
 import ProfesoresVerPage from './pages/profesores/ProfesoresVerPage';
-import RolesPage from './pages/roles/RolesPage';
-import RolesEditarPage from './pages/roles/RolesEditarPage';
-import RolesNuevoPage from './pages/roles/RolesNuevoPage';
-import RolesVerPage from './pages/roles/RolesVerPage';
 import LoginPage from './pages/auth/LoginPage';
 
 const mdTheme = createTheme({
@@ -79,7 +75,7 @@ const App = () => {
               <Route path="/alumnos/nuevo" element={<AlumnoNuevaPage />} />
               <Route path="/alumnos/:id/editar" element={<AlumnoEditarPage />} />
               <Route path="/alumnos/:id/ver" element={<AlumnoVerPage />} />
-              
+
               <Route path="/materias" element={<MateriaPage />} />
               <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
               <Route path="/materias/:id/ver" element={<MateriasVerPage />} />
@@ -87,7 +83,7 @@ const App = () => {
                 path="/materias/:id/editar"
                 element={<MateriasEditarPage />}
               />
-              
+
               <Route path="/materias" element={<MateriaPage />} />
               <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
@@ -117,8 +113,6 @@ const App = () => {
                 path="/profesores/:id/editar"
                 element={<ProfesoresEditarPage />}
               />
-
-              
             </Routes>
           </AppContainer>
         </Box>

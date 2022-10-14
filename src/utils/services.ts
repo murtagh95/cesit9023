@@ -8,7 +8,10 @@ export class CustomError extends Error {
 
 export const manageError = (error: unknown): CustomError => {
   if (error instanceof AxiosError) {
-    return new CustomError(error?.response?.status || 400, error.message);
+    return new CustomError(
+      error?.response?.data?.statusCode || 400,
+      error?.response?.data?.message || error.message
+    );
   } else {
     return new CustomError(500, 'Error desconocido');
   }

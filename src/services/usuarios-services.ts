@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { User } from '../models/User';
 import { manageError } from '../utils/services';
 

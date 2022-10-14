@@ -5,13 +5,18 @@ import { CustomError } from '../utils/services';
 import axios from 'axios';
 
 const token = localStorage.getItem('token') || '';
-axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+const setDefaultAxiosToken = (givenToken: string) => {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${givenToken}`;
+};
+setDefaultAxiosToken(token);
 
 interface UserState {
   email: string;
   token: string;
   cargando: boolean;
   mensajeError: string | null;
+  authenticated: boolean;
 }
 
 // Define the initial state using that type
@@ -20,6 +25,7 @@ const initialState: UserState = {
   token,
   cargando: false,
   mensajeError: null,
+  authenticated: false,
 };
 
 export const usersSlice = createSlice({
@@ -42,6 +48,7 @@ export const usersSlice = createSlice({
         state.cargando = false;
         state.email = payload.email;
         state.token = payload.token;
+        state.authenticated = true;
       }
     );
     builder.addCase(
@@ -49,6 +56,7 @@ export const usersSlice = createSlice({
       (state, { payload }: PayloadAction<CustomError | undefined>) => {
         state.mensajeError = payload?.message || 'Error desconocido';
         state.cargando = false;
+        state.authenticated = false;
       }
     );
   },
@@ -71,6 +79,7 @@ export const loginUser = createAsyncThunk<
   try {
     const userRes = await loginUserService(email, password);
     localStorage.setItem('token', userRes.token);
+    setDefaultAxiosToken(userRes.token);
     return userRes;
   } catch (error) {
     return thunkApi.rejectWithValue(error as CustomError);
