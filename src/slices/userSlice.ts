@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { User } from '../models/User';
-import { loginUserService } from '../services/usuarios-services';
+import { apiGetCurrentUser, apiLoginUser } from '../services/usuarios-services';
 import { CustomError } from '../utils/services';
 import axios from 'axios';
 
@@ -59,6 +59,28 @@ export const usersSlice = createSlice({
         state.authenticated = false;
       }
     );
+
+    builder.addCase(getCurrentUser.pending, (state) => {
+      state.cargando = true;
+      state.mensajeError = null;
+    });
+    builder.addCase(
+      getCurrentUser.fulfilled,
+      (state, { payload }: PayloadAction<User>) => {
+        state.cargando = false;
+        state.email = payload.email;
+        state.token = payload.token;
+        state.authenticated = true;
+      }
+    );
+    builder.addCase(
+      getCurrentUser.rejected,
+      (state, { payload }: PayloadAction<CustomError | undefined>) => {
+        state.mensajeError = payload?.message || 'Error desconocido';
+        state.cargando = false;
+        state.authenticated = false;
+      }
+    );
   },
 });
 
@@ -77,7 +99,23 @@ export const loginUser = createAsyncThunk<
   { rejectValue: CustomError }
 >('user/loginUser', async ({ email, password }: LoginQuery, thunkApi) => {
   try {
-    const userRes = await loginUserService(email, password);
+    const userRes = await apiLoginUser(email, password);
+    localStorage.setItem('token', userRes.token);
+    setDefaultAxiosToken(userRes.token);
+    return userRes;
+  } catch (error) {
+    return thunkApi.rejectWithValue(error as CustomError);
+  }
+});
+
+export const getCurrentUser = createAsyncThunk<
+  User,
+  void,
+  { rejectValue: CustomError }
+>('user/getCurrentUser', async (_: void, thunkApi) => {
+  console.info('heere');
+  try {
+    const userRes = await apiGetCurrentUser();
     localStorage.setItem('token', userRes.token);
     setDefaultAxiosToken(userRes.token);
     return userRes;

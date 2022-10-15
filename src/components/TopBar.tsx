@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC, useEffect } from 'react';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
@@ -7,7 +7,10 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../constants';
-import logo from './img/LOGOBLANCO.png'
+import logo from './img/LOGOBLANCO.png';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getCurrentUser } from '../slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
@@ -36,8 +39,20 @@ interface TopBarProps {
 }
 
 const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { authenticated } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, []);
+
+  // if (!authenticated) {
+  //   navigate('/login');
+  // }
+
   return (
-    <AppBar id='AppBar' position="absolute" open={open}>
+    <AppBar id="AppBar" position="absolute" open={open}>
       <Toolbar
         sx={{
           pr: '24px', // keep right padding when drawer closed
@@ -62,7 +77,7 @@ const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-           <img className='logo' src={logo} alt="logo" />
+          <img className="logo" src={logo} alt="logo" />
         </Typography>
         <IconButton color="inherit">
           <Badge badgeContent={4} color="primary">

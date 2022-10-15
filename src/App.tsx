@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LeftMenu from './components/LeftMenu';
 import TopBar from './components/TopBar';
 import { Route, Routes } from 'react-router-dom';
@@ -49,6 +49,7 @@ const mdTheme = createTheme({
 
 const App = () => {
   const [open, setOpen] = useState(true);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
