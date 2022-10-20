@@ -13,7 +13,7 @@ import { RootState } from '../store/store';
 // Define a type for the slice state
 interface CarrerasState {
   carreras: Carrera[];
-  skip: number;
+  offset: number;
   limit: number;
   cantidadPaginas: number;
   carreraSeleccionada: Carrera | null;
@@ -26,7 +26,7 @@ interface CarrerasState {
 // Define the initial state using that type
 const initialState: CarrerasState = {
   carreras: [],
-  skip: 0,
+  offset: 0,
   limit: 10,
   cantidadPaginas: 0,
   carreraSeleccionada: null,
@@ -63,7 +63,7 @@ export const carrerasSlice = createSlice({
     builder.addCase(buscarCarreras.fulfilled,
       (state, { payload }: PayloadAction<PaginatedResponse<Carrera>>) => {
         state.carreras = payload.data || [];
-        state.skip = Math.round(payload.skip / payload.limit) + 1;
+        state.offset = Math.round(payload.offset / payload.limit) + 1;
         state.cantidadPaginas = Math.round(payload.total / payload.limit);
         state.limit = payload.limit;
         state.cargando = false;
@@ -124,7 +124,7 @@ export default carrerasSlice.reducer
 // Extra reducers 
 interface BuscarCarreraQuery {
   limit: number;
-  skip: number;
+  offset: number;
 }
 export const buscarCarreras = createAsyncThunk<
   PaginatedResponse<Carrera>,
@@ -134,10 +134,10 @@ export const buscarCarreras = createAsyncThunk<
   try {
     const state = thunkApi.getState() as RootState;
     let criterio = state.carrera.criterio || ({} as Record<string, string>);
-    if (params?.limit && params?.skip) {
+    if (params?.limit && params?.offset) {
       criterio = { ...criterio, limit: params.limit.toString() };
-      const skipLimit = (params.skip - 1) * params.limit;
-      criterio = { ...criterio, skip: skipLimit.toString() };
+      const offsetLimit = (params.offset - 1) * params.limit;
+      criterio = { ...criterio, offset: offsetLimit.toString() };
     }
 
     let carerasRes: PaginatedResponse<Carrera>;
