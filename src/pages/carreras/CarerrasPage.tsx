@@ -27,7 +27,7 @@ const CarerrasPage = () => {
   const dispatch = useAppDispatch();
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
   const carreraId = useRef<string>();
-  const { cargando, carreras, mensajeError, cantidadPaginas, skip, limit } = useAppSelector(state => state.carrera);
+  const { cargando, carreras, mensajeError, cantidadPaginas, offset, limit } = useAppSelector(state => state.carrera);
 
   const navigate = useNavigate();
 
@@ -41,8 +41,8 @@ const CarerrasPage = () => {
     }
   }, []);
 
-  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, skip: number) => {
-    dispatch(buscarCarreras({ skip, limit }));
+  const handlePaginationOnChange = (ev: ChangeEvent<unknown>, offset: number) => {
+    dispatch(buscarCarreras({ offset, limit }));
   }
 
   return (
@@ -121,7 +121,7 @@ const CarerrasPage = () => {
             </TableContainer>
 
             <Stack spacing={2} width="100%" alignItems="center">
-              <Pagination count={cantidadPaginas} page={skip} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
+              <Pagination count={cantidadPaginas} page={offset} siblingCount={2} onChange={handlePaginationOnChange} variant="outlined" color="primary" />
             </Stack>
           </>
 

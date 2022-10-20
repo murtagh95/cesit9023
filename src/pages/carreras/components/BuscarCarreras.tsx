@@ -29,7 +29,7 @@ const BuscarCarreras: FC = () => {
     reset,
   } = useForm<IFromBuscar>({
     defaultValues: {
-      tipo: '_todos',
+      tipo: 'nombre',
     },
   });
 
@@ -50,7 +50,6 @@ const BuscarCarreras: FC = () => {
   const options: DropdownOption[] = [
     { label: 'Nombre', value: 'nombre' },
     { label: 'Duracion', value: 'duracion' },
-    { label: 'Todo', value: '_todos' }
   ]
 
   return (

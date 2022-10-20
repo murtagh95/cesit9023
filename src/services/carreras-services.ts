@@ -66,10 +66,17 @@ export const actualizarCarreraService = async (
   id: string,
   data: Partial<Carrera>
 ) => {
+  let body = {
+    nombre: data.nombre,
+    duracion: data.duracion,
+    horario: data.horario,
+    plan: data.plan,
+  }
   try {
-    const res = await axios.put<Carrera>(
+
+    const res = await axios.patch<Carrera>(
       `http://localhost:5005/api/carreras/${id}`,
-      data
+      body
     );
     return res.data;
   } catch (error) {
