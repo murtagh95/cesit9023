@@ -20,8 +20,6 @@ const manageError = (error: unknown): CustomError => {
 
 export const buscarCursosService = async (
     criterio?: string,
-    page?: number,
-    limit?: number
 ): Promise<PaginatedResponse<Curso>> => {
     try {
         let uri = 'http://localhost:5005/api/cursos';
@@ -30,12 +28,6 @@ export const buscarCursosService = async (
         if (criterio) {
             params += `${criterio}`;
         }
-        // if (page) {
-        //   params += `page=${page}`;
-        // }
-        // if (limit) {
-        //   params += `limit=${limit}`;
-        // }
         const res = await axios.get<PaginatedResponse<Curso>>(`${uri}?${params}`);
         return res.data;
     } catch (error) {
@@ -67,10 +59,16 @@ export const actualizarCursoService = async (
     id: string,
     data: Partial<Curso>
 ) => {
+    let body = {
+        anio: data.anio,
+        cantidadAlumnos: data.cantidadAlumnos,
+        carrera: data.carrera,
+        bedelia: data.bedelia,
+    }
     try {
-        const res = await axios.put<Curso>(
+        const res = await axios.patch<Curso>(
             `http://localhost:5005/api/cursos/${id}`,
-            data
+            body
         );
         return res.data;
     } catch (error) {
