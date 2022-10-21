@@ -113,10 +113,8 @@ export const getCurrentUser = createAsyncThunk<
   void,
   { rejectValue: CustomError }
 >('user/getCurrentUser', async (_: void, thunkApi) => {
-  console.info('heere');
   try {
     const userRes = await apiGetCurrentUser();
-    localStorage.setItem('token', userRes.token);
     setDefaultAxiosToken(userRes.token);
     return userRes;
   } catch (error) {

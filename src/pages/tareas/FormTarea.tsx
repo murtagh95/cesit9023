@@ -13,6 +13,7 @@ import MyInputSlider from '../../components/form/MyInputSlider';
 import MyRadioButton, {
   RadioButtonOption,
 } from '../../components/form/MyRadioButton';
+import MyDropdown from '../../components/form/MyDropdown';
 
 export interface IFormInputs {
   nombre: string;
@@ -20,6 +21,7 @@ export interface IFormInputs {
   finalizada: boolean;
   fechaLimite?: Date | undefined;
   progreso: number;
+  asignado: string | undefined;
 }
 
 const schemaValidator = yup
@@ -50,7 +52,7 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={2}>
-      <Grid item xs={12}>
+        <Grid item xs={12}>
           <MyRadioButton
             name="Roles"
             control={control}
@@ -61,7 +63,7 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
         <Grid item xs={12}>
           <MyInputText name="nombre" control={control} label="Nombre" />
         </Grid>
-       
+
         <Grid item xs={12}>
           <MyTextArea name="descripcion" control={control} label="Descripcion" />
         </Grid>
@@ -81,6 +83,17 @@ const FormTarea: FC<FormTareaProps> = ({ data, onSubmit }) => {
             control={control}
             label="Progreso"
             setValue={setValue}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <MyDropdown
+            name="asignado"
+            label="Buscar por"
+            control={control}
+            options={[
+              { label: 'Nombre', value: 'nombre' },
+              { label: 'Nombre2', value: 'nombre2' },
+            ]}
           />
         </Grid>
         <Grid item xs={12}>

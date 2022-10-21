@@ -54,7 +54,7 @@ export const actualizarTareaService = async (
   data: Partial<Tarea>
 ) => {
   try {
-    const res = await axios.put<Tarea>(
+    const res = await axios.patch<Tarea>(
       `http://localhost:5005/api/tareas/${id}`,
       data
     );
