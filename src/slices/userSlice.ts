@@ -2,14 +2,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { User } from '../models/User';
 import { apiGetCurrentUser, apiLoginUser } from '../services/usuarios-services';
 import { CustomError } from '../utils/services';
-import axios from 'axios';
-
-const token = localStorage.getItem('token') || '';
-
-const setDefaultAxiosToken = (givenToken: string) => {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${givenToken}`;
-};
-setDefaultAxiosToken(token);
 
 interface UserState {
   email: string;
@@ -22,7 +14,7 @@ interface UserState {
 // Define the initial state using that type
 const initialState: UserState = {
   email: '',
-  token,
+  token: '',
   cargando: false,
   mensajeError: null,
   authenticated: false,
@@ -35,6 +27,11 @@ export const usersSlice = createSlice({
   reducers: {
     setCargando: (state, { payload }: PayloadAction<boolean>) => {
       state.cargando = payload;
+    },
+    logout: (state) => {
+      state.token = '';
+      state.authenticated = false;
+      localStorage.removeItem('token');
     },
   },
   extraReducers: (builder) => {
@@ -84,7 +81,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { setCargando } = usersSlice.actions;
+export const { setCargando, logout } = usersSlice.actions;
 
 export default usersSlice.reducer;
 
@@ -101,7 +98,6 @@ export const loginUser = createAsyncThunk<
   try {
     const userRes = await apiLoginUser(email, password);
     localStorage.setItem('token', userRes.token);
-    setDefaultAxiosToken(userRes.token);
     return userRes;
   } catch (error) {
     return thunkApi.rejectWithValue(error as CustomError);
@@ -115,7 +111,6 @@ export const getCurrentUser = createAsyncThunk<
 >('user/getCurrentUser', async (_: void, thunkApi) => {
   try {
     const userRes = await apiGetCurrentUser();
-    setDefaultAxiosToken(userRes.token);
     return userRes;
   } catch (error) {
     return thunkApi.rejectWithValue(error as CustomError);

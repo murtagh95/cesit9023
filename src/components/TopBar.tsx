@@ -3,13 +3,13 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { drawerWidth } from '../constants';
 import logo from './img/LOGOBLANCO.png';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { getCurrentUser } from '../slices/userSlice';
+import { getCurrentUser, logout } from '../slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -47,9 +47,9 @@ const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
     dispatch(getCurrentUser());
   }, []);
 
-  // if (!authenticated) {
-  //   navigate('/login');
-  // }
+  if (!authenticated) {
+    navigate('/login');
+  }
 
   return (
     <AppBar id="AppBar" position="absolute" open={open}>
@@ -79,9 +79,9 @@ const TopBar: FC<TopBarProps> = ({ open, toggleDrawer }) => {
         >
           <img className="logo" src={logo} alt="logo" />
         </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="primary">
-            <NotificationsIcon />
+        <IconButton onClick={() => dispatch(logout())} color="inherit">
+          <Badge color="primary">
+            <LogoutIcon />
           </Badge>
         </IconButton>
       </Toolbar>

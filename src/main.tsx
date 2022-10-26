@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { initAuthService } from './services';
+
+initAuthService();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

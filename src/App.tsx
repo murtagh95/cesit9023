@@ -1,13 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import { useEffect, useState } from 'react';
-import LeftMenu from './components/LeftMenu';
-import TopBar from './components/TopBar';
 import { Route, Routes } from 'react-router-dom';
 import Ejemplos from './pages/ejemplos/Ejemplos';
 import HomePage from './pages/HomePage';
-import AppContainer from './components/AppContainer';
 import TareasPage from './pages/tareas/TareasPage';
 import TareasNuevaPage from './pages/tareas/TareasNuevaPage';
 import AlumnoPage from './pages/alumnos/AlumnoPage';
@@ -35,6 +29,8 @@ import ProfesoresEditarPage from './pages/profesores/ProfesoresEditarPage';
 import ProfesoresNuevoPage from './pages/profesores/ProfesoresNuevoPage';
 import ProfesoresVerPage from './pages/profesores/ProfesoresVerPage';
 import LoginPage from './pages/auth/LoginPage';
+import PrivateLayout from './layouts/PrivateLayout';
+import PublicLayout from './layouts/PublicLayout';
 
 const mdTheme = createTheme({
   palette: {
@@ -48,75 +44,57 @@ const mdTheme = createTheme({
 });
 
 const App = () => {
-  const [open, setOpen] = useState(true);
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
   return (
     <Provider store={store}>
       <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <TopBar open={open} toggleDrawer={toggleDrawer} />
-          <LeftMenu open={open} toggleDrawer={toggleDrawer} />
-          <AppContainer>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/ejemplos" element={<Ejemplos />} />
-              <Route path="/tareas" element={<TareasPage />} />
-              <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
-              <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
-              <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
-              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
+        <Routes>
+          <Route path="/" element={<PrivateLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/ejemplos" element={<Ejemplos />} />
+            <Route path="/tareas" element={<TareasPage />} />
+            <Route path="/tareas/nueva" element={<TareasNuevaPage />} />
+            <Route path="/tareas/:id/ver" element={<TareasVerPage />} />
+            <Route path="/tareas/:id/editar" element={<TareasEditarPage />} />
+            <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
-              <Route path="/alumnos" element={<AlumnoPage />} />
-              <Route path="/alumnos/nuevo" element={<AlumnoNuevaPage />} />
-              <Route path="/alumnos/:id/editar" element={<AlumnoEditarPage />} />
-              <Route path="/alumnos/:id/ver" element={<AlumnoVerPage />} />
+            <Route path="/alumnos" element={<AlumnoPage />} />
+            <Route path="/alumnos/nuevo" element={<AlumnoNuevaPage />} />
+            <Route path="/alumnos/:id/editar" element={<AlumnoEditarPage />} />
+            <Route path="/alumnos/:id/ver" element={<AlumnoVerPage />} />
 
-              <Route path="/materias" element={<MateriaPage />} />
-              <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
-              <Route path="/materias/:id/ver" element={<MateriasVerPage />} />
-              <Route
-                path="/materias/:id/editar"
-                element={<MateriasEditarPage />}
-              />
+            <Route path="/materias" element={<MateriaPage />} />
+            <Route path="/materias/nuevo" element={<MateriasNuevaPage />} />
+            <Route path="/materias/:id/ver" element={<MateriasVerPage />} />
+            <Route
+              path="/materias/:id/editar"
+              element={<MateriasEditarPage />}
+            />
 
-              <Route path="/materias" element={<MateriaPage />} />
-              <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
+            <Route path="/materias" element={<MateriaPage />} />
+            <Route path="/tareas/:id/editar" element={<TareasNuevaPage />} />
 
-              <Route path="/carreras" element={<CarerrasPage />} />
-              <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
-              <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />
-              <Route
-                path="/carreras/:id/editar"
-                element={<CarreraEditarPage />}
-              />
+            <Route path="/carreras" element={<CarerrasPage />} />
+            <Route path="/carrera/nueva" element={<CarreraNuevoPage />} />
+            <Route path="/carreras/:id/ver" element={<CarrerasVerPage />} />
+            <Route path="/carreras/:id/editar" element={<CarreraEditarPage />} />
 
-              <Route path="/cursos" element={<CursosPage />} />
-              <Route path="/curso/nuevo" element={<CursosNuevoPage />} />
-              <Route path="/cursos/:id/ver" element={<CursosVerPage />} />
-              <Route path="/cursos/:id/editar" element={<CursoEditarPage />} />
+            <Route path="/cursos" element={<CursosPage />} />
+            <Route path="/curso/nuevo" element={<CursosNuevoPage />} />
+            <Route path="/cursos/:id/ver" element={<CursosVerPage />} />
+            <Route path="/cursos/:id/editar" element={<CursoEditarPage />} />
 
-              <Route path="/profesores" element={<ProfesoresPage />} />
-              <Route
-                path="/profesores/nuevo"
-                element={<ProfesoresNuevoPage />}
-              />
-              <Route
-                path="/profesores/:id/ver"
-                element={<ProfesoresVerPage />}
-              />
-              <Route
-                path="/profesores/:id/editar"
-                element={<ProfesoresEditarPage />}
-              />
-            </Routes>
-          </AppContainer>
-        </Box>
+            <Route path="/profesores" element={<ProfesoresPage />} />
+            <Route path="/profesores/nuevo" element={<ProfesoresNuevoPage />} />
+            <Route path="/profesores/:id/ver" element={<ProfesoresVerPage />} />
+            <Route
+              path="/profesores/:id/editar"
+              element={<ProfesoresEditarPage />}
+            />
+          </Route>
+          <Route path="/login" element={<PublicLayout />}>
+            <Route index element={<LoginPage />} />
+          </Route>
+        </Routes>
       </ThemeProvider>
     </Provider>
   );
