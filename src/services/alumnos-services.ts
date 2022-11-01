@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { url_backend } from '../constants';
 import { Alumno } from '../models/Alumno';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 
@@ -20,7 +21,7 @@ export const buscarAlumnosService = async (
   criterio?: string
 ): Promise<PaginatedResponse<Alumno>> => {
   try {
-    let uri = 'http://localhost:5005/api/alumnos';
+    let uri = `${url_backend}/api/alumnos`;
 
     let params = '';
     if (criterio) {
@@ -36,7 +37,7 @@ export const buscarAlumnosService = async (
 export const crearAlumnoService = async (data: Alumno): Promise<Alumno> => {
   try {
     const res = await axios.post<Alumno>(
-      'http://localhost:5005/api/alumnos',
+      `${url_backend}/api/alumnos`,
       data
     );
     return res.data;
@@ -48,7 +49,7 @@ export const crearAlumnoService = async (data: Alumno): Promise<Alumno> => {
 export const buscarAlumnoPorIdService = async (id: string): Promise<Alumno> => {
   try {
     const res = await axios.get<Alumno>(
-      `http://localhost:5005/api/alumnos/${id}`
+      `${url_backend}/api/alumnos/${id}`
     );
     return res.data;
   } catch (error) {
@@ -63,7 +64,7 @@ export const actualizarAlumnoService = async (
   let body = { nombre: data.nombre, apellido : data.apellido, dni: data.dni, domicilio: data.domicilio, fechaNacimiento: data.fechaNacimiento};
   try {
     const res = await axios.patch<Alumno>(
-      `http://localhost:5005/api/alumnos/${id}`,
+      `${url_backend}/api/alumnos/${id}`,
       body
     );
     return res.data;
@@ -77,7 +78,7 @@ export const eliminarAlumnosPorIdService = async (
 ): Promise<Alumno> => {
   try {
     const res = await axios.delete<Alumno>(
-      `http://localhost:5005/api/alumnos/${id}`
+      `${url_backend}/api/alumnos/${id}`
     );
     return res.data;
   } catch (error) {

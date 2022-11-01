@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { url_backend } from '../../constants';
 
 interface Tarea {
   _id: string;
@@ -23,7 +24,7 @@ const EjemploIntegradorEffect = () => {
 
   const buscarTareasHandler = async () => {
     try {
-      const res = await axios.get<Tarea[]>('http://localhost:5005/api/tareas');
+      const res = await axios.get<Tarea[]>(`${url_backend}/api/tareas`);
       setTareas(res.data);
     } catch (error) {
       console.error(error);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { url_backend } from '../constants';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Tarea } from '../models/Tarea';
 import { manageError } from '../utils/services';
@@ -9,7 +10,7 @@ export const buscarTaresService = async (
   limit?: number
 ): Promise<PaginatedResponse<Tarea>> => {
   try {
-    let uri = 'http://localhost:5005/api/tareas';
+    let uri = `${url_backend}/api/tareas`;
 
     let params = '';
     if (criterio) {
@@ -31,7 +32,7 @@ export const buscarTaresService = async (
 export const crearTareaService = async (data: Tarea): Promise<Tarea> => {
   try {
     const res = await axios.post<Tarea>(
-      'http://localhost:5005/api/tareas',
+      `${url_backend}/api/tareas`,
       data
     );
     return res.data;
@@ -42,7 +43,7 @@ export const crearTareaService = async (data: Tarea): Promise<Tarea> => {
 
 export const buscarTareaPorIdService = async (id: string): Promise<Tarea> => {
   try {
-    const res = await axios.get<Tarea>(`http://localhost:5005/api/tareas/${id}`);
+    const res = await axios.get<Tarea>(`${url_backend}/api/tareas/${id}`);
     return res.data;
   } catch (error) {
     throw manageError(error);
@@ -55,7 +56,7 @@ export const actualizarTareaService = async (
 ) => {
   try {
     const res = await axios.patch<Tarea>(
-      `http://localhost:5005/api/tareas/${id}`,
+      `${url_backend}/api/tareas/${id}`,
       data
     );
     return res.data;
@@ -67,7 +68,7 @@ export const actualizarTareaService = async (
 export const eliminarTareaPorIdService = async (id: string): Promise<Tarea> => {
   try {
     const res = await axios.delete<Tarea>(
-      `http://localhost:5005/api/tareas/${id}`
+      `${url_backend}/api/tareas/${id}`
     );
     return res.data;
   } catch (error) {

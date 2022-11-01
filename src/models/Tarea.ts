@@ -5,4 +5,5 @@ export interface Tarea {
   finalizada: boolean;
   fechaLimite?: Date | undefined;
   progreso: number;
+  asignado: string | undefined;
 }

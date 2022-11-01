@@ -3,6 +3,7 @@ export class PaginatedResponse<T> {
     public data: T[] | null,
     public offset: number,
     public limit: number,
-    public total: number
+    public total: number,
+    public skip: number
   ) {}
 }
