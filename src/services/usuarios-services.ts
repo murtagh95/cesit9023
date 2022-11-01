@@ -20,6 +20,7 @@ export const apiLoginUser = async (
 ): Promise<User> => {
   try {
     console.log(`${back_end_url}/api/auth/login`)
+    console.log(process.env.BACKEND_URL)
     const res = await axios.post<User>(`${back_end_url}/api/auth/login`, {
       email,
       password,
