@@ -3,7 +3,7 @@ import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Materia } from '../models/Materia';
 import { back_end_url } from '../utils/constants';
 
-const URL = `${back_end_url}/materias`
+const URL = `${back_end_url}/api/materias`
 
 
 export class CustomError extends Error {
