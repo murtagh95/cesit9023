@@ -6,7 +6,6 @@ import materiasSlice from '../slices/materiasSlice';
 import tareasSlice from '../slices/tareasSlice';
 import alumnosSlice from '../slices/alumnosSlice';
 import profesoresSlice from '../slices/profesoresSlice';
-import rolesSlice from '../slices/rolesSlice';
 import userSlice from '../slices/userSlice';
 
 const store = configureStore({
@@ -18,8 +17,7 @@ const store = configureStore({
     curso: cursosSlice,
     materia: materiasSlice,
     alumno: alumnosSlice,
-    profesor: profesoresSlice,
-    rol: rolesSlice,
+    profesor: profesoresSlice
   },
 });
 

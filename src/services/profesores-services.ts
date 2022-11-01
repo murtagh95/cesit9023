@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Profesor } from '../models/Profesor';
+import { back_end_url } from '../utils/constants';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -22,7 +23,7 @@ export const buscarProfesoresService = async (
   limit?: number
 ): Promise<PaginatedResponse<Profesor>> => {
   try {
-    let uri = 'http://localhost:5005/api/profesores';
+    let uri = `${back_end_url}/api/profesores`;
 
     let params = '';
     if (criterio) {
@@ -40,7 +41,7 @@ export const crearProfesorService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.post<Profesor>(
-      'http://localhost:5005/api/profesores',
+      `${back_end_url}/api/profesores`,
       data
     );
     return res.data;
@@ -54,7 +55,7 @@ export const buscarProfesorPorIdService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.get<Profesor>(
-      `http://localhost:5005/api/profesores/${id}`
+      `${back_end_url}/api/profesores/${id}`
     );
     return res.data;
   } catch (error) {
@@ -68,7 +69,7 @@ export const actualizarProfesorService = async (
 ) => {
   try {
     const res = await axios.put<Profesor>(
-      `http://localhost:5005/api/profesores/${id}`,
+      `${back_end_url}/api/profesores/${id}`,
       data
     );
     return res.data;
@@ -82,7 +83,7 @@ export const eliminarProfesorPorIdService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.delete<Profesor>(
-      `http://localhost:5005/api/profesores/${id}`
+      `${back_end_url}/api/profesores/${id}`
     );
     return res.data;
   } catch (error) {
