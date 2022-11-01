@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { url_backend } from '../constants';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
 import { Profesor } from '../models/Profesor';
+import { back_end_url } from '../utils/constants';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -23,7 +23,7 @@ export const buscarProfesoresService = async (
   limit?: number
 ): Promise<PaginatedResponse<Profesor>> => {
   try {
-    let uri = `${url_backend}/api/profesores`;
+    let uri = `${back_end_url}/api/profesores`;
 
     let params = '';
     if (criterio) {
@@ -41,7 +41,7 @@ export const crearProfesorService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.post<Profesor>(
-      `${url_backend}/api/profesores`,
+      `${back_end_url}/api/profesores`,
       data
     );
     return res.data;
@@ -55,7 +55,7 @@ export const buscarProfesorPorIdService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.get<Profesor>(
-      `${url_backend}/api/profesores/${id}`
+      `${back_end_url}/api/profesores/${id}`
     );
     return res.data;
   } catch (error) {
@@ -69,7 +69,7 @@ export const actualizarProfesorService = async (
 ) => {
   try {
     const res = await axios.put<Profesor>(
-      `${url_backend}/api/profesores/${id}`,
+      `${back_end_url}/api/profesores/${id}`,
       data
     );
     return res.data;
@@ -83,7 +83,7 @@ export const eliminarProfesorPorIdService = async (
 ): Promise<Profesor> => {
   try {
     const res = await axios.delete<Profesor>(
-      `${url_backend}/api/profesores/${id}`
+      `${back_end_url}/api/profesores/${id}`
     );
     return res.data;
   } catch (error) {

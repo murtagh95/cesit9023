@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { url_backend } from '../constants';
 import { Alumno } from '../models/Alumno';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
+import { back_end_url } from '../utils/constants';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -21,7 +21,7 @@ export const buscarAlumnosService = async (
   criterio?: string
 ): Promise<PaginatedResponse<Alumno>> => {
   try {
-    let uri = `${url_backend}/api/alumnos`;
+    let uri = `${back_end_url}/api/alumnos`;
 
     let params = '';
     if (criterio) {
@@ -37,7 +37,7 @@ export const buscarAlumnosService = async (
 export const crearAlumnoService = async (data: Alumno): Promise<Alumno> => {
   try {
     const res = await axios.post<Alumno>(
-      `${url_backend}/api/alumnos`,
+      `${back_end_url}/api/alumnos`,
       data
     );
     return res.data;
@@ -49,7 +49,7 @@ export const crearAlumnoService = async (data: Alumno): Promise<Alumno> => {
 export const buscarAlumnoPorIdService = async (id: string): Promise<Alumno> => {
   try {
     const res = await axios.get<Alumno>(
-      `${url_backend}/api/alumnos/${id}`
+      `${back_end_url}/api/alumnos/${id}`
     );
     return res.data;
   } catch (error) {
@@ -64,7 +64,7 @@ export const actualizarAlumnoService = async (
   let body = { nombre: data.nombre, apellido : data.apellido, dni: data.dni, domicilio: data.domicilio, fechaNacimiento: data.fechaNacimiento};
   try {
     const res = await axios.patch<Alumno>(
-      `${url_backend}/api/alumnos/${id}`,
+      `${back_end_url}/api/alumnos/${id}`,
       body
     );
     return res.data;
@@ -78,7 +78,7 @@ export const eliminarAlumnosPorIdService = async (
 ): Promise<Alumno> => {
   try {
     const res = await axios.delete<Alumno>(
-      `${url_backend}/api/alumnos/${id}`
+      `${back_end_url}/api/alumnos/${id}`
     );
     return res.data;
   } catch (error) {

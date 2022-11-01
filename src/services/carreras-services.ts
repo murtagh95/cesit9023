@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
-import { url_backend } from '../constants';
 import { Carrera } from '../models/Carrera';
 import { PaginatedResponse } from '../models/commons/PaginatorResponse';
+import { back_end_url } from '../utils/constants';
 
 export class CustomError extends Error {
   constructor(public code: number, public message: string) {
@@ -23,7 +23,7 @@ export const buscarCarrerasService = async (
   limit?: number
 ): Promise<PaginatedResponse<Carrera>> => {
   try {
-    let uri = `${url_backend}/api/carreras`;
+    let uri = `${back_end_url}/api/carreras`;
 
     let params = '';
     if (criterio) {
@@ -41,7 +41,7 @@ export const crearCarreraService = async (
 ): Promise<Carrera | null> => {
   try {
     const res = await axios.post<Carrera>(
-      `${url_backend}/api/carreras`,
+      `${back_end_url}/api/carreras`,
       carrera
     );
     return res.data;
@@ -55,7 +55,7 @@ export const buscarCarreraPorIdService = async (
 ): Promise<Carrera> => {
   try {
     const res = await axios.get<Carrera>(
-      `${url_backend}/api/carreras/${id}`
+      `${back_end_url}/api/carreras/${id}`
     );
     return res.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const actualizarCarreraService = async (
   try {
 
     const res = await axios.patch<Carrera>(
-      `${url_backend}/api/carreras/${id}`,
+      `${back_end_url}/api/carreras/${id}`,
       body
     );
     return res.data;
@@ -90,7 +90,7 @@ export const eliminarCarreraPorIdService = async (
 ): Promise<Carrera> => {
   try {
     const res = await axios.delete<Carrera>(
-      `${url_backend}/api/carreras/${id}`
+      `${back_end_url}/api/carreras/${id}`
     );
     return res.data;
   } catch (error) {
